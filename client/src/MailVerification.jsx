@@ -1,9 +1,14 @@
 import  { useState } from 'react';
 import './MailVerification.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const MailVerification = () => {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
+    const [success, setSuccess] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleOtpChange = (e) => {
         const { value } = e.target;
@@ -15,13 +20,43 @@ const MailVerification = () => {
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
-
-    const handleSubmit = (e) => {
+    
+   
+    
+    const handleSendOtp = async (e) => {
         e.preventDefault();
-        console.log('Email:', email);
-        console.log('Entered OTP:', otp);
-        
+        try {
+            const response = await axios.post('http://localhost:8000/send-otp', {
+                email, // Send email to server to generate and send OTP
+            });
+            console.log('OTP sent successfully:', response.data);
+            setSuccess(response.data.message); // Set success message
+            setError(''); // Clear any previous error
+        } catch (error) {
+            console.error('Error sending OTP:', error);
+            setError(error.response ? error.response.data.message : 'Failed to send OTP'); // Handle error
+            setSuccess(''); // Clear any previous success message
+        }
     };
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevents default form submission
+        try {
+            const response = await axios.post('http://localhost:8000/verify-otp', {
+                email, // Sending the user's email
+                otp,   // Sending the OTP entered by the user
+            });
+            console.log('OTP verification successful:', response.data);
+            setSuccess(response.data.message); // Set success message
+            navigate('/login');// Handle successful verification response
+        } catch (error) {
+            // Handle error response
+            console.error('Error verifying OTP:', error);
+            setError(error.response ? error.response.data.message : 'Verification failed'); // Handle error
+            setSuccess(''); // Clear any previous success message
+        }
+    };
+    
 
     return (
         <form className="otp-form" onSubmit={handleSubmit}>
@@ -41,7 +76,7 @@ const MailVerification = () => {
                     onChange={handleEmailChange}
                 />
             </div>
-            <button type="button" className="otp-btn">Send OTP</button>
+            <button type="button" className="otp-btn" onClick={handleSendOtp}>Send OTP</button>
 
             {/* OTP Input Field */}
             <div className="form-card-input-wrapper">
@@ -63,10 +98,14 @@ const MailVerification = () => {
 
             {/* Resend Code Section */}
             <p className="resendNote">
-                Didn't receive the code? <button type="button" className="resend-Btn">Resend Code</button>
+                Didn't receive the code? <button type="button" className="resend-Btn" onClick={handleSendOtp}>Resend Code</button>
             </p>
+            {success && <p className="success-message">{success}</p>}
+            {error && <p className="error-message">{error}</p>}
+
         </form>
     );
+
 };
 
 export default MailVerification;
