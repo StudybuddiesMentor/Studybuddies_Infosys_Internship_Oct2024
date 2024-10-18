@@ -10,6 +10,8 @@ import category from './images/category.png';
 import rating from './images/rating.png';
 import comment from './images/comment.png';
 
+
+
 function App() {
   return (
     <>
