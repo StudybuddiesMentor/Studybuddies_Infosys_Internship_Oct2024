@@ -1,9 +1,10 @@
-import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './db/index.js'
-dotenv.config()
+import express from 'express'
 
 const app = express()
+
+dotenv.config();
 
 connectDB()
 .then(() => {
@@ -14,6 +15,4 @@ connectDB()
 .catch((err)=>{
     console.log("Error occured :" , err)
 })
-
-
 

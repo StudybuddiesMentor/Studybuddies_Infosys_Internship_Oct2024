@@ -1,7 +1,11 @@
-import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import { DB_NAME } from '../constants.js'
-dotenv.config()
+
+import mongoose from "mongoose"
+import { DB_NAME } from "../constants.js"
+
+dotenv.config({
+    path: './env'
+})
 
 const connectDB = async () => {
     try {
@@ -13,4 +17,5 @@ const connectDB = async () => {
         process.exit(1)
     }
 }
+
 export default connectDB 
