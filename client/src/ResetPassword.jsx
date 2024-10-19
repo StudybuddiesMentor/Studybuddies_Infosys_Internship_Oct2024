@@ -8,7 +8,7 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const { userId, token } = useParams();
+    const { id, token } = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -25,7 +25,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:8000/reset-password/${userId}/${token}`, { password });
+            const response = await axios.post(`http://localhost:8000/reset-password/${id}/${token}`, { password });
 
             console.log('Response:', response.data); 
             setSuccess('Password reset successful. Redirecting to login...');
