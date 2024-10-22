@@ -8,7 +8,6 @@ import dotenv from 'dotenv';
 
 const JWT_SECRET = "jwt_secret_key";
 
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
 

@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // MongoDB connection
-const mongourl = "mongodb://127.0.0.1:27017/test";
+const mongourl = "mongodb://127.0.0.1:27017/test";    // change db name
 main()
 .then(()=>{
     console.log("mongodb connected successfully");
