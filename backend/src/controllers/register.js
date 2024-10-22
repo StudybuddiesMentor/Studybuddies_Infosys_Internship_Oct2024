@@ -1,14 +1,15 @@
 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const cookieParser = require('cookie-parser');
-const RegisterModel = require("../models/register.js");
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import cookieParser from 'cookie-parser';
+import RegisterModel from '../models/register.js';
+import dotenv from 'dotenv';
 
 const JWT_SECRET = "jwt_secret_key";
 
 
-module.exports.login = async (req, res) => {
+export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -43,7 +44,7 @@ module.exports.login = async (req, res) => {
     }
 };
 
-module.exports.register =  async (req, res) => {
+export const register =  async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
@@ -64,7 +65,7 @@ module.exports.register =  async (req, res) => {
     }
 };
 
-module.exports.verifyotp = async(req,res)=>{
+export const verifyotp = async(req,res)=>{
 
     const{ email, otp} = req.body;
     try {
@@ -92,7 +93,7 @@ module.exports.verifyotp = async(req,res)=>{
 };
 
 
-module.exports.SendOtp = async(req,res)=>{
+export const SendOtp = async(req,res)=>{
     const{email} = req.body;
     try{
     const user = await RegisterModel.findOne({email})
@@ -141,8 +142,7 @@ catch (error) {
 };
 
 
-
-module.exports.forgotpassword = async (req, res) => {
+export const forgotpassword = async (req, res) => {
     const { email } = req.body;
 
     try {
@@ -196,7 +196,7 @@ module.exports.forgotpassword = async (req, res) => {
 
 
 
-module.exports.passwordReset = async (req, res) => {
+export const passwordReset = async (req, res) => {
     const { id, token } = req.params;
 
 

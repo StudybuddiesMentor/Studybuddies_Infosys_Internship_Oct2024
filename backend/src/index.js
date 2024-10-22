@@ -1,11 +1,14 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-require("dotenv").config();
-const register = require("./routes/register.js");
-const {verifyUser} = require("./middleware.js")
 
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import router from './routes/register.js';
+
+
+// Load environment variables
+dotenv.config();
 
 const PORT = 8000;
 
@@ -36,12 +39,12 @@ async function main() {
 }
 
 
-app.use("/",register);
+app.use("/",router);
 
 
 
 // Home route with JWT verification
-app.get('/home',verifyUser,  (req, res) => {
+app.get('/home',  (req, res) => {
     return res.json({ message: "Success! You are authenticated." });
 });
 

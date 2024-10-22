@@ -2,8 +2,6 @@ import  { useState } from 'react';
 import './MailVerification.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import image from './assets/fly.jpg';
-import logo from './assets/logo.png';
 
 const MailVerification = () => {
     const [email, setEmail] = useState('');
@@ -61,65 +59,53 @@ const MailVerification = () => {
     
 
     return (
-        <div className="page">
-            {/* Logo container */}
-            <div className="logo-container">
-                <img src={logo} alt="Logo" className="logo" />
-                <span className='studybuddy'>StudyBuddy</span>
+        <form className="otp-form" onSubmit={handleSubmit}>
+            <span className="mainHeading">Email Verification</span>
+            <p className="otpSubheading">
+                We will send a verification code to your email address
+            </p>
+
+            {/* Email Input Field */}
+            <div className="inputContainer emailContainer">
+                <input
+                    required
+                    type="email"
+                    className="email-input"
+                    placeholder="Email"
+                    value={email}
+                    onChange={handleEmailChange}
+                />
             </div>
-            <form className="otp-form" onSubmit={handleSubmit}>
-                <span className="mainHeading">Email Verification</span>
-                <p className="otpSubheading">
-                    We will send a verification code to your email address
-                </p>
+            <button type="button" className="otp-btn" onClick={handleSendOtp}>Send OTP</button>
 
-                {/* Email Input Field */}
-                <div className="inputContainer emailContainer">
-                    <input
-                        required
-                        type="email"
-                        className="email-input"
-                        placeholder="Email"
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
-                </div>
-                <button type="button" className="otp-btn" onClick={handleSendOtp}>Send OTP</button>
-
-                {/* OTP Input Field */}
-                <div className="form-card-input-wrapper">
-                    <input
-                        className="form-card-input"
-                        placeholder="_  _  _  _"
-                        maxLength="4"
-                        type="text" 
-                        value={otp}
-                        onChange={handleOtpChange}
-                    />
-                    <div className="form-card-input-bg"></div>
-                </div>
-
-                {/* Verify Button */}
-                <button className="verifyButton" type="submit">
-                    Verify
-                </button>
-
-                {/* Resend Code Section */}
-                <p className="resendNote">
-                    Didn't receive the code? <button type="button" className="resend-Btn" onClick={handleSendOtp}>Resend Code</button>
-                </p>
-                {success && <p className="success-message">{success}</p>}
-                {error && <p className="error-message">{error}</p>}
-            </form>
-            <div className="fly-img">
-                <img src={image} alt="Flying image" />
-                <div className="quote-container">
-                    <p className="quote-text">"Focus on the journey, not the destination. The learning is in the doing." <br />– StudyBuddy</p>
-                </div>
+            {/* OTP Input Field */}
+            <div className="form-card-input-wrapper">
+                <input
+                    className="form-card-input"
+                    placeholder="_  _  _  _"
+                    maxLength="4"
+                    type="text" 
+                    value={otp}
+                    onChange={handleOtpChange}
+                />
+                <div className="form-card-input-bg"></div>
             </div>
-        </div>
+
+            {/* Verify Button */}
+            <button className="verifyButton" type="submit">
+                Verify
+            </button>
+
+            {/* Resend Code Section */}
+            <p className="resendNote">
+                Didn't receive the code? <button type="button" className="resend-Btn" onClick={handleSendOtp}>Resend Code</button>
+            </p>
+            {success && <p className="success-message">{success}</p>}
+            {error && <p className="error-message">{error}</p>}
+
+        </form>
     );
 
-}
+};
 
 export default MailVerification;
