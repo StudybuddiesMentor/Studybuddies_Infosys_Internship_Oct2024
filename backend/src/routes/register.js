@@ -3,6 +3,7 @@ import express from 'express';
 const router = express.Router();
 //const router = express.Router({mergeParams:true});
 //const registercontroller = require("../controllers/register.js")
+
 // import registercontroller from './controllers/register.js'
 import {login, register, verifyotp, SendOtp, forgotpassword, passwordReset} from '../controllers/register.js';
 
