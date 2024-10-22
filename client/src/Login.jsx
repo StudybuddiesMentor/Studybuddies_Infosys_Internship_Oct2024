@@ -34,10 +34,6 @@ function Login() {
       setEmail('');
       setPassword('');
 
-      setTimeout(() => {
-        window.location.href = 'https://kbalaji-portfolio.netlify.app';
-      }, 2000);
-
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Invalid email or password');
