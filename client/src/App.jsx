@@ -4,6 +4,8 @@ import Login from './Login';
 import ForgotPassword from './ForgotPassword'; 
 import ResetPassword from './ResetPassword';
 import MailVerification from './MailVerification'
+import Features from './Features';
+
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} /> 
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} /> 
+        <Route path="/features" element={<Features/>}/>
+
         <Route
           path="/"
           element={
