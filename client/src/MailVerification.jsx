@@ -52,7 +52,6 @@ const MailVerification = () => {
     };
 
     return (
-<<<<<<< HEAD
         <form className="otp-form" onSubmit={handleSubmit}>
             <span className="mainHeading">Email Verification</span>
             <p className="otpSubheading">
@@ -83,62 +82,6 @@ const MailVerification = () => {
                     onChange={handleOtpChange}
                 />
                 <div className="form-card-input-bg"></div>
-=======
-        <div className="page">
-            <div className="logo-container">
-                <img src={logo} alt="Logo" className="logo" />
-                <span className="studybuddy">StudyBuddy</span>
-            </div>
-            <form className="otp-form" onSubmit={handleSubmit}>
-                <span className="mainHeading">Email Verification</span>
-                <p className="otpSubheading">We will send a verification code to your email address</p>
-
-                {/* Email Input */}
-                <div className="inputContainer emailContainer">
-                    <input
-                        required
-                        type="email"
-                        className="email-input"
-                        placeholder="Email"
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
-                </div>
-                <button type="button" className="otp-btn" onClick={handleSendOtp}>Send OTP</button>
-
-                {/* OTP Input */}
-                <div className="form-card-input-wrapper">
-                    <input
-                        className="form-card-input"
-                        placeholder="_  _  _  _"
-                        maxLength="4"
-                        type="text"
-                        value={otp}
-                        onChange={handleOtpChange}
-                    />
-                    <div className="form-card-input-bg"></div>
-                </div>
-
-                {/* Verify Button */}
-                <button className="verifyButton" type="submit">Verify</button>
-
-                {/* Resend OTP Section */}
-                <p className="resendNote">
-                    Didn't receive the code? <button type="button" className="resend-Btn" onClick={handleSendOtp}>Resend Code</button>
-                </p>
-
-                {/* Display success or error messages */}
-                {success && <p className="success-message">{success}</p>}
-                {error && <p className="error-message">{error}</p>}
-            </form>
-
-            {/* Image and quote section */}
-            <div className="fly-img">
-                <img src={image} alt="Flying image" />
-                <div className="quote-container">
-                    <p className="quote-text">"Focus on the journey, not the destination. The learning is in the doing." <br />– StudyBuddy</p>
-                </div>
->>>>>>> fd7c779899e5b9077089f55119da47dbfc88fc56
             </div>
 
             {/* Verify Button */}
@@ -155,11 +98,7 @@ const MailVerification = () => {
 
         </form>
     );
-<<<<<<< HEAD
 
 };
-=======
-}
->>>>>>> fd7c779899e5b9077089f55119da47dbfc88fc56
 
 export default MailVerification;
