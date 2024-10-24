@@ -1,4 +1,4 @@
-import './Features.css';
+import './Features1.css';
 import React from 'react';
 import favourite from './assets/favourite.png';
 import flashcard1 from './assets/flashcard1.png';
@@ -10,9 +10,9 @@ import category from './assets/category.png';
 import rating from './assets/rating.png';
 import comment from './assets/comment.png';
 
-function Features() {
+function Features1() {
   return (
-    <>
+    <div>
       {/* First Section */}
       <section className="features-section bg">
         <div className="text-content">
@@ -90,7 +90,7 @@ function Features() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
-export default Features;
+export default Features1;
