@@ -33,6 +33,9 @@ install: This command tells npm to install the dependencies listed in your packa
    1. cd Studybuddies_Infosys_Internship_Oct2024
    2. cd backend
    3. npm install
+   4. npm install nodemailer                        // Run the following command to install Nodemailer:
+   5. npm start
+
 
 
 # Create File 
