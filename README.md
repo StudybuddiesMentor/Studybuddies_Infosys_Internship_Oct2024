@@ -19,8 +19,8 @@ StudyBuddies aims to streamline the  studying process by providing a user-friend
    # Install dependencies On Client Side
    1. cd Studybuddies_Infosys_Internship_Oct2024
    2. cd client
-   3. npm install --legacy-peer-deps
-   4. npm install 
+   3. npm install
+   4. npm install --legacy-peer-deps
    5. npm run dev
 
    ** Explanation of Flags
