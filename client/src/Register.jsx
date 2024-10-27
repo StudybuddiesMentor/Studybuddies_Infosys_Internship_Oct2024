@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './Login.css'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import image from './assets/fly.jpg';
-import logo from './assets/logo.png'; 
+import image from './assets/register.png';
+import logo from './assets/logo1.png'; 
 
 function Register() {
     const [name, setName] = useState('');
@@ -57,7 +57,6 @@ function Register() {
             {/* Logo container */}
             <div className="logo-container">
                 <img src={logo} alt="Logo" className="logo" />
-                <span className='studybuddy'>StudyBuddy</span>
             </div>
 
             <div className="login-right">

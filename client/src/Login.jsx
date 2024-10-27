@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './Login.css'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import image from './assets/fly.jpg';
-import logo from './assets/logo.png';  // Add your logo image here
+import image from './assets/loginani.png';
+import logo from './assets/logo1.png';  // Add your logo image here
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -54,7 +54,6 @@ function Login() {
       {/* Logo container */}
       <div className="logo-container">
         <img src={logo} alt="Logo" className="logo" />
-        <span className='studybuddy'>StudyBuddy</span>
       </div>
 
       <div className="login-right">
