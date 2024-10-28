@@ -1,4 +1,4 @@
-import Deck from "../db/deck.js";
+import Deck from "../db/Deck.js";
 
 // Create a new deck
 export const createDeck = async (req, res) => {

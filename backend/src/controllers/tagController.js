@@ -1,4 +1,4 @@
-import Deck from "../db/deck.js";
+import Deck from "../db/Deck.js";
 import Tag from "../db/Tag.js";
 
 // Create a new tag

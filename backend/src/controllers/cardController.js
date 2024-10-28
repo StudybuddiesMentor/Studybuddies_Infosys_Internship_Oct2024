@@ -1,5 +1,5 @@
-import Card from "../db/card.js";
-import Deck from "../db/deck.js";
+import Card from "../db/Card.js";
+import Deck from "../db/Deck.js";
 
 // Add a card to a deck
 export const createCard = async (req, res) => {
