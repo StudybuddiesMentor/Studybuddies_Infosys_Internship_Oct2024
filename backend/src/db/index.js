@@ -1,20 +1,17 @@
-import dotenv from 'dotenv'
-import mongoose from "mongoose"
-import { DB_NAME } from "../constants.js"
+// Import all models
+import User from 'User.js';
+import Deck from 'Deck.js';
+import Card from 'Card.js';
+import Vote from 'Vote.js';
+import Tag from 'Tag.js';
+import DeckTag from 'DeckTag.js';
 
-dotenv.config({
-    path: './env'
-})
-
-const connectDB = async () => {
-    try {
-        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
-        console.log(` \n MongoBB connected !! DB HOST: ${
-            connectionInstance.connection.host}`);
-    } catch (error) {
-        console.log("MONGODB connection error" , error);
-        process.exit(1)
-    }
-}
-
-export default connectDB 
+// Export all models from a single file
+export { 
+  User, 
+  Deck, 
+  Card, 
+  Vote, 
+  Tag, 
+  DeckTag 
+};
