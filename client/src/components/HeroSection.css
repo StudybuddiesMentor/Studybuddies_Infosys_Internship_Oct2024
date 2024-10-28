@@ -1,0 +1,94 @@
+/* HeroSection.css */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;  
+  width: 100vw;   
+  padding: 0 100px;
+  background: linear-gradient(to right, #e0f7f8, #f0f7f7);  /* Background gradient */
+  box-sizing: border-box;  /* Ensures padding doesn't cause overflow */
+  overflow: hidden; /* Prevents any scrollbars from appearing */
+}
+
+.hero-content {
+  flex: 1;  /* Left content takes up 50% of the screen */
+  max-width: 600px; /* Optional: Limit width for readability */
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.hero-content h1 span {
+  color: #00bfa5;  /* Highlighted color for 'Best' */
+}
+
+.hero-content p {
+  margin: 20px 0;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.btn {
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.watch-btn {
+  background-color: #00bfa5;
+  color: white;
+}
+
+.get-btn {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.watch-btn:hover, .get-btn:hover {
+  opacity: 0.9;  /* Slight hover effect */
+}
+
+.hero-image {
+  flex: 1;  /* Right content takes up 50% of the screen */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .hero-content, .hero-image {
+    max-width: 100%;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

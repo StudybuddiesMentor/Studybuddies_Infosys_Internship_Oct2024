@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..800&display=swap');
+* {
+  font-family: "Open Sans", sans-serif;
+  box-sizing: border-box;
+}
+
+/* Logo container */
+.logo-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 100;
+}
+.studybuddy {
+  font-family: "Spicy Rice", serif;
+  color: rgba(0, 0, 0, 0.814);
+  font-size: 20px;    
+}
+.logo {
+  width: 40px;
+  height: auto;
+}
+
+/* Page container for centering */
+.page {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* OTP Form */
+.otp-form {
+  width: 100%;
+  max-width: 380px;
+  background-color: #fff;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  margin: 0 auto;
+}
+
+.mainHeading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f0f0f;
+}
+
+.otpSubheading {
+  font-size: 0.9rem;
+  color: #000;
+  text-align: center;
+}
+
+.inputContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.email-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.otp-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #67be6a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.otp-btn:hover {
+  background-color: #67be6a;
+}
+
+.form-card-input-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.form-card-input {
+  width: 200px; 
+  padding: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center; 
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  outline: none;
+  z-index: 1;
+  background: transparent; 
+}
+
+.form-card-input-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100%;
+  border-radius: 12px;
+  background-color: rgba(206, 206, 206, 0.664);
+  z-index: 0; 
+}
+
+.verifyButton {
+  width: 100%;
+  padding: 15px;
+  background-color: #67be6a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verifyButton:hover {
+  background-color: #67be6a;
+}
+
+.resendNote {
+  font-size: 0.9rem;
+  color: #000;
+  text-align: center;
+}
+
+.resendBtn {
+  background-color: transparent;
+  border: none;
+  color: #7f81ff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.resend-Btn:hover {
+  background-color: #047220;
+}
+
+/* Responsive Styling for medium screens */
+@media (max-width: 1068px) {
+  .page {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .otp-form {
+    max-width: 350px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+
+  .resendNote {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .success-message {
+    color: #28a745;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .logo-container {
+    top: 10px; 
+    left: 10px;
+  }
+}
+
+/* Responsive Styling for small screens */
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .otp-form {
+    max-width: 350px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+
+  .resendNote {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .success-message {
+    color: #28a745;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .logo-container {
+    top: 10px; 
+    left: 10px;
+  }
+}
