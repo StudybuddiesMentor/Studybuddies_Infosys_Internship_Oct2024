@@ -6,9 +6,6 @@ const router = express.Router();
 // import registercontroller from './controllers/register.js'
 import {login, register, verifyotp, SendOtp, forgotpassword, passwordReset} from '../controllers/register.js';
 
-
-
-
 router.post("/login" , login);
 
 router.post("/register", register);
