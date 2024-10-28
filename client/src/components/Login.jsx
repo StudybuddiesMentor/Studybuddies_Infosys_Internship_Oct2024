@@ -89,8 +89,12 @@ function Login() {
               />
             </div>
             <div className="login-links">
-              <button className="btn-links" onClick={handleForgotPassword}>Forgot Your Password?</button>
-              <button className="btn-links" onClick={handleRegister}>Need an Account?</button>
+              <button type="button" className="btn-links" onClick={handleForgotPassword}>
+                Forgot Your Password?
+              </button>
+              <button type="button" className="btn-links" onClick={handleRegister}>
+                Need an Account?
+              </button>
             </div>
             <button type="submit" className="btn-submit">Sign In</button>
           </form>
@@ -98,9 +102,11 @@ function Login() {
       </div>
       <div className="fly-img">
         <img src={image} alt="Flying image" />
-        <div class="quote-container">
-  <p class="quote-text">"Dream big, work hard, stay focused, and surround yourself with good people." <br />– StudyBuddy</p>
-</div>
+        <div className="quote-container">
+          <p className="quote-text">
+            "Dream big, work hard, stay focused, and surround yourself with good people." <br />– StudyBuddy
+          </p>
+        </div>
       </div>
     </div>
   );
