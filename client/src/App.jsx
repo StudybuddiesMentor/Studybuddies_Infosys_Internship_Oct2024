@@ -7,6 +7,7 @@ import MailVerification from './components/MailVerification';
 import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css';
+import MainPage from './components/MainPage';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
-        <Route path="/features" element={<Features />} />
+        <Route path="/MainPage" element={<MainPage />} />
       </Routes>
     </Router>
   );
