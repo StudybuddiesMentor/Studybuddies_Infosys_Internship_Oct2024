@@ -8,11 +8,12 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Import middlewares
-import { adminAuthMiddleware, userAuthMiddleware } from "./middleware/auth.js";
-
 // Import routes
-import router from "./routes/register.js";
+import userRoutes from "./routes/userRoutes.js";
+import deckRoutes from "./routes/deckRoutes.js";
+import cardRoutes from "./routes/cardRoutes.js";
+import voteRoutes from "./routes/voteRoutes.js";
+import tagRoutes from "./routes/tagRoutes.js";
 
 // Fetch the PORT and MONGODB_URI from .env
 const PORT = process.env.PORT || 8000;
@@ -31,7 +32,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/", router);
+// Add routes
+app.use("/api/users", userRoutes); // Route for user-related operations
+app.use("/api/decks", deckRoutes); // Route for deck-related operations
+app.use("/api/cards", cardRoutes); // Route for card-related operations
+app.use("/api/votes", voteRoutes); // Route for voting-related operations
+app.use("/api/tags", tagRoutes); // Route for tag-related operations
 
 // Unified function to connect to MongoDB and start the server
 const startServer = async () => {
