@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './Login.css'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import image from './assets/register.png';
-import logo from './assets/logo1.png'; 
+import image from '@/assets/register.png';
+import logo from '@/assets/logo1.png'; 
 
 function Register() {
     const [name, setName] = useState('');

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './MailVerification.css';
-import image from './assets/fly.jpg';
-import logo from './assets/logo.png';
+// import image from './assets/loginani.png';
+import logo from '@/assets/logo1.png';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

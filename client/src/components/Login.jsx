@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './Login.css'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import image from './assets/loginani.png';
-import logo from './assets/logo1.png';  // Add your logo image here
+import image from '@/assets/loginani.png';
+import logo from '@/assets/logo1.png';
 
 function Login() {
   const [email, setEmail] = useState('');

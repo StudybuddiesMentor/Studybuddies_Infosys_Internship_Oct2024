@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Register from './Register';
-import Login from './Login';
-import ForgotPassword from './ForgotPassword'; 
-import ResetPassword from './ResetPassword';
-import MailVerification from './MailVerification'
-import Features from './Features';
+import Register from './components/Register';
+import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword'; 
+import ResetPassword from './components/ResetPassword';
+import MailVerification from './components/MailVerification'
+import Features from './components/Features';
 
 
 function App() {
