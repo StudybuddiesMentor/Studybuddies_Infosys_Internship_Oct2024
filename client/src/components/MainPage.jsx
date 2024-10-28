@@ -67,9 +67,7 @@ const MainPage = () => {
             <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
               Create Deck
             </button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
-              Create Flashcard
-            </button>
+          
 
             {/* Category Dropdown */}
             <div className="relative">
