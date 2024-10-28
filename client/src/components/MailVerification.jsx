@@ -26,7 +26,7 @@ const MailVerification = () => {
     const handleSendOtp = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/send-otp', { email });
+            const response = await axios.post('http://localhost:9000/send-otp', { email });
             console.log('OTP sent successfully:', response.data);
             setSuccess(response.data.message);
             setError('');
@@ -40,7 +40,7 @@ const MailVerification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/verify-otp', { email, otp });
+            const response = await axios.post('http://localhost:9000/verify-otp', { email, otp });
             console.log('OTP verification successful:', response.data);
             setSuccess(response.data.message);
             setError('');
@@ -58,7 +58,6 @@ const MailVerification = () => {
             {/* Logo container */}
             <div className="logo-container">
                 <img src={logo} alt="Logo" className="logo" />
-                <span className='studybuddy'>StudyBuddy</span>
             </div>
             <form className="otp-form" onSubmit={handleSubmit}>
                 <span className="mainHeading">Email Verification</span>

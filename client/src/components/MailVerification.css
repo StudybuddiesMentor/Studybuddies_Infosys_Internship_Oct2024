@@ -22,28 +22,33 @@
   width: 40px;
   height: auto;
 }
+
+/* Page container for centering */
 .page {
   background-color: #fff;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh; 
   width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
 }
+
+/* OTP Form */
 .otp-form {
   width: 100%;
   max-width: 380px;
-  max-height: 600px;
   background-color: #fff;
-  padding-left: 50px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px;
-  margin: 50px 520px;
   gap: 20px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
+  margin: 0 auto;
 }
 
 .mainHeading {
@@ -75,7 +80,7 @@
 .otp-btn {
   width: 100%;
   padding: 10px;
-  background-color: #7f81ff;
+  background-color: #67be6a;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -85,7 +90,7 @@
 }
 
 .otp-btn:hover {
-  background-color: #9091ff;
+  background-color: #67be6a;
 }
 
 .form-card-input-wrapper {
@@ -120,11 +125,10 @@
   z-index: 0; 
 }
 
-
 .verifyButton {
   width: 100%;
   padding: 15px;
-  background-color: #7f81ff;
+  background-color: #67be6a;
   color: white;
   border: none;
   border-radius: 10px;
@@ -133,7 +137,7 @@
 }
 
 .verifyButton:hover {
-  background-color: #9091ff;
+  background-color: #67be6a;
 }
 
 .resendNote {
@@ -149,46 +153,44 @@
   cursor: pointer;
   font-weight: 700;
 }
+
 .resend-Btn:hover {
   background-color: #047220;
 }
 
-
+/* Responsive Styling for medium screens */
 @media (max-width: 1068px) {
   .page {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
     margin: 0 auto;
-    max-width: 90%;
+    width: 100%;
   }
 
   .otp-form {
-      max-width: 350px;
-      width: 100%;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      background-color: #fff;
+    max-width: 350px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
   }
 
   .resendNote {
-      text-align: center;
-      font-size: 0.9rem;
+    text-align: center;
+    font-size: 0.9rem;
   }
 
-  /* Message styles */
   .success-message {
-      color: #28a745;
-      font-size: 0.9rem;
-      text-align: center;
+    color: #28a745;
+    font-size: 0.9rem;
+    text-align: center;
   }
 
   .error-message {
-      color: #dc3545;
-      font-size: 0.9rem;
-      text-align: center;
+    color: #dc3545;
+    font-size: 0.9rem;
+    text-align: center;
   }
   .logo-container {
     top: 10px; 
@@ -196,15 +198,15 @@
   }
 }
 
+/* Responsive Styling for small screens */
 @media (max-width: 768px) {
   .page {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
     margin: 0 auto;
-    max-width: 90%;
+    width: 100%;
   }
 
   .otp-form {
@@ -212,37 +214,25 @@
     width: 90%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    background-color: #fff;
   }
 
   .resendNote {
-      text-align: center;
-      font-size: 0.9rem;
+    text-align: center;
+    font-size: 0.9rem;
   }
 
-  /* Message styles */
   .success-message {
-      color: #28a745;
-      font-size: 0.9rem;
-      text-align: center;
+    color: #28a745;
+    font-size: 0.9rem;
+    text-align: center;
   }
 
   .error-message {
-      color: #dc3545;
-      font-size: 0.9rem;
-      text-align: center;
+    color: #dc3545;
+    font-size: 0.9rem;
+    text-align: center;
   }
-  /* .page {
-    grid-template-columns: 1fr;
-  }
-  .otp-form {
-    padding: 30px;
-    width: 90%;
-    max-width: 350px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } */
+
   .logo-container {
     top: 10px; 
     left: 10px;

@@ -4,6 +4,38 @@
 # Project Title
 Studybuddies
 
+# Local Setup Instructions
+
+## Client Setup
+1. Install dependencies:
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Backend Setup
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Create a `.env` file in the backend directory:
+   ```bash
+   touch .env
+   ```
+
+3. Copy the contents of `.env.sample` into the newly created `.env` file.
+
+4. Start the backend server:
+   ```bash
+   npm run start
+   ```
+
+
 ## Description
 StudyBuddies aims to streamline the  studying process by providing a user-friendly web application. This application allows users to create and organize their study materials (Cards) into private or public decks. Public decks can be favorited by other users, fostering a collaborative community for studying and note-sharing.
 
