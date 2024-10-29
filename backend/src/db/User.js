@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-  // this is done because if the name of another user is exactly same as of mine then how he will register
   },
   email: {
     type: String,
@@ -15,24 +14,54 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  fullName:{
+    type:String,
+    default : ''
+  },
+  profilePic :  {
+    url: String,
+    filename: String,
+    },
+
+ bio :{
+    type : String,
+     default : ''
+ },
+ profession: {
+  type : String,
+  default : ''
+},
+ gender: { 
+  type: String,
+   enum: ['Male', 'Female', 'Other'],
+   }, 
   is_verified: {
     type: Boolean,
     default: false,
+    required:true
   },
   role: {
     type: String,
     enum: ["user", "admin"],
     default: "user",
   },
-  created_at: {
-    type: Date,
-    default: Date.now,
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now,
-  },
+  otp: {
+    type: String, 
+},
+ otpExpires: {
+    type: Date, 
+},
+ createdAt: {
+  type: Date,
+  default: Date.now,
+},
+ updatedAt: {
+  type: Date,
+  default: Date.now, 
+},
+  
 });
+
 
 const User = mongoose.model("User", userSchema);
 export default User;

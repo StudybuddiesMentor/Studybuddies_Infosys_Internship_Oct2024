@@ -1,13 +1,10 @@
 import express from 'express';
 import { 
-  registerUser, 
-  loginUser, 
+   
   getUserProfile, 
-  updateUserProfile, 
-  sendOtp, 
-  forgotPassword,
-  verifyOtp, 
-  passwordReset 
+  updateUserProfile,loginUser,registerUser,
+  verifyotp,forgotPassword,passwordReset,SendOtp
+   
 } from '../controllers/userController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
 
@@ -46,14 +43,14 @@ router.put('/profile', userAuthMiddleware, updateUserProfile);
  * @desc Send OTP for account verification or password reset
  * @access Public
  */
-router.post('/send-otp', sendOtp);
+router.post('/send-otp', SendOtp);
 
 /**
  * @route POST /api/users/verify-otp
  * @desc Verify the OTP for user verification
  * @access Public
  */
-router.post('/verify-otp', verifyOtp);
+router.post('/verify-otp', verifyotp);
 
 
 /**
