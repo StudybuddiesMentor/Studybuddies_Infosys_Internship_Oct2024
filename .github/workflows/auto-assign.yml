@@ -1,0 +1,22 @@
+name: Auto Assign Issue
+
+on:
+  issue_comment:
+    types: [created]  # Triggers when a new comment is created on an issue
+
+jobs:
+  assign_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check /assign command
+        if: contains(github.event.comment.body, '/assign')  # Checks if the comment contains "/assign"
+        uses: actions/github-script@v6  # Uses the GitHub Script Action to run JavaScript
+        with:
+          script: |
+            const assignee = context.payload.comment.user.login;  # Gets the username of the commenter
+            await github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: [assignee],  # Assigns the issue to the commenter
+            });
