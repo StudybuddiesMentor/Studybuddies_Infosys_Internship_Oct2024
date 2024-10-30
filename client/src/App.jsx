@@ -4,10 +4,10 @@ import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import MailVerification from './components/MailVerification';
-import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css';
 import MainPage from './components/MainPage';
+import Flashcard from './components/Flashcard';
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
         <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/Flashcard" element={<Flashcard/>}/>
       </Routes>
     </Router>
   );
