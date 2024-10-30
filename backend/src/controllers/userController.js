@@ -219,7 +219,7 @@ export const passwordReset = async (req, res) => {
     
      jwt.verify(token, JWT_SECRET, async(err, decoded) => {
         if (err) {
-            return res.json({ status: "error with token" });
+            return res.json({ message: "error with token" });
         }
 
         try {
@@ -234,41 +234,85 @@ export const passwordReset = async (req, res) => {
             await User.findByIdAndUpdate(id, { password: hashedPassword },{ new: true });
            
 
-           return res.status(200).json({ status: "Password successfully updated" });
+           return res.status(200).json({ message: "Password successfully updated" });
         } 
         catch (error) {
-            return registerUser.status(500).json({ status: error.message || "An error occurred" });
+            return registerUser.status(500).json({ message :  "An error occurred" , error: error.message});
         }
     });
 };
 
-// Get authenticated user's profile
-export const getUserProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    res.status(200).json(user);
-  } catch (error) {
-    console.error("Get profile error:", error);
-    res.status(500).json({ message: "Server error." });
-  }
-};
-
-// Update authenticated user's profile
-export const updateUserProfile = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
+export const updateUserProfile =  async (req, res) => {
+    const {  gender, email,fullName  } = req.body;
+    console.log("data getting from body",req.body);
+    try{
     const user = await User.findById(req.user.id);
-
-    if (!user) return res.status(404).json({ message: "User not found." });
-
-    if (username) user.username = username;
-    if (email) user.email = email;
-    if (password) user.password = await bcrypt.hash(password, 10);
-    await user.save();
-
-    res.status(200).json({ message: "Profile updated successfully." });
-  } catch (error) {
-    console.error("Update profile error:", error);
-    res.status(500).json({ message: "Server error." });
-  }
+    
+    if(!user){
+        return res.status(404).json({ message: "User not found" })
+    } 
+         user.gender = gender|| user.gender;
+         user.fullName = fullName || user.fullName;
+         if(email){
+         user.email = email 
+      }
+         user.updatedAt = Date.now();
+         await user.save();
+         console.log("after updated",user)
+         return res.status(200).json({ message:"Personal Information has been updated", user });
+        }
+     catch (error) {
+        return res.status(500).json({ message: "Internal server error", error: error.message });
+    }
 };
+
+export const updateUserBio = async(req,res)=>{
+    const {username,profession,bio} = req.body;
+    const  profilePic = req.file;
+    try{
+        const user = await User.findById(req.user.id);
+        if(!user){
+            return res.status(404).json({message:"user not found"});
+        }
+        user.bio = bio || user.bio;
+        user.profession = profession || user.profession;
+        user.username = username || user.username;
+        user.updatedAt = Date.now();
+        if( profilePic){
+           let url = req.file.path;
+            let filename = req.file.filename;
+            user.profilePic ={url,filename} 
+        }
+        await user.save();
+        return res.status(200).json({ message: "Profile has been updated", user });
+
+    }catch (error) {
+        return res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+}
+
+export const getUserProfile = async(req,res)=>{
+    try{
+        const user = await User.findById(req.user.id)
+        if(!user){
+            return res.status(404).json({message:"user not found"});
+        }
+        return res.status(200).json({message:"User Profile",user})
+        
+
+    }
+    catch(error){
+        res.status(500).json({message:"Internal Server error",error:error.message})
+    }
+
+}
+
+export const logoutUser = async(req,res)=>{
+    try{
+    res.clearCookie('token'); 
+    return res.status(200).json({ message: 'user logged out successfully' });
+    }
+    catch(error){
+      res.status(500).json({ message: "Error logging out user", error });
+    }
+  };

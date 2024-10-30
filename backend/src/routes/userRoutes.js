@@ -2,11 +2,22 @@ import express from 'express';
 import { 
    
   getUserProfile, 
-  updateUserProfile,loginUser,registerUser,
+  updateUserProfile,loginUser,registerUser,logoutUser,updateUserBio,
   verifyotp,forgotPassword,passwordReset,SendOtp
    
 } from '../controllers/userController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
+import ValidateSize from '../middlewares/ImageValidate.js'
+
+import multer from 'multer'
+import { storage } from '../cloudConfig.js'
+
+const MAX_SIZE = 5 * 1024 * 1024;
+const upload = multer({ storage:storage,
+  limits: {
+    fileSize: MAX_SIZE, // Maximum file size in bytes //
+    }
+  });
 
 const router = express.Router();
 
@@ -33,10 +44,17 @@ router.get('/profile', userAuthMiddleware, getUserProfile);
 
 /**
  * @route PUT /api/users/profile
- * @desc Update user profile
+ * @desc Update user additional information
  * @access Private (User Auth)
  */
 router.put('/profile', userAuthMiddleware, updateUserProfile);
+
+/**
+ * @route PUT /api/users/profile-pic
+ * @desc Update user profilepic 
+ * @access Private (User Auth)
+ */
+router.put('/profile-bio', userAuthMiddleware, upload.single('profilePic'),ValidateSize, updateUserBio);
 
 /**
  * @route POST /api/users/send-otp
@@ -66,5 +84,14 @@ router.post('/forgot-password', forgotPassword);
  * @access Public
  */
 router.post('/reset-password/:id/:token', passwordReset);
+
+/**
+ * @route GET /api/users/logout
+ * @desc Logout user with release of token
+ * @access Public
+ */
+
+
+router.get('/logout',logoutUser);
 
 export default router;

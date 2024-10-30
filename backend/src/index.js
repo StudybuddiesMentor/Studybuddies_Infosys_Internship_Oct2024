@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import multer from "multer";
 
 // configuration from environment variables
 import dotenv from "dotenv";
@@ -71,6 +72,21 @@ const startServer = async () => {
       `);
   }
 };
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+      // Handle Multer-specific errors
+      if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ message: 'Error: File too large. Maximum file size is 5 MB.' });
+      }
+    
+      return res.status(500).json({ message: 'Multer Error: ' + err.message });
+  } else if (err) {
+    
+      return res.status(500).json({ message: 'Internal Server Error: ' + err.message });
+  }
+  next();
+})
 
 // Start the application
 startServer();
