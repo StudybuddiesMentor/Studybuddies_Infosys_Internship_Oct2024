@@ -8,21 +8,10 @@ jobs:
   assign_issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Check /assign command
+      - name: Check for /assign command
         if: contains(github.event.comment.body, '/assign')
-        uses: actions/github-script@v6
+        uses: imjohnbo/issue-bot@v3.4.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const assignee = context.payload.comment.user.login;
-            const { owner, repo } = context.repo;
-            const issue_number = context.payload.issue.number;  // Fix here
-
-            console.log(`Assigning ${assignee} to issue #${issue_number}`);
-
-            await github.issues.addAssignees({
-              owner,
-              repo,
-              issue_number,
-              assignees: [assignee],
-            });
+          assignees: ${{ github.event.comment.user.login }}
+          issue_number: ${{ github.event.issue.number }}
