@@ -1,0 +1,17 @@
+name: Auto Assign Issue
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  assign_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for /assign command
+        if: contains(github.event.comment.body, '/assign')
+        uses: imjohnbo/issue-bot@v3.4.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: ${{ github.event.comment.user.login }}
+          issue_number: ${{ github.event.issue.number }}

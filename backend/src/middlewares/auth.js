@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 
 // Secret key to sign and verify JWT tokens (stored securely in .env)
+<<<<<<< HEAD
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "yourSecretKey";
 
 // Middleware for User Authentication
@@ -23,6 +24,30 @@ export const userAuthMiddleware = (req, res, next) => {
   }
 };
 
+=======
+const JWT_SECRET = "jwt_secret_key";
+
+// Middleware for User Authentication
+export const userAuthMiddleware =  (req, res, next) => {
+    
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+      return res.status(401).json({ message: "No token provided, access denied." });
+  }
+
+  
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+          return res.status(401).json({ message: "Session expired, please log in again." });
+      }
+      
+      
+      req.user = decoded;
+      next(); 
+  });
+};
+>>>>>>> origin/main
 // Middleware for Admin Authentication (User + Admin role check)
 export const adminAuthMiddleware = (req, res, next) => {
   // Get token from headers
