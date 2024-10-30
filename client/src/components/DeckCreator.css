@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..800&display=swap');
+* {
+  font-family: "Open Sans", sans-serif;
+  box-sizing: border-box;
+}
+
+.flashcard-deck-creator {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 900px;
+    margin-bottom: 16px;
+  }
+  
+  .deck-info {
+    margin-bottom: 24px;
+  }
+
+  /* Input container */
+  .input-container {
+    position: relative;
+    margin: 20px;
+  }
+
+  /* Input field */
+  .input-field {
+    width: 60%;
+    padding: 12px;
+    margin: 6px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+    background-color: transparent;
+  }
+
+  /* Placeholder text disappears on focus */
+  .input-field::placeholder {
+    color: #ccc;
+    transition: color 0.3s ease;
+  }
+
+  .input-field:focus::placeholder {
+    color: transparent; /* Hides placeholder text on focus */
+  }
+
+  /* Input label */
+  .input-label {
+    position: absolute;
+    top: 12px; /* Adjusted for input padding */
+    left: 12px;
+    font-size: 16px;
+    color: #ccc;
+    opacity: 0; /* Make label invisible initially */
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  /* Move label up and make visible on focus */
+  .input-field:focus + .input-label {
+    top: -10px;
+    font-size: 12px;
+    color: #1cb53a;
+    opacity: 1; /* Make label visible */
+  }
+
+  .desc-input {
+    width: 40%; /* Match width to the previous input */
+    padding: 12px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+  .input {
+    width: 70%;
+    padding: 12px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .tag-section {
+    margin-bottom: 24px;
+  }
+  
+  .tag-input-container {
+    width: 50%;
+    margin: 20px;
+    align-items: center;
+  }
+  
+  .add-tag-button {
+    padding: 10px 16px;
+    margin-left: 8px;
+    background-color: #63e35a;
+    color: #ffffff;
+    border: none;
+    border-radius: 24px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .add-tag-button:hover {
+    background-color: #1cb53a;
+  }
+  
+  .tag-list {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .tag {
+    display: flex;
+    align-items: center;
+    background-color: #e2e8f0;
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+  }
+  
+  .tag-delete {
+    margin-left: 8px;
+    color: #555;
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .tag-delete:hover {
+    color: #ff5c5c;
+  }
+  
+  .subtitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 20px;
+  }
+  
+  .flashcard-list {
+    display: flex;
+    width: 80%;
+    margin-left: 140px;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #ccc; /* Adjust the color and style as needed */
+    border-radius: 8px; /* Rounded corners (optional) */
+    padding: 16px; /* Space inside the box */
+    background-color: #f9f9f9; /* Background color (optional) */
+  }
+
+  .flashcard-input {
+    flex: 1;
+    width: 40%;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    outline: none;
+    box-shadow: none;
+    color: inherit;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-bottom: 2px solid #ccc;
+    transition: border-bottom-color 0.3s;
+  }
+
+  .flashcard-input:focus {
+    border-bottom-color: #4CAF50; /* Change color when focused (adjust as needed) */
+  }
+  
+  .delete-flashcard-button {
+    background-color: #e3342f;
+    color: #ffffff;
+    border: none;
+    padding: 6px 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 90px;
+  }
+  
+  .delete-flashcard-button:hover {
+    background-color: #cc1f1a;
+  }
+  
+  .add-flashcard-button,
+  .save-deck-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+    font-size: 16px;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-flashcard-button {
+    background-color: #38a169;
+  }
+  
+  .add-flashcard-button:hover {
+    background-color: #2f855a;
+  }
+  
+  .save-deck-button {
+    background-color: #3182ce;
+  }
+  
+  .save-deck-button:hover {
+    background-color: #2b6cb0;
+  }
+  
