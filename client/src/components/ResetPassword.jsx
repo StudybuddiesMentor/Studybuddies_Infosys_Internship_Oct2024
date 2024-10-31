@@ -25,11 +25,7 @@ const ResetPassword = () => {
         }
 
         try {
-<<<<<<< HEAD
-            const response = await axios.post(`http://localhost:8000/reset-password/${id}/${token}`, { password });
-=======
             const response = await axios.post(`http://localhost:9000/api/users/reset-password/${id}/${token}`, { password });
->>>>>>> origin/main
 
             console.log('Response:', response.data); 
             setSuccess('Password reset successful. Redirecting to login...');

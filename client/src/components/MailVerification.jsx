@@ -26,11 +26,7 @@ const MailVerification = () => {
     const handleSendOtp = async (e) => {
         e.preventDefault();
         try {
-<<<<<<< HEAD
-            const response = await axios.post('http://localhost:9000/send-otp', { email });
-=======
             const response = await axios.post('http://localhost:9000/api/users/send-otp', { email });
->>>>>>> origin/main
             console.log('OTP sent successfully:', response.data);
             setSuccess(response.data.message);
             setError('');
@@ -44,11 +40,7 @@ const MailVerification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-<<<<<<< HEAD
-            const response = await axios.post('http://localhost:9000/verify-otp', { email, otp });
-=======
             const response = await axios.post('http://localhost:9000/api/users/verify-otp', { email, otp });
->>>>>>> origin/main
             console.log('OTP verification successful:', response.data);
             setSuccess(response.data.message);
             setError('');

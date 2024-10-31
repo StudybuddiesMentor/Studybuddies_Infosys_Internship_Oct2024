@@ -10,7 +10,7 @@ import ExploreDecks from './components/explore/ExploreDecks'; // Import ExploreD
 import ExploreDeckDetails from './components/explore/ExploreDeckDetails'; // Import ExploreDeckDetails
 import './index.css';
 import MainPage from './components/MainPage';
-import Help from './components/Help';
+import Help from './components/Help.jsx';
 
 function App() {
   return (
