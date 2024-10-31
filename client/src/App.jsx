@@ -8,7 +8,7 @@ import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css';
 import MainPage from './components/MainPage';
-import Help from './components/Help';
+import Help from './components/Help.jsx';
 
 function App() {
   return (
