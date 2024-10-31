@@ -31,7 +31,7 @@ function Features1() {
         <div className="text-content">
           <h2>Find Flashcards</h2>
           <p>
-            Finding the perfect set of flashcards is quick and easy with our search feature. Whether you're studying for a specific subject, exam, or topic, simply enter a keyword, and browse through a variety of flashcard sets created by others. Filter results by relevance, popularity, or recent additions to discover the most helpful flashcards for your needs. Once you find the right set, you can start studying immediately or even customize it to suit your preferences.
+            Finding the perfect set of flashcards is quick and easy with our search feature. Whether you're studying for a specific subject, or topic, simply enter a keyword, and browse through a variety of flashcard sets created by others. Filter results by relevance, popularity, or recent additions to discover the most helpful flashcards for your needs. Once you find the right set, you can start studying immediately or even customize it to suit your preferences.
           </p>
         </div>
         <div className="image-content">
