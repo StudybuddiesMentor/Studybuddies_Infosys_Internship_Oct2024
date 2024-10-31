@@ -17,7 +17,7 @@ import voteRoutes from "./routes/voteRoutes.js";
 import tagRoutes from "./routes/tagRoutes.js";
 
 // Fetch the PORT and MONGODB_URI from .env
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 9000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
