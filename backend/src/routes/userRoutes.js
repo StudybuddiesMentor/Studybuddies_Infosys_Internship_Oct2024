@@ -1,8 +1,4 @@
 import express from 'express';
-<<<<<<< HEAD
-import { registerUser, loginUser, getUserProfile, updateUserProfile } from '../controllers/userController.js';
-import { userAuthMiddleware } from '../middlewares/auth.js';
-=======
 import { 
    
   getUserProfile, 
@@ -22,7 +18,6 @@ const upload = multer({ storage:storage,
     fileSize: MAX_SIZE, // Maximum file size in bytes //
     }
   });
->>>>>>> origin/main
 
 const router = express.Router();
 
@@ -49,17 +44,11 @@ router.get('/profile', userAuthMiddleware, getUserProfile);
 
 /**
  * @route PUT /api/users/profile
-<<<<<<< HEAD
- * @desc Update user profile
-=======
  * @desc Update user additional information
->>>>>>> origin/main
  * @access Private (User Auth)
  */
 router.put('/profile', userAuthMiddleware, updateUserProfile);
 
-<<<<<<< HEAD
-=======
 /**
  * @route PUT /api/users/profile-pic
  * @desc Update user profilepic 
@@ -105,5 +94,4 @@ router.post('/reset-password/:id/:token', passwordReset);
 
 router.get('/logout',logoutUser);
 
->>>>>>> origin/main
 export default router;
