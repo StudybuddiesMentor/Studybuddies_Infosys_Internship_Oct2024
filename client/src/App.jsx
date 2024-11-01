@@ -8,7 +8,7 @@ import MailVerification from './components/MailVerification';
 import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css'; // Main styles
-import './styles/tailwind.css'; //this was added to assist the explore page
+import './styles/tailwind.css'; // Tailwind styles
 import MainPage from './components/MainPage';
 import Help from './components/Help.jsx';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
@@ -23,9 +23,9 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
-        <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
         <Route path="/help" element={<Help />} />
-        <Route path="/explore-page" element={<ExplorePage />} /> {/* New Route for ExplorePage */}
+        <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
       </Routes>
     </Router>
   );
