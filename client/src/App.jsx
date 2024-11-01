@@ -1,3 +1,4 @@
+import React from 'react'; // Import React
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
@@ -6,11 +7,11 @@ import ResetPassword from './components/ResetPassword';
 import MailVerification from './components/MailVerification';
 import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
-import ExploreDecks from './components/explore/ExploreDecks'; // Import ExploreDecks
-import ExploreDeckDetails from './components/explore/ExploreDeckDetails'; // Import ExploreDeckDetails
-import './index.css';
+import './index.css'; // Main styles
+import './styles/tailwind.css'; //this was added to assist the explore page
 import MainPage from './components/MainPage';
 import Help from './components/Help.jsx';
+import ExplorePage from './components/ExplorePage'; // Import ExplorePage
 
 function App() {
   return (
@@ -24,8 +25,7 @@ function App() {
         <Route path="/mail-verification" element={<MailVerification />} />
         <Route path="/MainPage" element={<MainPage />} />
         <Route path="/help" element={<Help />} />
-        <Route path="/explore" element={<ExploreDecks />} /> {/* Explore Decks Route */}
-        <Route path="/decks/:deckId" element={<ExploreDeckDetails />} /> {/* Deck Details Route */}
+        <Route path="/explore-page" element={<ExplorePage />} /> {/* New Route for ExplorePage */}
       </Routes>
     </Router>
   );
