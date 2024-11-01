@@ -7,9 +7,7 @@ import MailVerification from './components/MailVerification';
 import Home from './components/Home'; // Import Home component
 import './index.css';
 import MainPage from './components/MainPage';
-import Flashcard from './components/Flashcard';
-import DeckCreator from './components/DeckCreator';
-
+import Deck from './components/Deck';
 
 function App() {
   return (
@@ -22,8 +20,8 @@ function App() {
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
         <Route path="/MainPage" element={<MainPage />} />
-        <Route path="/Flashcard" element={<Flashcard/>}/>
-        <Route path="/Deck" element={<DeckCreator/>}/>
+        <Route path="/Deck" element={<Deck/>}/>
+        
       </Routes>
     </Router>
   );
