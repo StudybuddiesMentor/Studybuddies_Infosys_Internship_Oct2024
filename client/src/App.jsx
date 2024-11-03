@@ -8,20 +8,23 @@ import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css';
 import MainPage from './components/MainPage';
+import Userpagebody from './components/Userpagebody';
+
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} /> {/* Home Route */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
-        <Route path="/mail-verification" element={<MailVerification />} />
-        <Route path="/MainPage" element={<MainPage />} />
-      </Routes>
-    </Router>
+    <Userpagebody/>
+    // <Router>
+    //   <Routes>
+    //     <Route path="/" element={<Home />} /> {/* Home Route */}
+    //     <Route path="/register" element={<Register />} />
+    //     <Route path="/login" element={<Login />} />
+    //     <Route path="/forgot-password" element={<ForgotPassword />} />
+    //     <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+    //     <Route path="/mail-verification" element={<MailVerification />} />
+    //     <Route path="/MainPage" element={<MainPage />} />
+    //   </Routes>
+    // </Router>
   );
 }
 
