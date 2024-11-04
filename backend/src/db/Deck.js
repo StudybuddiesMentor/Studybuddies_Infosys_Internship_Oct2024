@@ -5,6 +5,10 @@ const deckSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  deck_Image:{
+    url : String,
+    filename : String
+  },
   description: {
     type: String,
     default: "",

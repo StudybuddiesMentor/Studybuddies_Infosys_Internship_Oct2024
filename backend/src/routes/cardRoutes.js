@@ -1,8 +1,17 @@
 import express from 'express';
-import { createCard, updateCard, deleteCard } from '../controllers/cardController.js';
+import { createCard, updateCard, deleteCard,getCards } from '../controllers/cardController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
+
+
+/**
+ * @route GET /api/cards/:deckId
+ * @desc get all the cards of specific deck
+ * @access Private (User Auth)
+ */
+
+router.get('/:deckId',userAuthMiddleware,getCards);
 
 /**
  * @route POST /api/cards/:deckId

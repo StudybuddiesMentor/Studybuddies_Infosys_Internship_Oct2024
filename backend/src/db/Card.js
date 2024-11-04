@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const cardSchema = new mongoose.Schema({
-  front_content: {
+  Title: {
     type: String,
     required: true,
   },
-  back_content: {
+  Content: {
     type: String,
     required: true,
   },
