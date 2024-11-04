@@ -25,7 +25,7 @@ function Login() {
       const response = await axios.post('http://localhost:9000/api/users/login', {
         email,
         password,
-      });
+      },{ withCredentials: true });
       console.log(response.data);
 
       setSuccess('Login successful! Redirecting...');

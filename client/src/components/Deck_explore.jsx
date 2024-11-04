@@ -1,10 +1,14 @@
+
 import React from 'react';
 
-const Deck = ({ title, description }) => {
+const Deck = ({ title, description, imageUrl }) => {
+  // Default image URL for decks without an image
+  const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 cursor-pointer transition-transform transform hover:scale-110 hover:shadow-xl duration-200 w-64 h-64 flex flex-col justify-between border-2 border-black hover:border-gray-500">
       <img 
-        src="https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg" 
+        src={imageUrl || defaultImageUrl} // Use the provided imageUrl or the default image
         alt={title} 
         className="rounded-t-lg h-32 object-cover" 
       />
@@ -19,8 +23,7 @@ const Deck = ({ title, description }) => {
         Open Deck
       </button>
     </div>
-  );
+  );  
 };
-
 
 export default Deck;

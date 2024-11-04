@@ -98,7 +98,7 @@ export const deleteDeck = async (req, res) => {
     await deck.remove();
    return res.status(200).json({ message: "Deck deleted successfully." });
   } catch (error) {
-    console.error(error);
+    
    return res.status(500).json({ message: "Server error." });
   }
 };
@@ -108,7 +108,7 @@ export const getPublicDecks = async(req,res)=>{
   console.log("Fetching public decks...");
 try{
   const decks = await Deck.find({is_public: true});
-  console.log(decks);
+
 
   if(decks.length == 0){
    return res.status(404).json({message:"Currently there are no such decks"})
