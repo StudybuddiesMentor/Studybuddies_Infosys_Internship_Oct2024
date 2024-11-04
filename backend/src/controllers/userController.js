@@ -29,14 +29,13 @@ export const loginUser = async (req, res) => {
         
         const token = jwt.sign({ id : user._id, email: user.email }, JWT_SECRET, { expiresIn: "10d" });
 
-       
+        console.log("Attempting to set token cookie");
         res.cookie("token", token, {
-            httpOnly: true,
-            secure: false, 
-            sameSite: 'strict', 
+            httpOnly: true, 
             maxAge: 10 * 24 * 60 * 60 * 1000
 
         });
+        console.log("Token cookie set");
         res.status(200).json({ message: "Login successful",token });
     } catch (err) {
         console.error(err);
