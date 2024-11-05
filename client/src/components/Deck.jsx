@@ -11,6 +11,7 @@ const Deck = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [viewMode, setViewMode] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [deckImage, setDeckImage] = useState(null);
 
   useEffect(() => {
     const savedDecks = localStorage.getItem("decks");
@@ -49,7 +50,21 @@ const Deck = () => {
     setTags(tags.filter((_, i) => i !== index));
   };
 
+  const handleImageUpload = (e) => {
+    setDeckImage(e.target.files[0]); // Store the uploaded image
+  };
+
   const saveDeck = () => {
+    const formData = new FormData();
+    formData.append("title", deckTitle);
+    formData.append("description", deckDescription);
+    formData.append("tags", JSON.stringify(tags)); // Convert tags array to JSON string
+    formData.append("flashcards", JSON.stringify(flashcards)); // Convert flashcards array to JSON string
+    formData.append("isPublic", isPublic);
+    formData.append("createdTime", new Date().toLocaleString());
+    if (deckImage) {
+      formData.append("image", deckImage); // Add the image file to the FormData
+    }
     const newDeck = {
       title: deckTitle,
       description: deckDescription,
@@ -69,6 +84,7 @@ const Deck = () => {
     setTags([]);
     setFlashcards([{ title: "", content: "" }]);
     setIsPublic(false);
+    setDeckImage(null);
   };
 
   return (
@@ -167,6 +183,23 @@ const Deck = () => {
             onChange={(e) => setDeckDescription(e.target.value)}
             rows="3"
           />
+          {/* Image Upload Section */}
+          <div className="mb-5">
+            <label className="block text-gray-700">Upload Deck Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="border border-gray-300 rounded-lg p-2 w-full shadow focus:outline-none"
+              onChange={handleImageUpload}
+            />
+            {deckImage && (
+              <img
+                src={URL.createObjectURL(deckImage)}
+                alt="Deck Preview"
+                className="mt-4 w-full h-48 object-cover rounded-lg shadow"
+              />
+            )}
+          </div>
 
           <div className="mb-5 flex items-center">
             <input
@@ -220,13 +253,17 @@ const Deck = () => {
                 placeholder={`Flashcard ${index + 1} Title`}
                 className="border border-gray-300 rounded-lg w-full p-2 mb-2 shadow focus:outline-none focus:ring-2 focus:ring-green-300"
                 value={flashcard.title}
-                onChange={(e) => updateFlashcard(index, "title", e.target.value)}
+                onChange={(e) =>
+                  updateFlashcard(index, "title", e.target.value)
+                }
               />
               <textarea
                 placeholder="Content"
                 className="border border-gray-300 rounded-lg w-full p-2 shadow focus:outline-none focus:ring-2 focus:ring-green-300"
                 value={flashcard.content}
-                onChange={(e) => updateFlashcard(index, "content", e.target.value)}
+                onChange={(e) =>
+                  updateFlashcard(index, "content", e.target.value)
+                }
                 rows="3"
               />
               <button
@@ -263,7 +300,7 @@ const Deck = () => {
       ) : (
         <div className="container mx-auto py-12 px-8 bg-white shadow-xl rounded-lg mt-8 max-w-4xl">
           <h1 className="text-4xl font-bold text-green-700 mb-8 text-center">
-            Flashcards by Deck
+            Flashcards sorted based on Decks
           </h1>
           {createdDecks.map((deck, index) => (
             <div key={index} className="mb-10">
@@ -271,6 +308,17 @@ const Deck = () => {
                 {deck.title}
               </h2>
               <p className="text-gray-600 mb-4">{deck.description}</p>
+
+              {/* Display deck image if available */}
+              {deck.imageUrl && (
+                <img
+                  src={deck.imageUrl}
+                  alt={`Image for deck ${deck.title}`}
+                  className="w-full h-48 object-cover rounded-lg mb-4"
+                />
+              )}
+
+              {/* Display flashcards within the deck */}
               {deck.flashcards.map((flashcard, flashcardIndex) => (
                 <div
                   key={flashcardIndex}
@@ -284,6 +332,7 @@ const Deck = () => {
               ))}
             </div>
           ))}
+
           <button
             onClick={() => setViewMode(false)}
             className="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg shadow hover:bg-green-800 transition-colors w-full"
@@ -298,15 +347,17 @@ const Deck = () => {
         <div className="container mx-auto text-center bg-gray-800">
           <p>&copy; 2024 Study Buddy. All Rights Reserved.</p>
           <div className="mt-2 space-x-4">
-            {["Privacy Policy", "Terms of Service", "Contact Us"].map((item) => (
-              <a
-                key={item}
-                href={`/${item.toLowerCase().replace(" ", "-")}`}
-                className="hover:text-gray-400"
-              >
-                {item}
-              </a>
-            ))}
+            {["Privacy Policy", "Terms of Service", "Contact Us"].map(
+              (item) => (
+                <a
+                  key={item}
+                  href={`/${item.toLowerCase().replace(" ", "-")}`}
+                  className="hover:text-gray-400"
+                >
+                  {item}
+                </a>
+              )
+            )}
           </div>
         </div>
       </footer>
