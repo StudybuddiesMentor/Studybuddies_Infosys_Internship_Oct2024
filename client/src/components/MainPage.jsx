@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [favorites, setFavorites] = useState([false, false, false]);
+
+  const navigate = useNavigate();
+
+  const handleCreateDeck = () => {
+    navigate('/create-deck');
+  };
 
   const flashcards = [
     {
@@ -64,7 +71,7 @@ const MainPage = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-4 order-1 lg:order-2">
-            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+            <button onClick={handleCreateDeck} className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
               Create Deck
             </button>
           

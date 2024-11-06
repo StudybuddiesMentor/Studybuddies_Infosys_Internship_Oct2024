@@ -18,7 +18,7 @@ import tagRoutes from "./routes/tagRoutes.js";
 
 // Fetch the PORT and MONGODB_URI from .env
 const PORT = process.env.PORT || 9000;
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = 'mongodb+srv://aryan:aryan123@studybuddy.2bajq.mongodb.net/studybuddy';
 
 const app = express();
 

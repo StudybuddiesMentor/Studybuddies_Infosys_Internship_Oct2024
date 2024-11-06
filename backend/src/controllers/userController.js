@@ -163,34 +163,31 @@ export const forgotPassword = async (req, res) => {
 
        
         const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          port :465,
-          secure : true,
-          logger : false,
-          debug:true,
-          auth: {
-              user: process.env.GMAIL_ID, // Replace with your Gmail
-              pass: process.env.GMAIL_PASS,
-               // Replace with your email password or app-specific password
-          },
-          tls:{
-            rejectUnauthorized :true
-          }
-          
-      });
-
+            service: 'gmail',
+            port :465,
+            secure : true,
+            logger : false,
+            debug:true,
+            auth: {
+                user: process.env.GMAIL_ID, // Replace with your Gmail
+                pass: process.env.GMAIL_PASS,
+                 // Replace with your email password or app-specific password
+            },
+            tls:{
+              rejectUnauthorized : true
+            }
+            
+        });
+    
         // Email options
         const mailOptions = {
-            from: 'process.env.GMAIL_ID;',
+            from: process.env.GMAIL_ID,
             to: user.email,
-            subject: 'StudyBuddies - reset password',
-           // text: `Click on the link to reset your password: http://localhost:5173/reset-password/${user._id}/${token}`
-           html: `
-           <h3>Reset Your Password</h3>
-           <p>Click the link below to reset your password:</p>
-           <a href="http://localhost:5173/reset-password/${user._id}/${token}">Reset Password</a>
-           <p>Reset Link is valid for only 15:00 min.</p>`
-       };
+            subject: 'StudyBuddies - veify with otp',
+            html: `<h3>Your One Time Password (OTP): ${verifyotp} </h3>
+                   <p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>`
+          
+       };
        // Send the email
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

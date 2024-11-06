@@ -12,6 +12,8 @@ import './styles/tailwind.css'; // Tailwind styles
 import MainPage from './components/MainPage';
 import Help from './components/Help.jsx';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
+import DeckList from './pages/DeckList';
+import './App.css';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
         <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
         <Route path="/help" element={<Help />} />
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
+        <Route path="/create-deck" element={<DeckList />} />
+
       </Routes>
     </Router>
   );
