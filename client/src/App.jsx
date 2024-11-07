@@ -14,6 +14,7 @@ import Help from './components/Help.jsx';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
 import DeckList from './pages/DeckList';
 import './App.css';
+import TermsOfService from './components/TermNCondition.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
         <Route path="/create-deck" element={<DeckList />} />
+        <Route path="/term-and-condition" element={<TermsOfService />} />
 
       </Routes>
     </Router>
