@@ -51,20 +51,19 @@ const Deck = () => {
   };
 
   const handleImageUpload = (e) => {
-    setDeckImage(e.target.files[0]); // Store the uploaded image
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setDeckImage(reader.result); // Store the Base64 string representation of the image
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   const saveDeck = () => {
-    const formData = new FormData();
-    formData.append("title", deckTitle);
-    formData.append("description", deckDescription);
-    formData.append("tags", JSON.stringify(tags)); // Convert tags array to JSON string
-    formData.append("flashcards", JSON.stringify(flashcards)); // Convert flashcards array to JSON string
-    formData.append("isPublic", isPublic);
-    formData.append("createdTime", new Date().toLocaleString());
-    if (deckImage) {
-      formData.append("image", deckImage); // Add the image file to the FormData
-    }
     const newDeck = {
       title: deckTitle,
       description: deckDescription,
@@ -72,7 +71,9 @@ const Deck = () => {
       flashcards: flashcards,
       isPublic: isPublic,
       createdTime: new Date().toLocaleString(),
+      image: deckImage, // Save the Base64 string representation of the image
     };
+
     const updatedDecks = [...createdDecks, newDeck];
     setCreatedDecks(updatedDecks);
     localStorage.setItem("decks", JSON.stringify(updatedDecks));
@@ -158,6 +159,7 @@ const Deck = () => {
           </div>
         </div>
       </nav>
+      {/* ... [rest of the navbar code remains unchanged] */}
 
       {/* Main Content Section */}
       {!viewMode ? (
@@ -169,6 +171,7 @@ const Deck = () => {
             {lastCreatedTime && `Last Created: ${lastCreatedTime}`}
           </div>
 
+          {/* Deck Title, Description, Tags, and Flashcard Inputs */}
           <input
             type="text"
             placeholder="Enter Deck Title"
@@ -183,6 +186,7 @@ const Deck = () => {
             onChange={(e) => setDeckDescription(e.target.value)}
             rows="3"
           />
+
           {/* Image Upload Section */}
           <div className="mb-5">
             <label className="block text-gray-700">Upload Deck Image</label>
@@ -194,13 +198,12 @@ const Deck = () => {
             />
             {deckImage && (
               <img
-                src={URL.createObjectURL(deckImage)}
+                src={deckImage}
                 alt="Deck Preview"
                 className="mt-4 w-full h-48 object-cover rounded-lg shadow"
               />
             )}
           </div>
-
           <div className="mb-5 flex items-center">
             <input
               type="checkbox"
@@ -275,6 +278,7 @@ const Deck = () => {
             </div>
           ))}
 
+          {/* Save Deck Button */}
           <div className="flex justify-between">
             <button
               onClick={addFlashcard}
@@ -290,6 +294,7 @@ const Deck = () => {
             </button>
           </div>
 
+          {/* View Flashcards Button */}
           <button
             onClick={() => setViewMode(true)}
             className="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg shadow hover:bg-green-800 transition-colors w-full"
@@ -299,47 +304,58 @@ const Deck = () => {
         </div>
       ) : (
         <div className="container mx-auto py-12 px-8 bg-white shadow-xl rounded-lg mt-8 max-w-4xl">
-          <h1 className="text-4xl font-bold text-green-700 mb-8 text-center">
-            Flashcards sorted based on Decks
-          </h1>
-          {createdDecks.map((deck, index) => (
-            <div key={index} className="mb-10">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                {deck.title}
-              </h2>
-              <p className="text-gray-600 mb-4">{deck.description}</p>
+  <h1 className="text-4xl font-bold text-green-700 mb-8 text-center">
+    Flashcards sorted based on Decks
+  </h1>
+  {createdDecks.map((deck, index) => (
+    <div key={index} className="mb-10">
+      <div className="border border-gray-200 rounded-lg p-6 shadow-md bg-gray-50">
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
+          {deck.title}
+        </h2>
 
-              {/* Display deck image if available */}
-              {deck.imageUrl && (
-                <img
-                  src={deck.imageUrl}
-                  alt={`Image for deck ${deck.title}`}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-              )}
+        {/* Display deck image if available */}
+        {deck.image && (
+          <img
+            src={deck.image}
+            alt={`Image for deck ${deck.title}`}
+            className="w-full h-48 object-cover rounded-lg mb-4 shadow-sm"
+          />
+        )}
 
-              {/* Display flashcards within the deck */}
-              {deck.flashcards.map((flashcard, flashcardIndex) => (
-                <div
-                  key={flashcardIndex}
-                  className="p-4 bg-gray-100 rounded-lg shadow mb-4"
-                >
-                  <h3 className="text-lg font-medium text-gray-700">
-                    {flashcard.title}
-                  </h3>
-                  <p className="text-gray-600">{flashcard.content}</p>
-                </div>
-              ))}
-            </div>
-          ))}
+        {/* Description */}
+        <p className="text-lg text-gray-700 font-medium mb-6">
+          <span className="block font-semibold text-gray-900 mb-1">Description:</span>
+          {deck.description}
+        </p>
 
-          <button
-            onClick={() => setViewMode(false)}
-            className="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg shadow hover:bg-green-800 transition-colors w-full"
+        {/* Display flashcards within the deck */}
+        {deck.flashcards.map((flashcard, flashcardIndex) => (
+          <div
+            key={flashcardIndex}
+            className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm mb-4"
           >
-            Back to Create Deck
-          </button>
-        </div>
+            <h3 className="text-lg font-semibold text-green-700 mb-1">
+              {flashcard.title}
+            </h3>
+            <p className="text-gray-600">{flashcard.content}</p>
+          </div>
+        ))}
+      </div>
+
+      <hr className="border-t-2 border-gray-300 my-10 mx-auto w-3/4 rounded-lg shadow-md" />
+    </div>
+  ))}
+
+  <button
+    onClick={() => setViewMode(false)}
+    className="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg shadow hover:bg-green-800 transition-colors w-full"
+  >
+    Back to Create Deck
+  </button>
+</div>
+
       )}
 
       {/* Footer */}
