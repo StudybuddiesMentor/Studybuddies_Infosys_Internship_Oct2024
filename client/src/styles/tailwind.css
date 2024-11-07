@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-image: url('https://i.pinimg.com/736x/e5/85/84/e58584ee0b5c3b44a4817b88da2c7d0a.jpg'); /* Background image */
+  background-size: cover; /* Cover the entire body */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-color: #caa3d6; /* Fallback color */
+}

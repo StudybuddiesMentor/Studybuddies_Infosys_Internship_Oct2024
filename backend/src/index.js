@@ -1,55 +1,92 @@
+// external dependencies
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import multer from "multer";
 
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
-import router from './routes/register.js';
-
-
-// Load environment variables
+// configuration from environment variables
+import dotenv from "dotenv";
 dotenv.config();
 
-const PORT = 8000;
+// Import routes
+import userRoutes from "./routes/userRoutes.js";
+import deckRoutes from "./routes/deckRoutes.js";
+import cardRoutes from "./routes/cardRoutes.js";
+import voteRoutes from "./routes/voteRoutes.js";
+import tagRoutes from "./routes/tagRoutes.js";
 
+// Fetch the PORT and MONGODB_URI from .env
+const PORT = process.env.PORT || 9000;
+const MONGODB_URI = 'mongodb+srv://aryan:aryan123@studybuddy.2bajq.mongodb.net/studybuddy';
 
 const app = express();
 
 // CORS settings
-app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ["GET", "POST"],
-    credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allows all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"], // Allows all common HTTP methods
+    credentials: true, // No credentials for security reasons when using origin "*"
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 
-// MongoDB connection
-const mongourl = "mongodb://127.0.0.1:27017/test";    // change database name
-main()
-.then(()=>{
-    console.log("mongodb connected successfully");
+// Add routes
+app.use("/api/users", userRoutes); // Route for user-related operations
+app.use("/api/decks", deckRoutes); // Route for deck-related operations
+app.use("/api/cards", cardRoutes); // Route for card-related operations
+app.use("/api/votes", voteRoutes); // Route for voting-related operations
+app.use("/api/tags", tagRoutes); // Route for tag-related operations
+
+// Unified function to connect to MongoDB and start the server
+const startServer = async () => {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect(MONGODB_URI);
+
+    // Boxed console log for successful MongoDB connection
+    console.log(`
+      ******************************************
+      ***   MongoDB connected successfully   ***
+      ******************************************
+      `);
+
+    // Start the server after MongoDB connection is successful
+    app.listen(PORT, () => {
+      console.log(`
+      *******************************************
+      ***   Server is running on port: ${PORT}   ***
+      *******************************************
+        `);
+    });
+  } catch (err) {
+    // Boxed console error for MongoDB connection or server failure
+    console.error(`
+      ************************************************************
+      ***   Failed to connect to MongoDB or start the server   ***
+      ************************************************************
+      Error: ${err}
+      ************************************************************
+      `);
+  }
+};
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+      // Handle Multer-specific errors
+      if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ message: 'Error: File too large. Maximum file size is 5 MB.' });
+      }
+    
+      return res.status(500).json({ message: 'Multer Error: ' + err.message });
+  } else if (err) {
+    
+      return res.status(500).json({ message: 'Internal Server Error: ' + err.message });
+  }
+  next();
 })
-.catch((err)=>{
-    console.log(err);
-})
 
-async function main() {
-    await mongoose.connect(mongourl);
-}
-
-
-app.use("/",router);
-
-
-
-// Home route with JWT verification
-app.get('/home',  (req, res) => {
-    return res.json({ message: "Success! You are authenticated." });
-});
-
-// Server listening
-app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`);
-});
-
+// Start the application
+startServer();
