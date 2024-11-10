@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import banner1 from '../assets/banner1.png';
-import logoDefault from '../assets/logo.png';
 
-const Userpagebody = () => {
+const Adminpagebody = () => {
   // Original password fetched from database
   const originalPassword = 'currentPassword123';
 
@@ -13,15 +12,12 @@ const Userpagebody = () => {
     gender: 'Male',
   });
 
-  const [bio, setBio] = useState("I'm a user creating decks and flashcards for knowledge sharing");
-  const [isEditingBio, setIsEditingBio] = useState(false);
-  const [editedBio, setEditedBio] = useState(bio);
   const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false);
   const [editedPersonalInfo, setEditedPersonalInfo] = useState(Info);
   const [editedPassword, setEditedPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [Newpassword, setNewPassword] = useState(originalPassword); // Newpassword state to hold the updated password
-  const [successMessage, setSuccessMessage] = useState(''); // Success message state
+  const [Newpassword, setNewPassword] = useState(originalPassword);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleEditPersonalInfoClick = () => {
     setEditedPersonalInfo(Info);
@@ -47,20 +43,14 @@ const Userpagebody = () => {
       return;
     }
 
-    // Update the new password
-    setNewPassword(editedPassword); // Save the new password
+    setNewPassword(editedPassword);
     setUserInfo({ ...editedPersonalInfo });
     setShowPersonalInfoModal(false);
     document.body.style.overflow = 'auto';
-
-    // Show success message
     setSuccessMessage('Password changed successfully!');
-    
-    // Clear password fields after saving
     setEditedPassword('');
     setConfirmPassword('');
 
-    // Clear success message after a delay (e.g., 3 seconds)
     setTimeout(() => setSuccessMessage(''), 3000);
   };
 
@@ -226,4 +216,4 @@ const Userpagebody = () => {
   );
 };
 
-export default Userpagebody;
+export default Adminpagebody;
