@@ -5,12 +5,11 @@ import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import MailVerification from './components/MailVerification';
-import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css'; // Main styles
 import './styles/tailwind.css'; // Tailwind styles
 import MainPage from './components/MainPage';
-import Help from './components/Help.jsx';
+import Help from './components/Help';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
 import Deck from './pages/Deck';
 import './App.css';
