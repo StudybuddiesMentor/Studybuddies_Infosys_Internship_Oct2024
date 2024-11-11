@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import logo from '../assets/images.png'; 
 import { FaBars, FaTimes } from 'react-icons/fa';
+import Userpagebody from './Userpagebody';
+import Footer from './UserPageFooter'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +12,7 @@ const Navbar = () => {
   };
 
   return (
+    <>
     <nav className="flex justify-between items-center p-4 bg-purple-800 text-white relative z-10">
       <div className="navbar-logo">
         <img 
@@ -36,6 +39,9 @@ const Navbar = () => {
         <a href="/logout" className="block text-white hover:text-yellow-400 transition-colors duration-300 p-2">Logout</a>
       </div>
     </nav>
+    <Userpagebody/>
+    <Footer/>
+    </>
   );
 };
 

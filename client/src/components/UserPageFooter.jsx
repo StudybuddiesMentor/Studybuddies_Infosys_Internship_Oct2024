@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import logo from '../assets/images.png';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+=======
+import logo from '../assets/images.png'; // Adjust the path to your logo image
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa'; // Social media icons
+>>>>>>> user_page
 
 const Footer = () => {
   const [formData, setFormData] = useState({
