@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [favorites, setFavorites] = useState([false, false, false]);
-
-  const navigate = useNavigate();
-
-  const handleCreateDeck = () => {
-    navigate('/create-deck');
-  };
+  const Navigate = useNavigate();
 
   const flashcards = [
     {
@@ -51,106 +46,91 @@ const MainPage = () => {
   return (
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
       {/* Navbar */}
-<nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
-  <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
-    {/* Logo */}
-    <img
-      src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
-      alt="Study Buddy Logo"
-      className="rounded-full w-14 h-14 hover:scale-110 transition-transform duration-500 hover:shadow-xl"
-    />
-
-    {/* Search Bar */}
-    <div className="flex-1 mx-6 order-2 lg:order-1 relative">
-      <input
-        type="text"
-        placeholder="Search flashcards..."
-        className="border rounded-full px-4 py-2 w-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300 hover:shadow-lg"
-      />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="w-5 h-5 absolute right-4 top-3 text-gray-400"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 10-10.61 0 7.5 7.5 0 0010.61 0z"
-        />
-      </svg>
-    </div>
-
-    {/* Action Buttons */}
-    <div className="flex items-center space-x-6 order-1 lg:order-2">
-      <button
-        onClick={handleCreateDeck}
-        className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-5 py-2 rounded-full shadow-md hover:shadow-lg hover:bg-green-600 transition-colors duration-300"
-      >
-        Create Deck
-      </button>
-
-      {/* Category Dropdown */}
-      <div className="relative">
-        <button
-          className="px-4 py-2 flex items-center bg-gradient-to-r from-white to-gray-100 text-gray-700 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-        >
-          <span className="mr-2">Categories</span>
+      <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
+        <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
+          {/* Logo */}
+          <Link to="/MainPage">
           <img
-            src="https://icons.veryicon.com/png/o/miscellaneous/massager/drop-down-arrow-3.png"
-            alt="Dropdown Arrow"
-            className="h-5"
+            src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
+            alt="Study Buddy Logo"
+            className="rounded-full w-14 h-14 hover:scale-105 transition-transform duration-300"
           />
-        </button>
-        {dropdownOpen && (
-          <div
-            id="categoryDropdown"
-            className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10"
-          >
-            {["Math", "Science", "Languages", "History"].map((category) => (
-              <a
-                href={`/category/${category.toLowerCase()}`}
-                key={category}
-                className="block px-4 py-2 text-gray-700 hover:bg-green-100 transition-colors"
+          </Link>
+
+          {/* Search Bar */}
+          <div className="flex-1 mx-6 order-2 lg:order-1">
+            <input
+              type="text"
+              placeholder="Search flashcards..."
+              className="border rounded-full px-4 py-2 w-full shadow-md focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-300 transition"
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center space-x-4 order-1 lg:order-2">
+            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" onClick={() => Navigate("/deck")}>
+              Create Deck
+            </button>
+          
+
+            {/* Category Dropdown */}
+            <div className="relative">
+              <button
+                className="px-4 py-2 flex items-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                {category}
+                <span className="mr-2 text-gray-700">Categories</span>
+                <img
+                  src="https://icons.veryicon.com/png/o/miscellaneous/massager/drop-down-arrow-3.png"
+                  alt="Dropdown Arrow"
+                  className="h-5"
+                />
+              </button>
+              {dropdownOpen && (
+                <div
+                  id="categoryDropdown"
+                  className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10"
+                >
+                  {["Math", "Science", "Languages", "History"].map((category) => (
+                    <a
+                      href={`/category/${category.toLowerCase()}`}
+                      key={category}
+                      className="block px-4 py-2 text-gray-700 hover:bg-green-100 transition-colors"
+                    >
+                      {category}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Additional Links */}
+            {["Help", "Explore"].map((item) => (
+              <a
+                key={item}
+                href={`/${item.toLowerCase()}`}
+                className="text-gray-700 hover:text-green-500"
+              >
+                {item}
               </a>
             ))}
+
+            {/* Profile Icon */}
+            <a href="/UserPage">
+              <img
+                src="https://www.transparentpng.com/download/user/gray-user-profile-icon-png-fP8Q1P.png"
+                alt="User"
+                className="rounded-full w-10 h-10 shadow-lg p-1 hover:scale-105 transition-transform duration-300"
+              />
+            </a>
+
+            {/* Login/Signup Button */}
+            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+              Logout
+            </button>
           </div>
-        )}
-      </div>
-
-      {/* Additional Links */}
-      {["Help", "Explore"].map((item) => (
-        <a
-          key={item}
-          href={`/${item.toLowerCase()}`}
-          className="text-gray-700 hover:text-green-500 transition-colors duration-300"
-        >
-          {item}
-        </a>
-      ))}
-
-      {/* Profile Icon */}
-      <a href="#">
-        <img
-          src="https://www.transparentpng.com/download/user/gray-user-profile-icon-png-fP8Q1P.png"
-          alt="User"
-          className="rounded-full w-10 h-10 shadow-lg p-1 hover:scale-110 transition-transform duration-500 hover:shadow-xl"
-        />
-      </a>
-
-      {/* Login/Signup Button */}
-      <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-colors duration-300">
-        Login/Signup
-      </button>
-    </div>
-  </div>
-</nav>
-
+        </div>
+      </nav>
 
       {/* Main Content */}
       <main className="container mx-auto mt-10 px-4 bg-gradient-to-b from-green-50 to-green-200 py-10 rounded-xl shadow-lg pl-10">
