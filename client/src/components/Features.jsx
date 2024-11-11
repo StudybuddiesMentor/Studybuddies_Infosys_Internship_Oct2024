@@ -1,14 +1,54 @@
 import React from 'react';
-// import './index.css';
+import './Features.css';
+import flashcard from '/src/assets/flashcard.png';
+import flashcard3 from '/src/assets/flashcard3.png';
+import time from '/src/assets/time.jpeg';
 
 const Features = () => {
   return (
     <div className="features-section p-8 md:p-16 lg:px-28 font-sans text-gray-700 bg-gradient-to-b from-indigo-100 to-orange-50 selection:bg-white selection:text-black">
-      <h1 className="features-title font-bold text-4xl md:text-5xl text-center mb-10 text-black">Explore Your Innovation</h1>
+      
+      <div className="flex justify-center w-full">
+        <h1 className="features-title font-bold text-4xl md:text-5xl text-center mb-10 text-black">Explore Your Innovation</h1>
+      </div>
 
-      {/* Section: Explore Your Innovation */}
+      <section className="features-section bg">
+        <div className="text-content">
+          <h2>Create Flashcards</h2>
+          <p>
+            Creating your own set of flashcards is easy with our free flashcard maker. Simply enter a term and its definition, and organize your flashcards into custom categories to streamline your study sessions. Whether you're preparing for a test or learning something new, our flashcard maker helps you keep everything organized. Once your set is complete, you can study at your own pace and even share your flashcards with friends for collaborative learning.
+          </p>
+        </div>
+        <div className="image-content">
+          <img src={flashcard} alt="Flashcard Feature" />
+        </div>
+      </section>
+
+      <section className="features-section reverse bg">
+        <div className="text-content">
+          <h2>Find Flashcards</h2>
+          <p>
+            Finding the perfect set of flashcards is quick and easy with our search feature. Whether you're studying for a specific subject, exam, or topic, simply enter a keyword, and browse through a variety of flashcard sets created by others. Filter results by relevance, popularity, or recent additions to discover the most helpful flashcards for your needs. Once you find the right set, you can start studying immediately or even customize it to suit your preferences.
+          </p>
+        </div>
+        <div className="image-content">
+          <img src={flashcard3} alt="Versatile Integrations" />
+        </div>
+      </section>
+
+      <section className="features-section bg">
+        <div className="text-content">
+          <h2>A Smarter Way to Study</h2>
+          <p>
+            Flashcards are a highly effective tool for quick and focused learning. By breaking down complex topics into bite-sized pieces, flashcards make it easier to review and memorize key information. This method helps you retain knowledge faster and more efficiently, cutting down on study time while boosting recall. Whether you're preparing for exams or mastering new concepts, flashcards streamline your study sessions and make learning more manageable.
+          </p>
+        </div>
+        <div className="image-content">
+          <img src={time} alt="Flashcard Feature" />
+        </div>
+      </section>
+
       <div className="features-content flex flex-col md:flex-row justify-between space-y-8 md:space-y-0 md:space-x-10 bg-gradient-to-l from-yellow-100 shadow-lg rounded-lg p-8 md:p-16 mt-5 hover:shadow-xl hover:border-yellow-100 hover:bg-gradient-to-tr">
-        {/* Left Column */}
         <div className="left-column space-y-6">
           <div className="feature-item flex items-start">
             <img src="https://cdn-icons-png.flaticon.com/512/9489/9489151.png" alt="Innovation Icon" className="icon w-12 h-12 mr-5" />
@@ -24,7 +64,6 @@ const Features = () => {
           </div>
         </div>
 
-        {/* Right Column */}
         <div className="right-column space-y-6">
           <div className="feature-item flex items-start">
             <img src="https://cdn-icons-png.flaticon.com/512/2112/2112352.png" alt="Growth Icon" className="icon w-12 h-12 mr-5" />
@@ -41,8 +80,10 @@ const Features = () => {
         </div>
       </div>
 
-      {/* Section: Unlock the Future Of */}
-      <h1 className="future-title pt-12 pb-6 font-bold text-4xl md:text-5xl text-center text-black">Unlock the Future of</h1>
+      <div className="flex justify-center w-full pt-12">
+        <h1 className="future-title font-bold text-4xl md:text-5xl text-center text-black">Unlock the Future of</h1>
+      </div>
+
       <div className="future-features flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8 mt-8">
         <div className="future-feature flex-1 px-8 py-10 shadow-lg bg-gradient-to-t from-green-100 to-green-50 rounded-xl text-center hover:shadow-xl hover:bg-gradient-to-br">
           <img src="https://cdn-icons-png.flaticon.com/512/75/75818.png" alt="Collaborative Learning Icon" className="h-20 mx-auto" />

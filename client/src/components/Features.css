@@ -3,10 +3,12 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 40px;
-  max-width: 1200px;
-  margin: auto;
+  padding: 40px; 
+  margin: 0; 
+  width: 100%; 
+  box-sizing: border-box; 
 }
+
 
 .features-section.reverse {
   flex-direction: row-reverse;
@@ -81,46 +83,6 @@
   border-radius: 20px;
 }
 
-.icon-section {
-  padding: 40px;
-  background-color: #f9f9f9;
-  margin-top: 60px;
-}
-
-.icon-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-
-.icon-item {
-  text-align: center;
-  flex: 1;
-  min-width: 180px;
-  margin: 10px;
-}
-
-.icon-item img {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 20px;
-}
-
-.icon-item h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.icon-item p {
-  font-size: 1rem;
-  color: #555;
-}
-
-.icon-row:last-child {
-  margin-bottom: 0;
-}
-
 @media (max-width: 768px) {
   .features-section {
     flex-direction: column;
@@ -144,27 +106,3 @@
   }
 }
 
-@media (max-width: 480px) {
-  .icon-row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .icon-item {
-    margin-bottom: 20px;
-    flex: none;
-  }
-
-  .icon-item img {
-    width: 80px;
-    height: 80px;
-  }
-
-  .icon-item h3 {
-    font-size: 1.25rem;
-  }
-
-  .icon-item p {
-    font-size: 0.9rem;
-  }
-}
