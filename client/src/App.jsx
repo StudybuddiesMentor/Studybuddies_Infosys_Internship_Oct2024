@@ -1,12 +1,17 @@
 import './index.css';
+import Navbar from './components/Userpagenavbar';
 import AdminSection1 from './components/AdminSection1';
+import AdminFooter from './components/AdminFooter';
 
 function App() {
   return (
     <>
-      <AdminSection1/>
+      <Navbar/>   
+      <AdminSection1 />
+      <AdminFooter /> {/* Corrected this line */}
     </>
   );
+  
 }
 
 export default App;

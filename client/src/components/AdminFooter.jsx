@@ -71,7 +71,7 @@ const Footer = () => {
           <p className="text-yellow-400">All our Pages</p>
           <div className="flex flex-col mt-2 space-y-2">
             <a href="/home" className="text-blue-200 hover:text-white transition">Home</a>
-            <a href="/personal-information" className="text-blue-200 hover:text-white transition">Personal Information</a>
+            <a href="/personal-information" className="text-blue-200 hover:text-white transition">Admin Information</a>
             <a href="/deck" className="text-blue-200 hover:text-white transition">Deck</a>
           </div>
         </div>
@@ -79,8 +79,10 @@ const Footer = () => {
         {/* Logo and Contact */}
         <div className="mt-8 md:mt-0 text-center">
           <img src={logo} alt="Study Buddy Logo" className="rounded-full h-12 mx-auto" />
-          <p className="mt-2 text-sm text-gray-500 hover:text-blue-300 cursor-pointer">infosysstudybuddies@gmail.com</p>
-          {/* <div className="flex justify-center space-x-4 mt-4">
+          <a href="mailto:infosysstudybuddies@gmail.com" className="mt-2 text-sm text-gray-500 hover:text-blue-300 cursor-pointer">
+            infosysstudybuddies@gmail.com
+          </a>
+          <div className="flex justify-center space-x-4 mt-4">
             <a href="https://facebook.com" aria-label="Facebook" className="text-gray-400 hover:text-white">
               <FaFacebookF />
             </a>
@@ -93,7 +95,7 @@ const Footer = () => {
             <a href="https://linkedin.com" aria-label="LinkedIn" className="text-gray-400 hover:text-white">
               <FaLinkedin />
             </a>
-          </div> */}
+          </div>
         </div>
       </div>
 

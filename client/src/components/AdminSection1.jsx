@@ -172,7 +172,7 @@ const Adminpagebody = () => {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                <div className="col-span-1">
+                {/* <div className="col-span-1">
                   <label className="block font-semibold mb-2 text-gray-700">Change Password:</label>
                   <input
                     type="password"
@@ -181,8 +181,8 @@ const Adminpagebody = () => {
                     className="w-full p-3 border border-gray-300 rounded-lg text-gray-800"
                     placeholder="Enter new password"
                   />
-                </div>
-                <div className="col-span-1">
+                </div> */}
+                {/* <div className="col-span-1">
                   <label className="block font-semibold mb-2 text-gray-700">Confirm Password:</label>
                   <input
                     type="password"
@@ -191,21 +191,21 @@ const Adminpagebody = () => {
                     className="w-full p-3 border border-gray-300 rounded-lg text-gray-800"
                     placeholder="Confirm new password"
                   />
-                </div>
+                </div> */}
               </div>
 
-              <div className="mt-8 flex justify-end space-x-4">
-                <button
-                  onClick={handleCancelModal}
-                  className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 hover:scale-105 transform transition duration-300 ease-in-out"
-                >
-                  Cancel
-                </button>
+              <div className="mt-8 flex justify-between space-x-4">
                 <button
                   onClick={handleSavePersonalInfoClick}
-                  className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transform transition duration-300 ease-in-out"
+                  className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg transition duration-300"
                 >
                   Save Changes
+                </button>
+                <button
+                  onClick={handleCancelModal}
+                  className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 hover:shadow-lg transition duration-300"
+                >
+                  Cancel
                 </button>
               </div>
             </div>
