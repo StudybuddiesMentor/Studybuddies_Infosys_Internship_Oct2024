@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [favorites, setFavorites] = useState([false, false, false]);
+  const navigate = useNavigate();
 
   const flashcards = [
     {
@@ -112,7 +114,8 @@ const MainPage = () => {
             ))}
 
             {/* Profile Icon */}
-            <a href="#">
+            <a  onClick={() => navigate("/user-page")}
+              className="cursor-pointer">
               <img
                 src="https://www.transparentpng.com/download/user/gray-user-profile-icon-png-fP8Q1P.png"
                 alt="User"

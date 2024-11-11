@@ -8,15 +8,12 @@ import Features from './components/Features';
 import Home from './components/Home';
 import './index.css';
 import MainPage from './components/MainPage';
-import Userpagenavbar from './components/Userpagenavbar';
-import Userpagebody from './components/Userpagebody';
-import Userpagefooter from './components/UserPageFooter';
+import Userpagenavbar from './components/Userpagenavbar'
 
 function App() {
   return (
     <Router>
-      <Userpagenavbar />
-      <Userpagebody />
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
@@ -25,8 +22,9 @@ function App() {
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
         <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/user-page" element={<Userpagenavbar />} />
       </Routes>
-      <Userpagefooter />
+    
     </Router>
   );
 }

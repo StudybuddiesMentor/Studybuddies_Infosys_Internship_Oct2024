@@ -30,7 +30,9 @@ function Login() {
 
       setSuccess('Login successful! Redirecting...');
       setError('');
-
+      setTimeout(() => {
+        navigate('/MainPage');
+      }, 2000);
       setEmail('');
       setPassword('');
 

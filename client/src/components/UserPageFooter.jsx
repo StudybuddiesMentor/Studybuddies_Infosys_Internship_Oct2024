@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from './assets/images.png'; // Adjust the path to your logo image
+import logo from '../assets/images.png'; // Adjust the path to your logo image
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa'; // Social media icons
 
 const Footer = () => {
