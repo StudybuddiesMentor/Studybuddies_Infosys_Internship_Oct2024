@@ -4,11 +4,10 @@ import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import MailVerification from './components/MailVerification';
-import Features from './components/Features';
 import Home from './components/Home'; // Import Home component
 import './index.css';
 import MainPage from './components/MainPage';
-import DeckCreator from './components/DeckCreator';
+import Deck from './components/Deck';
 
 function App() {
   return (
@@ -21,7 +20,8 @@ function App() {
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
         <Route path="/MainPage" element={<MainPage />} />
-        <Route path="/deck-creation" element={<DeckCreator />} />
+        <Route path="/Deck" element={<Deck/>}/>
+        
       </Routes>
     </Router>
   );
