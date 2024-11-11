@@ -6,7 +6,8 @@ const Help = () => {
   return (
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen flex flex-col justify-between">
       {/* Navigation Bar */}
-      <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
+
+ <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
         <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
           {/* Logo */}
           <img
