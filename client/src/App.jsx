@@ -11,7 +11,7 @@ import './styles/tailwind.css'; // Tailwind styles
 import MainPage from './components/MainPage';
 import Help from './components/Help';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
-import Deck from './pages/Deck';
+import Deck from './components/Deck';
 import './App.css';
 
 function App() {
