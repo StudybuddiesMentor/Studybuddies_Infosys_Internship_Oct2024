@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react'; // Import React
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './components/Register';
@@ -16,6 +17,8 @@ import './App.css';
 import Privacy from './components/Privacy'; // Import Privacy Policy Page
 import './index.css'; // Import css for Privacy Policy and ContactUS Page
 import UserPage from './components/UserPage';
+import Adminpage from './components/Adminpage';
+import UserMonitoringPage from './components/UserMonitoringPage';
 // import Deck from './components/Deck';
 
 function App() {
@@ -37,6 +40,9 @@ function App() {
         <Route path="/Home" element={<Home />} />
         <Route path="/Logout" element={<Home />} />
         <Route path="/Decks" element={<Deck />} />
+        <Route path="/AdminPage" element={<Adminpage/>} />
+        <Route path="/users" element={<UserMonitoringPage/>} />
+        <Route path="/privacy-policy" element={<Privacy />} />
       </Routes>
     </Router>
   );
