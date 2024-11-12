@@ -48,6 +48,12 @@ function HomeFooter() {
                   </a>
                 </li>
 
+                <li>
+                  <a href="/privacy" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
+                    Privacy Policy
+                  </a>
+                </li>
+
                 {/* ... other company links ... */}
 
               </ul>
