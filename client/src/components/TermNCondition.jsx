@@ -1,9 +1,12 @@
 import { IoTerminalOutline } from "react-icons/io5";
 import React from "react";
-// import { IonIcon } from '@react-icons/all-files/io5/IoTerminalOutline';
+import Header from './Header';
+import Homefooter from './Homefooter';
 
 const TermsOfService = () => {
   return (
+    <>
+    <Header />
     <div className="flex items-center justify-center min-h-screen bg-[#632bad] p-5">
       <div className="w-full max-w-md bg-white rounded shadow-md">
         <div className="flex items-center justify-center px-10 py-5 border-b">
@@ -15,7 +18,7 @@ const TermsOfService = () => {
             <p className="text-sm text-gray-500">Last updated on November 06 2024</p>
           </div>
         </div>
-        <div className="overflow-auto h-60 px-10 py-5 space-y-4">
+        <div className="overflow-auto h-80 px-10 py-5 space-y-4">
           <ol className="space-y-4">
             <li>
               <h3 className="font-semibold">Terms and Conditions</h3>
@@ -45,15 +48,12 @@ const TermsOfService = () => {
           </ol>
         </div>
         <div className="flex justify-between p-5 border-t">
-          <button className="w-full py-2 mr-2 text-[#632bad] border border-[#632bad] rounded transition-all duration-300 hover:bg-[#632bad] hover:text-white">
-            Decline
-          </button>
-          <button className="w-full py-2 ml-2 text-white bg-[#632bad] rounded transition-all duration-300 hover:bg-[#391766]">
-            Accept
-          </button>
+          
         </div>
       </div>
     </div>
+    <Homefooter />
+    </>
   );
 };
 

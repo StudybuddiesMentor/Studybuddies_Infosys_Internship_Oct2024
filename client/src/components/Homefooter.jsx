@@ -1,6 +1,6 @@
 import React from 'react'
 import logo from '../assets/logo1.png'; // adjust path according to actual location
-
+// import TermsOfService from './TermNCondition';
 
 
 function HomeFooter() {
@@ -45,6 +45,9 @@ function HomeFooter() {
                 <li>
                   <a href="#" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
                     About
+                  </a>
+                  <a href="/term-and-condition" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
+                    Term and Conditions
                   </a>
                 </li>
 
