@@ -1,5 +1,3 @@
----
-
 # 📚 StudyBuddies
 *A Collaborative Study Platform*
 
