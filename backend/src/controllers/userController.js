@@ -239,7 +239,7 @@ export const passwordReset = async (req, res) => {
 };
 
 export const updateUserProfile =  async (req, res) => {
-    const {  gender, email,fullName  } = req.body;
+    const {  gender, email,fullName,username,profession,bio } = req.body;
     console.log("data getting from body",req.body);
     try{
     const user = await User.findById(req.user.id);
@@ -249,6 +249,9 @@ export const updateUserProfile =  async (req, res) => {
     } 
          user.gender = gender|| user.gender;
          user.fullName = fullName || user.fullName;
+         user.bio = bio || user.bio;
+         user.profession = profession || user.profession;
+         user.username = username || user.username;
          if(email){
          user.email = email 
       }
@@ -262,30 +265,33 @@ export const updateUserProfile =  async (req, res) => {
     }
 };
 
-export const updateUserBio = async(req,res)=>{
-    const {username,profession,bio} = req.body;
-    const  profilePic = req.file;
-    try{
+export const updateUserPic = async (req, res) => {
+    const profilePic = req.file;
+    try {
         const user = await User.findById(req.user.id);
-        if(!user){
-            return res.status(404).json({message:"user not found"});
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-        user.bio = bio || user.bio;
-        user.profession = profession || user.profession;
-        user.username = username || user.username;
-        user.updatedAt = Date.now();
-        if( profilePic){
-           let url = req.file.path;
-            let filename = req.file.filename;
-            user.profilePic ={url,filename} 
+        if (profilePic) {
+            if (user.profilePic && user.profilePic.url) {
+                const publicId = extractPublicIdFromUrl(user.profilePic.url);
+                if (publicId) {
+                    await cloudinary.v2.uploader.destroy(publicId);
+                }
+            }
+            const url = profilePic.path; 
+            const filename = profilePic.filename;  
+            user.profilePic = { url, filename }; 
+            await user.save();
+            return res.status(200).json({ message: "Profile picture has been updated", user });
         }
-        await user.save();
-        return res.status(200).json({ message: "Profile has been updated", user });
 
-    }catch (error) {
+        return res.status(400).json({ message: "No profile picture uploaded" });
+
+    } catch (error) {
         return res.status(500).json({ message: "Internal server error", error: error.message });
     }
-}
+};
 
 export const getUserProfile = async(req,res)=>{
     try{

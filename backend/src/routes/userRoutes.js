@@ -2,22 +2,13 @@ import express from 'express';
 import { 
    
   getUserProfile, 
-  updateUserProfile,loginUser,registerUser,logoutUser,updateUserBio,
+  updateUserProfile,loginUser,registerUser,logoutUser,updateUserPic,
   verifyotp,forgotPassword,passwordReset,SendOtp
    
 } from '../controllers/userController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
-import ValidateSize from '../middlewares/ImageValidate.js'
+import {upload,checkMinFileSize} from '../middlewares/ImageValidate.js'
 
-import multer from 'multer'
-import { storage } from '../cloudConfig.js'
-
-const MAX_SIZE = 5 * 1024 * 1024;
-const upload = multer({ storage:storage,
-  limits: {
-    fileSize: MAX_SIZE, // Maximum file size in bytes //
-    }
-  });
 
 const router = express.Router();
 
@@ -54,7 +45,7 @@ router.put('/profile', userAuthMiddleware, updateUserProfile);
  * @desc Update user profilepic 
  * @access Private (User Auth)
  */
-router.put('/profile-bio', userAuthMiddleware, upload.single('profilePic'),ValidateSize, updateUserBio);
+router.put('/profile-bio', userAuthMiddleware, upload.single('profilePic'),checkMinFileSize, updateUserPic);
 
 /**
  * @route POST /api/users/send-otp

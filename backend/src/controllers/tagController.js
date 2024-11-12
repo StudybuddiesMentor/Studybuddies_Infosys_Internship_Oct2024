@@ -1,43 +1,25 @@
 import Deck from "../db/Deck.js";
 import Tag from "../db/Tag.js";
+import checkTag from "../middlewares/TagValidate.js";
 
 // Create a new tag
 export const createTag = async (req, res) => {
   try {
     const { name } = req.body;
-
-    const newTag = new Tag({
-      name,
-    });
+    const result = await checkTag(name);
+    if (result) {
+      return res.status(result.status).json({ message: result.message });
+    }
+     const newTag = new Tag({ name: name.toLowerCase()})
 
     await newTag.save();
-    res.status(201).json(newTag);
+    return res.status(201).json(newTag);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error." });
+   return res.status(500).json({ message: "Internal Server error.", error:error.message });
   }
 };
 
-// Add a tag to a deck
-export const addTagToDeck = async (req, res) => {
-  try {
-    const { deckId } = req.params;
-    const { tagId } = req.body;
 
-    const deck = await Deck.findById(deckId);
-    if (!deck) {
-      return res.status(404).json({ message: "Deck not found." });
-    }
-
-    deck.tags.push(tagId);
-    await deck.save();
-
-    res.status(200).json(deck);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error." });
-  }
-};
 
 // Get all tags
 export const getTags = async (req, res) => {
