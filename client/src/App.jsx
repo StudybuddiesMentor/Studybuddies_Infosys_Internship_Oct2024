@@ -15,6 +15,8 @@ import Deck from './components/Deck';
 import './App.css';
 import Privacy from './components/Privacy'; // Import Privacy Policy Page
 import './index.css'; // Import css for Privacy Policy and ContactUS Page
+import UserPage from './components/UserPage';
+// import Deck from './components/Deck';
 
 function App() {
   return (
@@ -31,6 +33,10 @@ function App() {
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
         <Route path="/Deck" element={<Deck />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/UserPage" element={<UserPage />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Logout" element={<Home />} />
+        <Route path="/Decks" element={<Deck />} />
       </Routes>
     </Router>
   );
