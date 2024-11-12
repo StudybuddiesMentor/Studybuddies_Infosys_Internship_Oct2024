@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Help = () => {
+  const Navigate = useNavigate();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen flex flex-col justify-between">
-      {/* Navigation Bar */}
-
-
-  {/* Navigation Bar */}
-      <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
+  
+  {/* Navbar */}
+  <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
         <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
           {/* Logo */}
+          <Link to="/main-page">
           <img
             src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
             alt="Study Buddy Logo"
             className="rounded-full w-14 h-14 hover:scale-105 transition-transform duration-300"
           />
+          </Link>
 
           {/* Search Bar */}
           <div className="flex-1 mx-6 order-2 lg:order-1">
@@ -29,12 +32,11 @@ const Help = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-4 order-1 lg:order-2">
-            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+            
+            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" onClick={() => Navigate("/deck")}>
               Create Deck
             </button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
-              Create Flashcard
-            </button>
+          
 
             {/* Category Dropdown */}
             <div className="relative">
@@ -79,7 +81,7 @@ const Help = () => {
             ))}
 
             {/* Profile Icon */}
-            <a href="#">
+            <a href="/UserPage">
               <img
                 src="https://www.transparentpng.com/download/user/gray-user-profile-icon-png-fP8Q1P.png"
                 alt="User"
@@ -89,7 +91,7 @@ const Help = () => {
 
             {/* Login/Signup Button */}
             <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
-              Login/Signup
+              Logout
             </button>
           </div>
         </div>

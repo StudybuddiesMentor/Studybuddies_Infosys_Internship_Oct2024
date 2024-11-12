@@ -49,7 +49,7 @@ const MainPage = () => {
       <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
         <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
           {/* Logo */}
-          <Link to="/MainPage">
+          <Link to="/main-page">
           <img
             src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
             alt="Study Buddy Logo"

@@ -150,7 +150,7 @@ const Userpagebody = () => {
           />
         </div>
         <div className={`hidden md:flex items-center gap-6 transition-transform duration-300 ${isOpen ? "open" : ""}`}>
-          <a href="/home" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Home</a>
+          <a href="/main-page" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Home</a>
           <a href="/decks" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Create Decks</a>
           <a href="/logout" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Logout</a>
         </div>
@@ -483,7 +483,7 @@ const Userpagebody = () => {
         <div className="flex flex-col mt-8 md:mt-0">
           <p className="text-yellow-400">All our Pages</p>
           <div className="flex flex-col mt-2 space-y-2">
-            <a href="/home" className="text-blue-200 hover:text-white">Home</a>
+            <a href="/main-page" className="text-blue-200 hover:text-white">Home</a>
             {/* <a href="/Personal information" className="text-blue-200 hover:text-white">Personal information</a> */}
             <a href="/deck" className="text-blue-200 hover:text-white">Deck</a>
             {/* <a href="/contactus" className="text-blue-200 hover:text-white">Contact Us</a> */}

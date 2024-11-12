@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Deck = () => {
   const [deckTitle, setDeckTitle] = useState("");
@@ -111,13 +111,18 @@ const Deck = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-100 to-green-200 flex flex-col">
       {/* Navbar */}
-      <nav className="py-4">
+      <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
         <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
+          {/* Logo */}
+          <Link to="/main-page">
           <img
             src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
             alt="Study Buddy Logo"
             className="rounded-full w-14 h-14 hover:scale-105 transition-transform duration-300"
           />
+          </Link>
+
+          {/* Search Bar */}
           <div className="flex-1 mx-6 order-2 lg:order-1">
             <input
               type="text"
@@ -125,11 +130,15 @@ const Deck = () => {
               className="border rounded-full px-4 py-2 w-full shadow-md focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-300 transition"
             />
           </div>
+
+          {/* Action Buttons */}
           <div className="flex items-center space-x-4 order-1 lg:order-2">
-            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" onClick={() => Navigate("/deck")}>
               Create Deck
             </button>
+          
 
+            {/* Category Dropdown */}
             <div className="relative">
               <button
                 className="px-4 py-2 flex items-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
@@ -143,21 +152,24 @@ const Deck = () => {
                 />
               </button>
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10">
-                  {["Math", "Science", "Languages", "History"].map(
-                    (category) => (
-                      <a
-                        href={`/category/${category.toLowerCase()}`}
-                        key={category}
-                        className="block px-4 py-2 text-gray-700 hover:bg-green-100 transition-colors"
-                      >
-                        {category}
-                      </a>
-                    )
-                  )}
+                <div
+                  id="categoryDropdown"
+                  className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10"
+                >
+                  {["Math", "Science", "Languages", "History"].map((category) => (
+                    <a
+                      href={`/category/${category.toLowerCase()}`}
+                      key={category}
+                      className="block px-4 py-2 text-gray-700 hover:bg-green-100 transition-colors"
+                    >
+                      {category}
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
+
+            {/* Additional Links */}
             {["Help", "Explore"].map((item) => (
               <a
                 key={item}
@@ -167,16 +179,20 @@ const Deck = () => {
                 {item}
               </a>
             ))}
-            <a href="#">
+
+            {/* Profile Icon */}
+            <a href="/UserPage">
               <img
                 src="https://www.transparentpng.com/download/user/gray-user-profile-icon-png-fP8Q1P.png"
                 alt="User"
                 className="rounded-full w-10 h-10 shadow-lg p-1 hover:scale-105 transition-transform duration-300"
               />
             </a>
-            {/* <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
-              Login/Signup
-            </button> */}
+
+            {/* Login/Signup Button */}
+            <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+              Logout
+            </button>
           </div>
         </div>
       </nav>
@@ -353,7 +369,7 @@ const Deck = () => {
               </svg>
               <span>Save Deck</span>
             </button>
-            <br />
+           
             {/* View Flashcards Button */}
             <button
             onClick={() => setViewMode(true)}
@@ -365,7 +381,10 @@ const Deck = () => {
             <span>View Flashcards</span>
           </button>
           </div>
+          
         </div>
+        
+
       ) : (
         <div className="flex-grow container mx-auto py-12 px-8 bg-white shadow-lg rounded-lg mt-8 max-w-3xl">
         <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-700 mb-8 text-center">
@@ -442,7 +461,9 @@ const Deck = () => {
           </svg>
           <span>Create New Deck</span>
         </button>
+
       </div>
+      
       )}
     </div>
   );

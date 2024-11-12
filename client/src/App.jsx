@@ -32,7 +32,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
         <Route path="/Deck" element={<Deck />} />
-        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/UserPage" element={<UserPage />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/Logout" element={<Home />} />
