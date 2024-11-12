@@ -13,6 +13,8 @@ import Help from './components/Help';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
 import Deck from './components/Deck';
 import './App.css';
+import Privacy from './components/Privacy'; // Import Privacy Policy Page
+import './index.css'; // Import css for Privacy Policy and ContactUS Page
 
 function App() {
   return (
@@ -28,7 +30,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
         <Route path="/Deck" element={<Deck />} />
-
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
     </Router>
   );
