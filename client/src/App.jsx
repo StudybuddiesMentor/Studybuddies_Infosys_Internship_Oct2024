@@ -18,7 +18,7 @@ import Privacy from './components/Privacy'; // Import Privacy Policy Page
 import './index.css'; // Import css for Privacy Policy and ContactUS Page
 import UserPage from './components/UserPage';
 import Adminpage from './components/Adminpage';
-//import UserMonitoringPage from './components/UserMonitoringPage';
+import UserMonitoringPage from './components/UserMonitoringPage';
 // import Deck from './components/Deck';
 
 function App() {
@@ -41,8 +41,8 @@ function App() {
         <Route path="/Logout" element={<Home />} />
         <Route path="/Decks" element={<Deck />} />
         <Route path="/AdminPage" element={<Adminpage/>} />
-        
         <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
       </Routes>
     </Router>
   );
