@@ -243,8 +243,8 @@ export const passwordReset = async (req, res) => {
 };
 
 export const updateUserProfile =  async (req, res) => {
-    const {  gender, email,fullName,username,profession,bio } = req.body;
-    console.log("data getting from body",req.body);
+    const {  gender, email,fullName,username,professionalTitle,bio } = req.body;
+    
     try{
     const user = await User.findById(req.user.id);
     
@@ -254,7 +254,7 @@ export const updateUserProfile =  async (req, res) => {
          user.gender = gender|| user.gender;
          user.fullName = fullName || user.fullName;
          user.bio = bio || user.bio;
-         user.profession = profession || user.profession;
+         user.professionalTitle = professionalTitle || user.professionalTitle;
          user.username = username || user.username;
          if(email){
          user.email = email 
@@ -287,7 +287,7 @@ export const updateUserPic = async (req, res) => {
             const filename = profilePic.filename;  
             user.profilePic = { url, filename }; 
             await user.save();
-            return res.status(200).json({ message: "Profile picture has been updated", user });
+            return res.status(200).json({ message: "Profile picture has been updated", profilePicUrl : user.profilePic.url });
         }
 
         return res.status(400).json({ message: "No profile picture uploaded" });
