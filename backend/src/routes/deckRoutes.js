@@ -1,5 +1,6 @@
 import express from 'express';
-import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,RemoveAllDecks,countDecks,deckImage } from '../controllers/deckController.js';
+import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,
+  RemoveAllDecks,countDecks,deckImage,deckImageUpdate } from '../controllers/deckController.js';
 import { userAuthMiddleware, adminAuthMiddleware } from '../middlewares/auth.js';
 import Deck from '../models/Deck.js';
 import { deckImageUpload,checkMinFileSize } from '../middlewares/ImageValidate.js';
@@ -60,34 +61,13 @@ router.delete('/:id', userAuthMiddleware, deleteDeck);
 
 router.delete("/removealldecks",userAuthMiddleware,RemoveAllDecks);
 
-router.post('/deckimage',userAuthMiddleware,deckImageUpload.single('deck_Image'),checkMinFileSize,deckImage)
+router.post('/deckimage',userAuthMiddleware,deckImageUpload.single('deck_Image'),checkMinFileSize,deckImage);
+
+
+router.put('/deckimage/:id',userAuthMiddleware,deckImageUpload.single('deck_Image'),checkMinFileSize,deckImageUpdate);;
 
 
 
-router.get('/', async (req, res) => {
-    try {
-      const decks = await Deck.find();
-      res.json(decks);
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching decks' });
-    }
-  });
-  
-  // Increment likes for a deck
-  router.put('/:id/like', async (req, res) => {
-    try {
-      const deck = await Deck.findById(req.params.id);
-      if (deck) {
-        deck.likes += 1;
-        await deck.save();
-        res.json({ message: 'Like updated', likes: deck.likes });
-      } else {
-        res.status(404).json({ message: 'Deck not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating likes' });
-    }
-  });
 
 
 

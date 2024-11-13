@@ -2,6 +2,8 @@ import Deck from "../db/Deck.js";
 import User from "../db/User.js";
 import Tag from "../db/Tag.js";
 import DeckTag from "../db/DeckTag.js";
+import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
+import cloudinary from 'cloudinary'
 
 
 export const createDeck = async (req, res) => {
@@ -173,5 +175,36 @@ export const deckImage = async(req,res)=>{
     console.error('Error uploading deck image:', error);
     return res.status(500).json({ error: 'Internal server error.' });
   }
+
+}
+
+export const deckImageUpdate = async(req,res)=>{
+
+  if (!req.file) {
+   return res.status(400).json({ error: 'No image file uploaded.' });
+ }
+ try {
+   
+    const deck = await Deck.findById(req.params.id)
+    if (!deck) {
+     return res.status(404).json({ message: 'Deck not found.' });
+   }
+    if(deck.deck_Image && deck.deck_Image.url){
+     const publicId = extractPublicIdFromUrl(deck.deck_Image.url);
+     if (publicId) {
+         await cloudinary.v2.uploader.destroy(publicId);
+     }
+    }
+    deck.deck_Image = {
+     url: req.file.path,
+     filename: req.file.originalname,
+   };
+   await deck.save(); 
+ 
+   return res.status(200).json({message: 'Image uploaded successfully!',deck});
+ } catch (error) {
+   console.error('Error uploading deck image:', error);
+   return res.status(500).json({ error: 'Internal server error.' });
+ }
 
 }

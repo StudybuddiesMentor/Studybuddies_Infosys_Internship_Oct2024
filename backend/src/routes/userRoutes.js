@@ -45,7 +45,7 @@ router.put('/profile', userAuthMiddleware, updateUserProfile);
  * @desc Update user profilepic 
  * @access Private (User Auth)
  */
-router.put('/profile-bio', userAuthMiddleware, upload.single('profilePic'),checkMinFileSize, updateUserPic);
+router.put('/profile-pic', userAuthMiddleware, upload.single('profilePic'),checkMinFileSize, updateUserPic);
 
 /**
  * @route POST /api/users/send-otp

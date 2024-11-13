@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import User from "../db/User.js";
 import dotenv from "dotenv";
+import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
+import cloudinary from 'cloudinary'; 
+const cloudinaryV2 = cloudinary.v2;
 
 dotenv.config();
 
@@ -179,15 +182,16 @@ export const forgotPassword = async (req, res) => {
             
         });
     
-        // Email options
         const mailOptions = {
-            from: process.env.GMAIL_ID,
+            from: 'process.env.GMAIL_ID;',
             to: user.email,
-            subject: 'StudyBuddies - veify with otp',
-            html: `<h3>Your One Time Password (OTP): ${verifyotp} </h3>
-                   <p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>`
-          
-       };
+            subject: 'StudyBuddies - reset password',
+           html: `
+           <h3>Reset Your Password</h3>
+           <p>Click the link below to reset your password:</p>
+           <a href="http://localhost:5173/reset-password/${user._id}/${token}">Reset Password</a>
+           <p>Reset Link is valid for only 15:00 min.</p>`
+       };
        // Send the email
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

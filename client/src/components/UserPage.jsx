@@ -8,7 +8,7 @@ import logo1 from '../assets/photo.jpg';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 const Userpagebody = () => {
   const navigate = useNavigate();
@@ -27,17 +27,18 @@ const Userpagebody = () => {
   });
 
   const [userInfo, setUserInfo] = useState({
-    fullName: 'John Doe',
-    professionalTitle: 'Software Developer',
-    memberSince: 'September 2, 2024',
-    lastActive: 'Today at 2:00 PM',
-    username: 'john',
-    role: 'User',
-    email: 'john.doe@example.com',
-    gender: 'Male',
+    fullName: '',
+    professionalTitle: '',
+    memberSince: '',
+    lastActive: '',
+    username: '',
+    role: '',
+    email: '',
+    gender: '',
+
   });
 
-  const [bio, setBio] = useState("I'm a user creating decks and flashcards for knowledge sharing");
+  const [bio, setBio] = useState(" ");
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [editedBio, setEditedBio] = useState(bio);
   const [showFlashcards, setShowFlashcards] = useState(false);
@@ -48,6 +49,110 @@ const Userpagebody = () => {
   const [logo, setLogo] = useState(logoDefault);
   const [logoFile, setLogoFile] = useState(null);
 
+  useEffect(() => {
+    fetchUserInfo(); 
+  }, []);
+ 
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/api/users/profile', { withCredentials: true });
+      const data = response.data.user;
+
+      setUserInfo({
+        fullName: data.fullName || '',
+        professionalTitle: data.professionalTitle || '',
+        memberSince: new Date(data.createdAt).toLocaleDateString() || '',
+        lastActive: 'Today at 2:00 PM', 
+        username: data.username || '',
+        role: data.role || '',
+        email: data.email || '',
+        gender: data.gender || '',
+      });
+      setLogo(data.profilePic?.url || 'path/to/placeholder.jpg');
+      setBio(data.bio || ''); 
+    } catch (error) {
+      console.error("Failed to fetch user info:", error);
+    }
+  };
+
+  const handleProfilePictureChange = async () => {
+    const formData = new FormData();
+    formData.append('profilePic', logoFile);
+  
+    try {
+      const response = await axios.put(
+        'http://localhost:9000/api/users/profile-pic', 
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          withCredentials: true,
+        }
+      );
+      setLogo(response.data.profilePicUrl); 
+    }catch (error) {
+      if (error.response) {
+        const errorMessage = error.response.data.message || 'An error occurred while uploading the profile picture.';
+        alert(errorMessage); 
+      } else {
+        
+        alert('Error uploading profile picture. Please try again.');
+      }
+      console.error('Error uploading profile picture:', error);
+    }
+  
+  };
+  
+  
+  const handleSaveUserInfo = async () => {
+    try {
+      const response = await axios.put(
+        'http://localhost:9000/api/users/profile', 
+        {
+          fullName: editedPersonalInfo.fullName,
+          professionalTitle: editedPersonalInfo.professionalTitle,
+          bio: editedBio, 
+          email: editedPersonalInfo.email,
+          gender: editedPersonalInfo.gender,
+          username: editedPersonalInfo.username
+        },
+        { withCredentials: true }
+      );
+      console.log('Response from backend:', response.data);
+      const updatedUser = response.data.user;
+      setUserInfo({
+        fullName: updatedUser.fullName || editedUserInfo.fullName,
+        professionalTitle: updatedUser.professionalTitle || editedUserInfo.professionalTitle, 
+        username: updatedUser.username || userInfo.username,
+        email: updatedUser.email || editedUserInfo.email,
+        gender: updatedUser.gender || editedUserInfo.gender,
+      });
+  
+      
+      setBio(updatedUser.bio || editedBio) 
+      
+      setShowUserModal(false);
+      document.body.style.overflow = 'auto';
+    } catch (error) {
+      console.error('Error updating user info:', error);
+    }
+  };
+  
+  
+  const handleSavePersonalInfoClick = async () => {
+    if (logoFile) {
+      await handleProfilePictureChange();
+    }
+  
+    await handleSaveUserInfo();
+  
+    
+    await fetchUserInfo() 
+  
+    setShowPersonalInfoModal(false);
+    document.body.style.overflow = 'auto';
+  };
   const handleEditBioClick = () => setIsEditingBio(true);
 
   const handleSaveBioClick = () => {
@@ -69,8 +174,14 @@ const Userpagebody = () => {
 
 
   const handleEditPersonalInfoClick = () => {
-    setEditedPersonalInfo(userInfo);
-    setShowPersonalInfoModal(true);
+    setEditedUserInfo({
+   fullName: userInfo.fullName,
+   professionalTitle: userInfo.professionalTitle,  
+   email: userInfo.email,
+   gender: userInfo.gender,
+   bio: userInfo.bio,
+ })
+ setShowPersonalInfoModal(true);
     document.body.style.overflow = 'hidden';
   };
 
@@ -87,21 +198,13 @@ const Userpagebody = () => {
     document.body.style.overflow = 'auto';
 
     if (logoFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogo(reader.result);
+      handleProfilePictureChange();
       };
-      reader.readAsDataURL(logoFile);
+      
     }
-  };
+  
 
-  const handleSavePersonalInfoClick = () => {
-    setUserInfo({ ...editedUserInfo, bio: editedBio });
-    setBio(editedBio);
-    setUserInfo(editedPersonalInfo);
-    setShowPersonalInfoModal(false);
-    document.body.style.overflow = 'auto';
-  };
+  
 
   useEffect(() => {
     const mainContent = document.getElementById('main-content');
@@ -193,7 +296,7 @@ const Userpagebody = () => {
                 <div className="flex-grow items-center" style={{ marginLeft: '25px' }}>
 
                   <h2 className='text-xl font-semibold'>{userInfo.username}</h2>
-                  <p>{userInfo.professionalTitle}</p>
+                  <p>{userInfo.professionalTitle||''}</p>
                 </div>
                 {/* <div className="">
                   <FaEdit className='edit-icon text-gray-500 cursor-pointer' onClick={handleEditUserClick} />
@@ -235,11 +338,11 @@ const Userpagebody = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
               <div>
                 <label className='text-sm'>User Name:</label>
-                <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.username} readOnly />
+                <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.username||''} readOnly />
               </div>
               <div>
                 <label className='text-sm'>Full Name:</label>
-                <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.fullName} readOnly />
+                <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.fullName||''} readOnly />
               </div>
               <div>
                 <label className='text-sm'>Email:</label>
@@ -255,7 +358,7 @@ const Userpagebody = () => {
               </div>
               <div>
                 <label className='text-sm'>Profession:</label>
-                <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.professionalTitle} readOnly />
+                <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.professionalTitle||''} readOnly />
               </div>
 
             </div>
