@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link from React Router
 import Deck from './Deck_explore'; 
 
 const ExplorePage = () => {
@@ -15,13 +14,18 @@ const ExplorePage = () => {
           withCredentials: true, 
         });
 
+        // Accessing the decks array from the response data
         if (response.data.decks && Array.isArray(response.data.decks)) {
-          setDecks(response.data.decks);
+          setDecks(response.data.decks); // Set the decks state with the array
         } else {
           setError('Unexpected response format');
         }
       } catch (err) {
-        setError('Failed to fetch decks.');
+        if (err.response) {
+          setError(err.response.data.message || 'Failed to fetch decks.');
+        } else {
+          setError('Network error. Please check your connection or server.');
+        }
         console.error(err);
       } finally {
         setLoading(false);
@@ -43,16 +47,12 @@ const ExplorePage = () => {
     <div className="p-4 overflow-y-auto max-h-screen flex flex-col items-center">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {decks.map(deck => (
-          <div key={deck._id}>
-            <Deck
-              title={deck.deck_name}
-              description={deck.description}
-              imageUrl={deck.deck_Image || deck.defaultImageUrl}
-            />
-            <Link to={`/view-deck/${deck._id}`} className="text-blue-500 hover:underline mt-2">
-              View Deck
-            </Link>
-          </div>
+          <Deck
+            key={deck._id}
+            title={deck.deck_name} 
+            description={deck.description} 
+            imageUrl={deck.deck_Image || deck.defaultImageUrl} 
+          />
         ))}
       </div>
     </div>
@@ -60,3 +60,4 @@ const ExplorePage = () => {
 };
 
 export default ExplorePage;
+

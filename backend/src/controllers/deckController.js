@@ -71,7 +71,7 @@ export const getDeckById = async (req, res) => {
 export const updateDeck = async (req, res) => {
   try {
     const { deck_name, description, is_public } = req.body;
-      const deck_Image = req.file;
+    const deck_Image = req.file; // Updated image
 
     const deck = await Deck.findById(req.params.id);
     if (!deck) {
@@ -79,21 +79,25 @@ export const updateDeck = async (req, res) => {
     }
 
     // Update deck details
-    deck.deck_name = deck_name || deck.deck_name
+    deck.deck_name = deck_name || deck.deck_name;
     deck.is_public = is_public || deck.is_public;
     deck.description = description || deck.description;
-    if(deck_Image){
+
+    // Handle image update
+    if (deck_Image) {
       let url = req.file.path;
-       let filename = req.file.filename;
-       newDeck.deck_Image ={url,filename} 
-   }
+      let filename = req.file.filename;
+      deck.deck_Image = { url, filename }; // Update deck's image
+    }
+
     await deck.save();
-   return res.status(200).json({message:"Deck has been updated successfully",deck});
+    return res.status(200).json({ message: "Deck has been updated successfully", deck });
   } catch (error) {
     console.error(error);
-   return res.status(500).json({ message: "Server error." });
+    return res.status(500).json({ message: "Server error." });
   }
 };
+
 
 // Delete a deck
 export const deleteDeck = async (req, res) => {
