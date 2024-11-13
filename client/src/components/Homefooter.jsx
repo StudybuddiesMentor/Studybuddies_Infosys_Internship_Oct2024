@@ -49,7 +49,7 @@ function HomeFooter() {
                 </li>
 
                 <li>
-                  <a href="/Privacy" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
+                  <a href="/privacy-policy" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
                     Privacy Policy
                   </a>
                 </li>
