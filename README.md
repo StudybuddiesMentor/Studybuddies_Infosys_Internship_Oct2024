@@ -12,6 +12,7 @@
 ### Prerequisites
 - **Node.js** (v14 or higher recommended)
 - **MongoDB** (for local database setup)
+- **MngoDB Atlas** (cloud/cluster connectivity setup if not using local db setup)
 
 ---
 
@@ -124,13 +125,15 @@ install: This command tells npm to install the dependencies listed in your packa
   new file name:  .env
 *copy this and make neccessary changes*
   
-  GMAIL_ID = ........@gmail.com     *write studybuddy email*
-  GMAIL_PASS = khhtzzbxdlzuxfuz     *passkey generated from google authentication*
+  GMAIL_ID =   your-email@gmail.com   *write studybuddy email*
+  GMAIL_PASS =  your-google-auth-key    *passkey generated from google authentication*
 
 # Create DataBase and Collection
 * create a database and connect it local host and change db collection name in src / index.js file
   
-  example: mongodb://127.0.0.1:27017/test
+  example: mongodb://127.0.0.1:27017/test   // for local database setup
+  
+
 
 
 ## 🗄️ Database Configuration

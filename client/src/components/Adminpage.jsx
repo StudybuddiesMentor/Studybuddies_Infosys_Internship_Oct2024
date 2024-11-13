@@ -142,7 +142,7 @@ const Adminpagebody = () => {
                 Explore
               </button>
               <button className="bg-white text-violet-600 font-extrabold text-2xl border border-purple-500 py-2 px-4 shadow-md hover:bg-purple-500 hover:text-white transition duration-300"
-              onClick={() => navigate('/users')}>
+              onClick={() => navigate('/UserMonitoringPage')}>
                 Users
               </button>
             </div>

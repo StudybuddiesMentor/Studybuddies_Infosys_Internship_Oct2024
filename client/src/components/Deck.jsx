@@ -75,31 +75,38 @@ const Deck = () => {
   };
 
   const saveDeck = () => {
-    const newDeck = {
-      title: deckTitle,
-      description: deckDescription,
-      tags,
-      flashcards,
-      isPublic,
-      createdTime: new Date().toLocaleString(),
-      image: deckImage,
-    };
+    try{
+      alert("Deck saved successfully!");
+      const newDeck = {
+        title: deckTitle,
+        description: deckDescription,
+        tags,
+        flashcards,
+        isPublic,
+        createdTime: new Date().toLocaleString(),
+        image: deckImage,
+      };
 
-    const storedDecks = JSON.parse(localStorage.getItem("decks")) || [];
-    storedDecks.push(newDeck);
-    localStorage.setItem("decks", JSON.stringify(storedDecks));
-    setLastCreatedTime(newDeck.createdTime);
+      const storedDecks = JSON.parse(localStorage.getItem("decks")) || [];
+      storedDecks.push(newDeck);
+      localStorage.setItem("decks", JSON.stringify(storedDecks));
+      setLastCreatedTime(newDeck.createdTime);
 
-    // Reset form fields and state
-    setDeckTitle("");
-    setDeckDescription("");
-    setTags([]);
-    setFlashcards([{ title: "", content: "" }]);
-    setIsPublic(false);
-    setDeckImage(null);
+      // Reset form fields and state
+      setDeckTitle("");
+      setDeckDescription("");
+      setTags([]);
+      setFlashcards([{ title: "", content: "" }]);
+      setIsPublic(false);
+      setDeckImage(null);
 
-    setCreatedDecks(storedDecks);
-    setViewMode(false);
+      setCreatedDecks(storedDecks);
+      setViewMode(false);
+    }
+    catch (error) {
+      console.error("Failed to save deck:", error);
+      alert("Failed to save deck. Please try again.");
+    }
   };
     // Additional feature: delete a created deck
     const deleteDeck = (index) => {

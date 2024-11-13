@@ -18,9 +18,10 @@ import Privacy from './components/Privacy'; // Import Privacy Policy Page
 import './index.css'; // Import css for Privacy Policy and ContactUS Page
 import UserPage from './components/UserPage';
 import Adminpage from './components/Adminpage';
-import ViewDeckPage from './components/ViewDeckPage';
 //import UserMonitoringPage from './components/UserMonitoringPage';
 // import Deck from './components/Deck';
+import ContactUs from './components/ContactUs'; // Import ContactUs Page
+
 
 function App() {
   return (
@@ -42,10 +43,7 @@ function App() {
         <Route path="/Logout" element={<Home />} />
         <Route path="/Decks" element={<Deck />} />
         <Route path="/AdminPage" element={<Adminpage/>} />
-        
         <Route path="/privacy-policy" element={<Privacy />} />
-        <Route path="/view-deck/:id" component={ViewDeckPage} />
-
       </Routes>
     </Router>
   );
