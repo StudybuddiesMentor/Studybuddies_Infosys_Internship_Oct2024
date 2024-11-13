@@ -59,6 +59,12 @@ function HomeFooter() {
                     Contact Us
                   </a>
                 </li>
+
+                <li>
+                  <a href="/term-and-condition" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
+                    Term and Conditions
+                  </a>
+                </li>
                 
                 {/* ... other company links ... */}
 

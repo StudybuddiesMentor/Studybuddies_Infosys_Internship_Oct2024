@@ -19,6 +19,7 @@ import './index.css'; // Import css for Privacy Policy and ContactUS Page
 import UserPage from './components/UserPage';
 import Adminpage from './components/Adminpage';
 import UserMonitoringPage from './components/UserMonitoringPage';
+import TermsNCondition from './components/TermNCondition.jsx';
 // import Deck from './components/Deck';
 import ContactUs from './components/ContactUs'; // Import ContactUs Page
 
@@ -44,6 +45,7 @@ function App() {
         <Route path="/Decks" element={<Deck />} />
         <Route path="/AdminPage" element={<Adminpage/>} />
         <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/term-and-condition" element={<TermsNCondition />} />
         <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
       </Routes>
     </Router>
