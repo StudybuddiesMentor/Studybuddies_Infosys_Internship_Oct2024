@@ -1,15 +1,15 @@
 import Deck from "../db/Deck.js";
 import User from "../db/User.js";
+import Tag from "../db/Tag.js";
+import DeckTag from "../db/DeckTag.js";
 
-// Create a new deck
+
 export const createDeck = async (req, res) => {
   try {
-    const { deck_name, description, is_public } = req.body;
-      const deck_Image = req.file;
-      const user = await User.findById(req.user.id);
+    const { deck_name, description, is_public,tag,imageUrl, fileName } = req.body;
       
-
-        if (!user) {
+      const user = await User.findById(req.user.id);
+       if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
     const newDeck = new Deck({
@@ -18,19 +18,27 @@ export const createDeck = async (req, res) => {
       is_public,
       created_by: user._id,
     });
-    if(deck_Image){
-      let url = req.file.path;
-       let filename = req.file.filename;
-       newDeck.deck_Image ={url,filename} 
-   }
+    if (imageUrl && fileName) {
+      newDeck.deck_Image = { url: imageUrl, filename: fileName };
+    }
 
     await newDeck.save();
-   return res.status(201).json({message:"Deck has been created",newDeck});
+    let deckTag = null;
+if (tag) {
+      
+    let findtag = await Tag.findOneAndUpdate({ name: tag },  { name: tag },{ upsert: true, new: true });
+    
+     deckTag = await DeckTag.create({deck_id: newDeck._id,  tag_id: findtag._id});
+  }
+    
+      
+   return res.status(201).json({message:"Deck has been created", newDeck,deckTag });
   } catch (error) {
     console.error(error);
    return res.status(500).json({ message: "Internal Server error." });
   }
 };
+
 
 // Get all public decks or user's private decks
 export const getDecks = async (req, res) => {
@@ -146,4 +154,20 @@ export const countDecks = async(req,res)=>{
   }catch(error){
     return res.status(500).json({message:"Internal Server error", error : error.message});
   }
+}
+export const deckImage = async(req,res)=>{
+  
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file uploaded.' });
+  }
+  try {
+    const imageUrl = req.file.path;
+    const fileName = req.file.originalname; 
+
+    return res.status(200).json({message: 'Image uploaded successfully!',imageUrl,fileName});
+  } catch (error) {
+    console.error('Error uploading deck image:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+
 }

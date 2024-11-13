@@ -1,8 +1,8 @@
 import express from 'express';
-import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,RemoveAllDecks,countDecks } from '../controllers/deckController.js';
+import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,RemoveAllDecks,countDecks,deckImage } from '../controllers/deckController.js';
 import { userAuthMiddleware, adminAuthMiddleware } from '../middlewares/auth.js';
 import Deck from '../models/Deck.js';
-
+import { deckImageUpload,checkMinFileSize } from '../middlewares/ImageValidate.js';
 
 const router = express.Router();
 
@@ -59,6 +59,8 @@ router.delete('/:id', userAuthMiddleware, deleteDeck);
  */
 
 router.delete("/removealldecks",userAuthMiddleware,RemoveAllDecks);
+
+router.post('/deckimage',userAuthMiddleware,deckImageUpload.single('deck_Image'),checkMinFileSize,deckImage)
 
 
 

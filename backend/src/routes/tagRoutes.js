@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTag, addTagToDeck, removeTagFromDeck, getTags } from '../controllers/tagController.js';
+import { createTag, removeTagFromDeck, getTags } from '../controllers/tagController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
@@ -18,12 +18,7 @@ router.get('/', getTags);
  */
 router.post('/', userAuthMiddleware, createTag);
 
-/**
- * @route POST /api/tags/:deckId
- * @desc Add a tag to a specific deck
- * @access Private (User Auth)
- */
-router.post('/:deckId', userAuthMiddleware, addTagToDeck);
+
 
 /**
  * @route DELETE /api/tags/:deckId

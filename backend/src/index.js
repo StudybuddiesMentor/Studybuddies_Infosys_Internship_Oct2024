@@ -75,18 +75,31 @@ const startServer = async () => {
 
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
-      // Handle Multer-specific errors
-      if (err.code === 'LIMIT_FILE_SIZE') {
-          return res.status(400).json({ message: 'Error: File too large. Maximum file size is 5 MB.' });
-      }
-    
-      return res.status(500).json({ message: 'Multer Error: ' + err.message });
-  } else if (err) {
-    
-      return res.status(500).json({ message: 'Internal Server Error: ' + err.message });
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        message: 'Error: File too large. Maximum file size is 5 MB.',
+        errorCode: err.code
+      });
+    }
+    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({
+        message: 'Error: Unexpected file type or field name.',
+        errorCode: err.code
+      });
+    }
   }
-  next();
-})
+  if (err.message && err.message.includes('Invalid file type')) {
+    return res.status(err.status || 400).json({ message: err.message });
+  }
+
+  if (err.message && err.message.includes('File size is too small')) {
+    return res.status(err.status || 400).json({ message: err.message });
+  }
+  return res.status(err.status || 500).json({
+    message: "Something went wrong!",
+    error: err.message || err
+  });
+});
 
 // Start the application
 startServer();

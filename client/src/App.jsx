@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react'; // Import React
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './components/Register';
@@ -13,6 +14,14 @@ import Help from './components/Help';
 import ExplorePage from './components/ExplorePage'; // Import ExplorePage
 import Deck from './components/Deck';
 import './App.css';
+import Privacy from './components/Privacy'; // Import Privacy Policy Page
+import './index.css'; // Import css for Privacy Policy and ContactUS Page
+import UserPage from './components/UserPage';
+import Adminpage from './components/Adminpage';
+import UserMonitoringPage from './components/UserMonitoringPage';
+// import Deck from './components/Deck';
+import ContactUs from './components/ContactUs'; // Import ContactUs Page
+
 
 function App() {
   return (
@@ -28,6 +37,15 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
         <Route path="/Deck" element={<Deck />} />
+        <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/UserPage" element={<UserPage />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Logout" element={<Home />} />
+        <Route path="/Decks" element={<Deck />} />
+        <Route path="/AdminPage" element={<Adminpage/>} />
+        <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
+        <Route path="/ContactUs" element={<ContactUs/>}/>
 
       </Routes>
     </Router>
