@@ -17,6 +17,7 @@ import './App.css';
 import Privacy from './components/Privacy'; // Import Privacy Policy Page
 import './index.css'; // Import css for Privacy Policy and ContactUS Page
 import UserPage from './components/UserPage';
+import ExplorePage from './components/ExplorePage_admin'; // Import ExplorePage
 import Adminpage from './components/Adminpage';
 import UserMonitoringPage from './components/UserMonitoringPage';
 import TermsNCondition from './components/TermNCondition.jsx';
