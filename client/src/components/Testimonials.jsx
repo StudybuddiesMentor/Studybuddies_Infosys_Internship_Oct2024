@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Testimonials_image_1 from '../assets/Testimonials_image_1.jpg';
 import Testimonials_image_2 from '../assets/Testimonials_image_2.jpg';
 import Testimonials_image_3 from '../assets/Testimonials_image_3.jpg';
 import Testimonials_image_4 from '../assets/Testimonials_image_4.jpg';
 import Testimonials_image_5 from '../assets/Testimonials_image_5.jpg';
 import Testimonials_image_6 from '../assets/Testimonials_image_6.jpg';
-
 
 const testimonialsData = [
     {
@@ -50,11 +49,9 @@ const testimonialsData = [
         feedback: 'This website saved me! Medical school requires memorizing so much information, and the flashcard maker is an amazing tool for breaking down complex topics.',
         rating: 4,
     },
-
 ];
 
 const Testimonial = ({ image, name, title, feedback, rating }) => {
-    // Function to render stars based on the rating
     const renderStars = (rating) => {
         return Array(rating)
             .fill()
@@ -64,7 +61,7 @@ const Testimonial = ({ image, name, title, feedback, rating }) => {
     };
 
     return (
-        <div className="bg-white p-6 min-w-80  rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center">
+        <div className="bg-green-100 p-6 min-w-80 rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center">
             <img src={image} alt={name} className="w-20 h-20 rounded-full mb-4" />
             <h3 className="text-lg font-semibold text-gray-800 text-center">{name}</h3>
             <p className="text-sm text-gray-500 text-center">{title}</p>
@@ -80,21 +77,51 @@ const Testimonial = ({ image, name, title, feedback, rating }) => {
 };
 
 const Testimonials = () => {
+    const scrollRef = useRef(null);
+
+    const scroll = (direction) => {
+        const { current } = scrollRef;
+        const scrollAmount = 300;
+
+        if (direction === 'left') {
+            current.scrollLeft -= scrollAmount;
+        } else {
+            current.scrollLeft += scrollAmount;
+        }
+    };
+
     return (
-        <section className="bg-gray-100 py-12">
+        <section className="bg-green-50 py-12 relative">
             <div className="max-w-6xl mx-auto px-6 lg:px-8">
                 <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">What Our Learners Say</h2>
-                <div className="flex gap-8 w-full overflow overflow-x-scroll">
-                    {testimonialsData.map((testimonial, index) => (
-                        <Testimonial
-                            key={index}
-                            image={testimonial.image}
-                            name={testimonial.name}
-                            title={testimonial.title}
-                            feedback={testimonial.feedback}
-                            rating={testimonial.rating}
-                        />
-                    ))}
+                <div className="flex items-center">
+                    <button
+                        onClick={() => scroll('left')}
+                        className="p-2 bg-gray-900 text-white rounded-full mr-2 hover:bg-blue-600 transition"
+                    >
+                        ◀
+                    </button>
+                    <div
+                        ref={scrollRef}
+                        className="flex gap-8 w-full overflow-x-scroll scrollbar-hide"
+                    >
+                        {testimonialsData.map((testimonial, index) => (
+                            <Testimonial
+                                key={index}
+                                image={testimonial.image}
+                                name={testimonial.name}
+                                title={testimonial.title}
+                                feedback={testimonial.feedback}
+                                rating={testimonial.rating}
+                            />
+                        ))}
+                    </div>
+                    <button
+                        onClick={() => scroll('right')}
+                        className="p-2 bg-gray-900 text-white rounded-full ml-2 hover:bg-blue-600 transition"
+                    >
+                        ▶
+                    </button>
                 </div>
             </div>
         </section>
