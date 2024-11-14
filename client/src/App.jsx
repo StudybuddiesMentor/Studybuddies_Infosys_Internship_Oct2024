@@ -47,6 +47,7 @@ function App() {
         <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/term-and-condition" element={<TermsNCondition />} />
         <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
+        <Route path="/ContactUs" element={<ContactUs />} />
       </Routes>
     </Router>
   );
