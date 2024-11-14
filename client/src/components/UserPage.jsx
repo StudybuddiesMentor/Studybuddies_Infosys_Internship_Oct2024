@@ -330,16 +330,19 @@ const Userpagebody = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Personal Information</h3>
               <div className='b'>
-                <button
+                {/* <button
                   onClick={handleEditPersonalInfoClick}
                   className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
                   Edit Info
+                </button> */}
+                <button 
+                 onClick={handleEditPersonalInfoClick}
+                 className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" >
+                 Edit Info
                 </button>
+                </div>
               </div>
-            </div>
-
-
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
               <div>
                 <label className='text-sm'>User Name:</label>
                 <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.username||''} readOnly />
