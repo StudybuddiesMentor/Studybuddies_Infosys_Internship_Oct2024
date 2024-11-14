@@ -342,7 +342,9 @@ const Userpagebody = () => {
                 </button>
                 </div>
               </div>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
+
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
               <div>
                 <label className='text-sm'>User Name:</label>
                 <input className='w-full p-2 border rounded mt-1' type='text' value={userInfo.username||''} readOnly />
@@ -374,12 +376,17 @@ const Userpagebody = () => {
           <div className="bg-white rounded-lg shadow p-4 mt-2 section user-actions block sm:flex ">
             <div className="flex flex-col items-center shadow-md rounded-lg p-4 decks w-[1000px] mx-auto">
 
-              <button
+              {/* <button
                 className="bg-blue-500 text-white py-3 px-6 rounded-lg cursor-pointer font-bold text-lg mb-2 transition-transform duration-300 shadow-lg create-decks hover:bg-blue-700 hover:scale-105"
-                onClick={handleCreateDeckClick}
-              >
+                onClick={handleCreateDeckClick}>
                 <span className="mr-2 plus-symbol">+</span> Create Decks
+              </button> */}
+              <button
+              className="bg-green-500 text-white py-3 px-6 rounded-full cursor-pointer font-bold text-lg transition-transform duration-300 shadow-md hover:bg-green-600 hover:scale-105"
+              onClick={handleCreateDeckClick}>
+              <span className="mr-2">+</span> Create Decks
               </button>
+
 
               <div className="flex justify-center deck-actions w-[90%] max-w-[800px] mt-4 mx-auto" style={{ gap: '160px' }}>
                 <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
