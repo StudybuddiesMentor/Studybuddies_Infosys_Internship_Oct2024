@@ -243,8 +243,9 @@ const Userpagebody = () => {
     setFormData({ fullName: '', email: '', message: '' });
   };
   return (
-    <div className=' bg-gray-100'>
-      <nav className="flex justify-between items-center p-4 bg-purple-800 text-white relative z-10 m-0" >
+    // <div className=' bg-gray-100'>
+    <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
+      <nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0" >
         <div className="navbar-logo">
           <img
             src={logo}
@@ -252,12 +253,17 @@ const Userpagebody = () => {
             className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
           />
         </div>
-        <div className={`hidden md:flex items-center gap-6 transition-transform duration-300 ${isOpen ? "open" : ""}`}>
-          <a href="/main-page" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Home</a>
-          <a href="/decks" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Create Decks</a>
-          <a href="/logout" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Logout</a>
+        <div className="hidden md:flex items-center gap-6 bg-white py-4 px-8  transition-transform duration-300">
+          <a href="/main-page" className="text-green-500 bg-white border border-green-500 px-4 py-2 rounded-full shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300 font-bold">
+          Home
+          </a>
+          <a href="/decks" className="text-green-500 bg-white border border-green-500 px-4 py-2 rounded-full shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300 font-bold">
+          Create Decks
+          </a>
+          <a href="/logout" className="text-green-500 bg-white border border-green-500 px-4 py-2 rounded-full shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300 font-bold">
+          Logout
+          </a>
         </div>
-
         <div className="md:hidden">
           <button onClick={toggleMenu} className="focus:outline-none">
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -325,14 +331,18 @@ const Userpagebody = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Personal Information</h3>
               <div className='b'>
-                <button
+                {/* <button
                   onClick={handleEditPersonalInfoClick}
-                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out"
-                >
+                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
                   Edit Info
+                </button> */}
+                <button 
+                 onClick={handleEditPersonalInfoClick}
+                 className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" >
+                 Edit Info
                 </button>
+                </div>
               </div>
-            </div>
 
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
@@ -367,12 +377,17 @@ const Userpagebody = () => {
           <div className="bg-white rounded-lg shadow p-4 mt-2 section user-actions block sm:flex ">
             <div className="flex flex-col items-center shadow-md rounded-lg p-4 decks w-[1000px] mx-auto">
 
-              <button
+              {/* <button
                 className="bg-blue-500 text-white py-3 px-6 rounded-lg cursor-pointer font-bold text-lg mb-2 transition-transform duration-300 shadow-lg create-decks hover:bg-blue-700 hover:scale-105"
-                onClick={handleCreateDeckClick}
-              >
+                onClick={handleCreateDeckClick}>
                 <span className="mr-2 plus-symbol">+</span> Create Decks
+              </button> */}
+              <button
+              className="bg-green-500 text-white py-3 px-6 rounded-full cursor-pointer font-bold text-lg transition-transform duration-300 shadow-md hover:bg-green-600 hover:scale-105"
+              onClick={handleCreateDeckClick}>
+              <span className="mr-2">+</span> Create Decks
               </button>
+
 
               <div className="flex justify-center deck-actions w-[90%] max-w-[800px] mt-4 mx-auto" style={{ gap: '160px' }}>
                 <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">

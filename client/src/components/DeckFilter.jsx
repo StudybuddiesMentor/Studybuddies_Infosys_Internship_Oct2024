@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
+// Component for filtering deck data based on criteria like exact match, likes, cards, and posted date
 const DeckFilter = ({ onFilterChange }) => {
+  // State variables to store the values of each filter option
   const [exactMatch, setExactMatch] = useState(false);
   const [likes, setLikes] = useState(0);
   const [cards, setCards] = useState(0);
@@ -13,6 +15,7 @@ const DeckFilter = ({ onFilterChange }) => {
 
   return (
     <div className="bg-white p-4 rounded-md shadow-lg w-full max-w-sm mx-auto sm:max-w-md md:max-w-xs mt-[45px]">
+      {/* Checkbox for enabling/disabling exact match filter */}
       <div className="flex items-center mb-4">
         <input
           type="checkbox"
@@ -25,7 +28,7 @@ const DeckFilter = ({ onFilterChange }) => {
         />
         <label>Exact Match</label>
       </div>
-
+      {/* Range slider for filtering by likes, with a label and dynamic value display */}
       <div className="mb-4">
         <label>Likes greater than</label>
         <input
@@ -35,7 +38,7 @@ const DeckFilter = ({ onFilterChange }) => {
           step="100"
           value={likes}
           onChange={(e) => {
-            setLikes(Number(e.target.value));
+            setLikes(Number(e.target.value)); // Update likes state
             handleFilterChange();
           }}
           className="w-full mt-2"
@@ -45,7 +48,7 @@ const DeckFilter = ({ onFilterChange }) => {
           <span>{likes >= 10000 ? '10k+' : likes}</span>
         </div>
       </div>
-
+      {/* Range slider for filtering by card count, with a label and current count display */}
       <div className="mb-4">
         <label>Cards greater than</label>
         <input
@@ -65,7 +68,7 @@ const DeckFilter = ({ onFilterChange }) => {
           <span>{cards}</span>
         </div>
       </div>
-
+       {/* Date input for filtering by posted date */}
       <div className="mb-4">
         <label>Posted After</label>
         <input

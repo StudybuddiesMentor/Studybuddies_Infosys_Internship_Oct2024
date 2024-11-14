@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import Deck from './Deck_explore'; 
 
-// Component to display and manage a collection of public decks for user exploration
-const ExplorePage = () => {
-  // State variables to store deck data, error messages, and loading status
+// Component to display and manage a collection of public decks for exploration
+const ExplorePageadmin = () => {
+  // State to store the decks data, any error message, and loading status
   const [decks, setDecks] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // useEffect hook to fetch public decks when the component mounts
+  // useEffect hook to fetch public decks when the component is first mounted
   useEffect(() => {
-    // Async function to retrieve deck data from the server
     const fetchPublicDecks = async () => {
       try {
-        // Perform GET request to fetch deck data from the backend
+         // Make a GET request to fetch decks data from the server
         const response = await axios.get('http://localhost:9000/api/decks/exploredeck', {
           withCredentials: true, 
         });
@@ -26,7 +25,7 @@ const ExplorePage = () => {
           setError('Unexpected response format');
         }
       } catch (err) {
-        // Error handling: show server error message if available or network error if not
+         // Handle errors: either server-side or network-related
         if (err.response) {
           setError(err.response.data.message || 'Failed to fetch decks.');
         } else {
@@ -40,19 +39,18 @@ const ExplorePage = () => {
 
     fetchPublicDecks();
   }, []);
-  // Display a loading message while the data is being retrieved
+  // Display loading message while data is being fetched
   if (loading) {
     return <p>Loading decks...</p>;
   }
-
-   // Display an error message if fetching data fails
+  // Display error message if an error occurred
   if (error) {
     return <p>{error}</p>;
   }
 
   return (
     <div className="p-4 overflow-y-auto max-h-screen flex flex-col items-center">
-      {/* Display deck items in a responsive grid layout */}
+       {/* Grid to display each deck in a responsive layout */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {decks.map(deck => (
           <Deck
@@ -60,7 +58,6 @@ const ExplorePage = () => {
             title={deck.deck_name} 
             description={deck.description} 
             imageUrl={deck.deck_Image || deck.defaultImageUrl} 
-            deckId={deck._id}
           />
         ))}
       </div>
@@ -68,5 +65,4 @@ const ExplorePage = () => {
   );
 };
 
-export default ExplorePage;
-
+export default ExplorePageadmin;
