@@ -1,41 +1,46 @@
 import React, { useState } from 'react';
 import Header from './Header';
 
+// ContactForm component to handle form submission and file attachments
 const ContactForm = () => {
+    // State to track form submission and file attachment status
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [files, setFiles] = useState(null)
-
+    // Function to handle form submission
     const onSubmit = async (event) => {
         event.preventDefault()
         setIsSubmitting(true)
 
-
+        // Simulate a delay (e.g., network request)
         await new Promise(resolve => setTimeout(resolve, 2000))
 
         alert("Request submitted. We'll get back to you as soon as possible.")
 
         setIsSubmitting(false)
         setFiles(null)
-        event.target.reset()
+        event.target.reset() // Reset form inputs
     }
-
+     // Handle file drop event
     const handleFileDrop = (e) => {
-        e.preventDefault()
-        setFiles(e.dataTransfer.files)
+        e.preventDefault() // Prevent default browser behavior
+        setFiles(e.dataTransfer.files) // Set the files from the drop event
     }
-
+    // Handle file selection via input
     const handleFileInput = (e) => {
         if (e.target.files) {
-            setFiles(e.target.files)
+            setFiles(e.target.files) // Set the selected files
         }
     }
 
     return (
         <>
+            {/* Include the Header component */}
             <Header />
             <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem', border: '2px' }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: '600', marginBottom: '1.5rem' }}>Submit a request</h1>
+                {/* Form element with submit handler */}
                 <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                     {/* Email input field */}
                     <div>
                         <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem' }}>
                             Your email address <span style={{ color: 'red' }}>*</span>
@@ -54,7 +59,7 @@ const ContactForm = () => {
 
                         />
                     </div>
-
+                     {/* Subject input field */}
                     <div>
                         <label htmlFor="subject" style={{ display: 'block', marginBottom: '0.5rem' }}>
                             Subject <span style={{ color: 'red' }}>*</span>
@@ -71,7 +76,7 @@ const ContactForm = () => {
                             }}
                         />
                     </div>
-
+                     {/* Description textarea */}
                     <div>
                         <label htmlFor="description" style={{ display: 'block', marginBottom: '0.5rem' }}>
                             Description <span style={{ color: 'red' }}>*</span>
@@ -122,7 +127,7 @@ const ContactForm = () => {
                             </label>
                         </div>
                     </div>
-
+                    {/* Submit button with conditional styling based on submission state */}
                     <button
                         type="submit"
                         disabled={isSubmitting}

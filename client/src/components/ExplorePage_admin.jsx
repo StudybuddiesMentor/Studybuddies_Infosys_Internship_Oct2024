@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import Deck from './Deck_explore'; 
 
-const ExplorePage = () => {
+const ExplorePageadmin = () => {
   const [decks, setDecks] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,6 @@ const ExplorePage = () => {
             title={deck.deck_name} 
             description={deck.description} 
             imageUrl={deck.deck_Image || deck.defaultImageUrl} 
-            deckId={deck._id}
           />
         ))}
       </div>
@@ -60,5 +59,4 @@ const ExplorePage = () => {
   );
 };
 
-export default ExplorePage;
-
+export default ExplorePageadmin;

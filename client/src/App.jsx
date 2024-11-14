@@ -17,10 +17,13 @@ import './App.css';
 import Privacy from './components/Privacy'; // Import Privacy Policy Page
 import './index.css'; // Import css for Privacy Policy and ContactUS Page
 import UserPage from './components/UserPage';
+import ExplorePageadmin from './components/ExplorePage_admin'; // Import ExplorePage
 import Adminpage from './components/Adminpage';
-//import UserMonitoringPage from './components/UserMonitoringPage';
+import UserMonitoringPage from './components/UserMonitoringPage';
+import TermsNCondition from './components/TermNCondition.jsx';
 // import Deck from './components/Deck';
 import ContactUs from './components/ContactUs'; // Import ContactUs Page
+import ViewDeckPage from './components/ViewDeckPage';
 
 
 function App() {
@@ -44,6 +47,11 @@ function App() {
         <Route path="/Decks" element={<Deck />} />
         <Route path="/AdminPage" element={<Adminpage/>} />
         <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/term-and-condition" element={<TermsNCondition />} />
+        <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
+        <Route path="/ContactUs" element={<ContactUs />} />
+        <Route path="/view-deck/:id" element={<ViewDeckPage/>} />
+        <Route path="/explore-admin" element={<ExplorePageadmin />} /> 
       </Routes>
     </Router>
   );

@@ -1,9 +1,15 @@
-
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
-const Deck = ({ title, description, imageUrl }) => {
+const Deck = ({ title, description, imageUrl, deckId }) => {
   // Default image URL for decks without an image
   const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
+  const navigate = useNavigate();
+
+  const handleOpenDeck = () => {
+    alert(`Opening ${title} Deck`);
+    navigate(`/view-deck/${deckId}`); // Navigate to ViewDeckPage with deck ID
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 cursor-pointer transition-transform transform hover:scale-110 hover:shadow-xl duration-200 w-64 h-64 flex flex-col justify-between border-2 border-black hover:border-gray-500">
@@ -18,7 +24,7 @@ const Deck = ({ title, description, imageUrl }) => {
       </div>
       <button 
         className="mt-2 bg-[#d8b1e1] text-black py-2 px-4 rounded hover:bg-[#caa3d6] transition duration-200"
-        onClick={() => alert(`Opening ${title}`)}
+        onClick={handleOpenDeck}
       >
         Open Deck
       </button>
