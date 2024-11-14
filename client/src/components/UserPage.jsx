@@ -243,7 +243,8 @@ const Userpagebody = () => {
     setFormData({ fullName: '', email: '', message: '' });
   };
   return (
-    <div className=' bg-gray-100'>
+    // <div className=' bg-gray-100'>
+    <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
       <nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0" >
         <div className="navbar-logo">
           <img
