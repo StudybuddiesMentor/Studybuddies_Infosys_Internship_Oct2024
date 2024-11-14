@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import banner1 from '../assets/banner1.png';
-import logo from '../assets/logo.png';
+import logo1 from '../assets/logo1.png';
 import img from '../assets/photo.jpg';
 import { useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
@@ -97,20 +97,21 @@ const Adminpagebody = () => {
     setFormData({ fullName: '', email: '', message: '' });
   };
   return (
-    <div className=" bg-gray-100">
+    <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
 
 
-<nav className="flex justify-between items-center p-4 bg-purple-800 text-white relative z-10">
+<nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0">
       <div className="navbar-logo">
         <img 
-          src={logo} 
+          src={logo1} 
           alt="Logo" 
           className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
         />
       </div>
       <div className={`hidden md:flex items-center gap-6 transition-transform duration-300 ${isOpen ? "open" : ""}`}>
-        <a href="/home" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Home</a>
-        <a href="/logout" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Logout</a>
+      <a href="/home" className="font-bold text-black hover:text-green-700 transition-colors duration-300">Home</a>
+<a href="/logout" className="font-bold text-black hover:text-green-700 transition-colors duration-300">Logout</a>
+
       </div>
     
       <div className="md:hidden">
@@ -135,26 +136,26 @@ const Adminpagebody = () => {
               <h2 className="text-xl font-semibold text-gray-800"><b>Welcome, </b>{Info.adminname}</h2>
             </div>
             <div className="flex justify-end gap-5 space-x-4 mt-6">
-              <button className="bg-white text-violet-600 font-extrabold text-2xl border border-purple-500 py-2 px-4 shadow-md hover:bg-purple-500 hover:text-white transition duration-300"
+              <button className="bg-white text-green-500 font-extrabold text-2xl border border-green-500 py-2 px-4 shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300"
               onClick={() => navigate('/explore')}>
-                Explore
+              Explore
               </button>
-              <button className="bg-white text-violet-600 font-extrabold text-2xl border border-purple-500 py-2 px-4 shadow-md hover:bg-purple-500 hover:text-white transition duration-300"
-              onClick={() => navigate('/UserMonitoringPage')}>
-                Users
-              </button>
+
+              <button className="bg-white text-green-500 font-extrabold text-2xl border border-green-500 py-2 px-4 shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300"
+        onClick={() => navigate('/UserMonitoringPage')}>
+  Users
+</button>
             </div>
           </div>
 
           <div className="p-4 mt-2 rounded-lg shadow-lg bg-white relative">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-800">Admin Information</h3>
-              <button
-                onClick={handleEditPersonalInfoClick}
-                className="absolute top-4 right-4 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transform transition duration-300 ease-in-out"
-              >
-                Edit Info
-              </button>
+              <button 
+                 onClick={handleEditPersonalInfoClick}
+                 className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" >
+                 Edit Info
+                </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
