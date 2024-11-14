@@ -22,6 +22,7 @@ import UserMonitoringPage from './components/UserMonitoringPage';
 import TermsNCondition from './components/TermNCondition.jsx';
 // import Deck from './components/Deck';
 import ContactUs from './components/ContactUs'; // Import ContactUs Page
+import ViewDeckPage from './components/ViewDeckPage';
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
         <Route path="/term-and-condition" element={<TermsNCondition />} />
         <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
         <Route path="/ContactUs" element={<ContactUs />} />
+        <Route path="/view-deck/:id" element={<ViewDeckPage/>} />
       </Routes>
     </Router>
   );

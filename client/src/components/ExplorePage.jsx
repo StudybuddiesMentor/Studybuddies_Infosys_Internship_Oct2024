@@ -52,6 +52,7 @@ const ExplorePage = () => {
             title={deck.deck_name} 
             description={deck.description} 
             imageUrl={deck.deck_Image || deck.defaultImageUrl} 
+            deckId={deck._id}
           />
         ))}
       </div>
