@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import Deck from './Deck_explore'; 
 
-const ExplorePage = () => {
+const ExplorePageadmin = () => {
   const [decks, setDecks] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -59,4 +59,4 @@ const ExplorePage = () => {
   );
 };
 
-export default ExplorePage;
+export default ExplorePageadmin;

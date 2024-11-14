@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [favorites, setFavorites] = useState([false, false, false]);
+  const [favorites, setFavorites] = useState([]);
   const Navigate = useNavigate();
 
   const flashcards = [
@@ -35,13 +35,20 @@ const MainPage = () => {
   }, [flashcards.length]);
 
   // Toggle favorite icon for a specific card
-  const toggleFavorite = (index) => {
+  const toggleFavorite = (id) => {
     setFavorites((prevFavorites) => {
       const newFavorites = [...prevFavorites];
-      newFavorites[index] = !newFavorites[index];
+      const index = newFavorites.findIndex((favorite) => favorite.id === id);
+      if (index !== -1) {
+        newFavorites.splice(index, 1); // Remove the favorite from the list
+      } else {
+        newFavorites.push({ id, isFavorite: true });
+      }
       return newFavorites;
     });
   };
+
+
 
   return (
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
@@ -153,7 +160,7 @@ const MainPage = () => {
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     {[...Array(3)].map((_, idx) => (
       <div
-        key={idx}
+      key={`recent-${idx}`}
         className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
       >
         <div className="overflow-hidden h-full rounded-lg bg-gray-100 group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:to-purple-500 p-4 transition-all duration-500">
@@ -171,16 +178,19 @@ const MainPage = () => {
         </div>
 
         <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
-          <img
-            src={
-              favorites[idx]
-                ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
-                : "https://cdn-icons-png.freepik.com/512/57/57602.png"
-            }
-            alt="Favorite"
-            className="h-8 cursor-pointer hover:scale-110 transition-transform"
-            onClick={() => toggleFavorite(idx)}
-          />
+        <img
+                    src={
+                      favorites.find(
+                        (favorite) => favorite.id === `recent-${idx}`
+                      )
+                        ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
+                        : "https://cdn-icons-png.freepik.com/512/57/57602.png"
+                    }
+                    alt="Favorite"
+                    className="h-8 cursor-pointer hover:scale-110 transition-transform"
+                    onClick={() => toggleFavorite(`recent-${idx}`)}
+                  />
+
         </div>
       </div>
     ))}
@@ -195,7 +205,7 @@ const MainPage = () => {
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     {[...Array(3)].map((_, idx) => (
       <div
-        key={idx}
+      key={`explore-${idx}`}
         className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
       >
         <div className="overflow-hidden h-full rounded-lg bg-gray-100 group-hover:bg-gradient-to-r group-hover:from-green-500 group-hover:to-yellow-500 p-4 transition-all duration-500">
@@ -213,16 +223,18 @@ const MainPage = () => {
         </div>
 
         <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
-          <img
-            src={
-              favorites[idx]
-                ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
-                : "https://cdn-icons-png.freepik.com/512/57/57602.png"
-            }
-            alt="Favorite"
-            className="h-8 cursor-pointer hover:scale-110 transition-transform"
-            onClick={() => toggleFavorite(idx)}
-          />
+        <img
+                    src={
+                      favorites.find(
+                        (favorite) => favorite.id === `explore-${idx}`
+                      )
+                        ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
+                        : "https://cdn-icons-png.freepik.com/512/57/57602.png"
+                    }
+                    alt="Favorite"
+                    className="h-8 cursor-pointer hover:scale-110 transition-transform"
+                    onClick={() => toggleFavorite(`explore-${idx}`)}
+                  />
         </div>
       </div>
     ))}
