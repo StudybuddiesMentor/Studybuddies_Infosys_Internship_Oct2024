@@ -4,6 +4,7 @@ import logo from '../assets/heropic.png'; // adjust path according to actual loc
 import Header from './Header';
 import Homefeature from './Homefeature';
 import Homefooter from './Homefooter';
+import Testimonials from './Testimonials';
 
 function Home() {
   return (
@@ -45,6 +46,7 @@ function Home() {
     </section>
 </div>
 <Homefeature />
+      <Testimonials />
 <Homefooter />
 
     

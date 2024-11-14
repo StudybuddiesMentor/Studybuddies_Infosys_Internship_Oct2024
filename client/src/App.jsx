@@ -24,7 +24,7 @@ import TermsNCondition from './components/TermNCondition.jsx';
 // import Deck from './components/Deck';
 import ContactUs from './components/ContactUs'; // Import ContactUs Page
 import ViewDeckPage from './components/ViewDeckPage';
-
+import Testimonials from './components/Testimonials.jsx';
 
 function App() {
   return (
