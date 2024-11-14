@@ -109,8 +109,8 @@ const Adminpagebody = () => {
         />
       </div>
       <div className={`hidden md:flex items-center gap-6 transition-transform duration-300 ${isOpen ? "open" : ""}`}>
-      <a href="/home" className="font-bold text-black hover:text-green-600 transition-colors duration-300">Home</a>
-<a href="/logout" className="font-bold text-black hover:text-green-600 transition-colors duration-300">Logout</a>
+      <a href="/home" className="font-bold text-black hover:text-green-700 transition-colors duration-300">Home</a>
+<a href="/logout" className="font-bold text-black hover:text-green-700 transition-colors duration-300">Logout</a>
 
       </div>
     
