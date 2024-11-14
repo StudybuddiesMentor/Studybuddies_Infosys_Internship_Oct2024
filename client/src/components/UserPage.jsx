@@ -4,7 +4,7 @@ import banner1 from '../assets/banner1.png';
 import logoDefault from '../assets/logo.png';
 // import logo from '../assets/images.png';
 import { FaEdit } from 'react-icons/fa';
-import logo1 from '../assets/photo.jpg';
+import logo1 from '../assets/logo1.jpg';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -248,7 +248,7 @@ const Userpagebody = () => {
       <nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0" >
         <div className="navbar-logo">
           <img
-            src={logo}
+            src={logo1}
             alt="Logo"
             className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
           />
