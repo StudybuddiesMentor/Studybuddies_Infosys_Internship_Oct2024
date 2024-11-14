@@ -10,17 +10,27 @@ const MainPage = () => {
     {
       id: 1,
       content:
-        "https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/background_images/image_3.jpg",
+        "https://img.freepik.com/premium-photo/sticky-notes-board-office-generative-ai_77190-12755.jpg",
     },
     {
       id: 2,
       content:
-        "https://i.pinimg.com/736x/9d/97/55/9d975590ceb12f3061ce554a1f0af5ae.jpg",
+        "https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/background_images/image_3.jpg",
     },
     {
       id: 3,
       content:
-        "https://www.entrelineaspapeleria.cl/cdn/shop/products/30-tarjetas-flash-card-150-grs-entrelineas-papeleria-728367_1080x.jpg?v=1709738958",
+        "https://cdn.pixabay.com/photo/2024/02/10/22/14/ai-generated-8565631_960_720.jpg",
+    },
+    {
+      id: 4,
+      content:
+        "https://img.freepik.com/premium-photo/stack-books-with-word-book-top_902049-15985.jpg",
+    },
+    {
+      id: 5,
+      content:
+        "https://img.freepik.com/premium-photo/shelf-filled-with-books-different-genres-wallpaper_987764-21253.jpg",
     },
   ];
 
