@@ -4,7 +4,7 @@ import banner1 from '../assets/banner1.png';
 import logoDefault from '../assets/logo.png';
 // import logo from '../assets/images.png';
 import { FaEdit } from 'react-icons/fa';
-import logo1 from '../assets/logo1.jpg';
+import logo1 from '../assets/logo1.png';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
