@@ -76,7 +76,7 @@ const MailVerification = () => {
                         onChange={handleEmailChange}
                     />
                 </div>
-                <button type="button" className="otp-btn" onClick={handleSendOtp}>Send OTP</button>
+                <button type="button" className="otp-btn" style={{ backgroundColor: click ? "blue" : "green" }} onClick={handleSendOtp}>Send OTP</button>
                 {/* OTP Input Field */}
                 <div className="form-card-input-wrapper">
                     <input
