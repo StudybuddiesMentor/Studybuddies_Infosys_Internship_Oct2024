@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../assets/logo.png';
+import logo1 from '../assets/logo1.png';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
 const users = [
@@ -58,9 +58,9 @@ const UserMonitoringPage = () => {
         <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 p-6">
             {/* Navbar */}
             <nav className="flex justify-between items-center p-4 bg-green-200 text-white shadow-lg rounded-xl mb-6">
-                <div className="navbar-logo">
+                <div className="navbar-logo1">
                     <img
-                        src={logo}
+                        src={logo1}
                         alt="Logo"
                         className="rounded-full h-12 cursor-pointer transition-transform duration-300 hover:scale-110"
                     />

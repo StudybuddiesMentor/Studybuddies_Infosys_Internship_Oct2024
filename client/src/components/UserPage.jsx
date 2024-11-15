@@ -14,18 +14,6 @@ import axios from 'axios';
 const Userpagebody = () => {
   const navigate = useNavigate();
 
-  
-  const [deckCounts, setDeckCounts] = useState({
-    createDeck: 3,
-    likedDeck: 1,
-    favoriteDeck: 2,
-  });
-
-  const [flashcardCounts, setFlashcardCounts] = useState({
-    createFlashcard: 5,
-    likedFlashcard: 2,
-    favoriteFlashcard: 4,
-  });
 
   const [userInfo, setUserInfo] = useState({
     fullName: '',
@@ -268,6 +256,42 @@ const Userpagebody = () => {
       e.target.value = ''; // Clear the input if the file is invalid
     }
   };
+
+  const exampleDecks = [
+    { id: 1, title: "Math Basics", image: "https://via.placeholder.com/150" },
+    { id: 2, title: "Science Facts", image: "https://via.placeholder.com/150" },
+    { id: 3, title: "History Highlights", image: "https://via.placeholder.com/150" },
+    { id: 4, title: "Programming 101", image: "https://via.placeholder.com/150" },
+    { id: 5, title: "Geography Insights", image: "https://via.placeholder.com/150" },
+    { id: 6, title: "Chemistry Basics", image: "https://via.placeholder.com/150" },
+    { id: 7, title: "Physics Concepts", image: "https://via.placeholder.com/150" },
+    { id: 8, title: "English Literature", image: "https://via.placeholder.com/150" },
+    { id: 9, title: "Art and Design", image: "https://via.placeholder.com/150" },
+    { id: 10, title: "Health and Wellness", image: "https://via.placeholder.com/150" },
+  ];
+
+  // State variables for pagination
+  const [currentDecks, setCurrentDecks] = useState([]);
+  const [deckPage, setDeckPage] = useState(1);
+  const decksPerPage = 8; // Number of decks per page
+  const totalDeckPages = Math.ceil(exampleDecks.length / decksPerPage);
+
+  useEffect(() => {
+    // Set the initial page decks
+    const startIndex = (deckPage - 1) * decksPerPage;
+    const endIndex = startIndex + decksPerPage;
+    setCurrentDecks(exampleDecks.slice(startIndex, endIndex));
+  }, [deckPage]);
+
+  // Handle pagination
+  const previousDeckPage = () => {
+    if (deckPage > 1) setDeckPage(deckPage - 1);
+  };
+
+  const nextDeckPage = () => {
+    if (deckPage < totalDeckPages) setDeckPage(deckPage + 1);
+  };
+
   return (
     // <div className=' bg-gray-100'>
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
@@ -400,39 +424,44 @@ const Userpagebody = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 mt-2 section user-actions block sm:flex ">
-            <div className="flex flex-col items-center shadow-md rounded-lg p-4 decks w-[1000px] mx-auto">
-
-              {/* <button
-                className="bg-blue-500 text-white py-3 px-6 rounded-lg cursor-pointer font-bold text-lg mb-2 transition-transform duration-300 shadow-lg create-decks hover:bg-blue-700 hover:scale-105"
-                onClick={handleCreateDeckClick}>
-                <span className="mr-2 plus-symbol">+</span> Create Decks
-              </button> */}
-              <button
-              className="bg-green-500 text-white py-3 px-6 rounded-full cursor-pointer font-bold text-lg transition-transform duration-300 shadow-md hover:bg-green-600 hover:scale-105"
-              onClick={handleCreateDeckClick}>
-              <span className="mr-2">+</span> Create Decks
-              </button>
-
-
-              <div className="flex justify-center deck-actions w-[90%] max-w-[800px] mt-4 mx-auto" style={{ gap: '160px' }}>
-                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
-                  <span >Created Deck</span>
-                  <span className="font-semibold count ml-4">{deckCounts.createDeck}</span>
-                </div>
-
-                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
-                  <span>Liked Deck</span>
-                  <span className="font-semibold count">{deckCounts.likedDeck}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
-                  <span>Favorite Deck</span>
-                  <span className="font-semibold count">{deckCounts.favoriteDeck}</span>
-                </div>
-              </div>
-
+          <div className="p-4 mt-2 rounded-lg shadow-lg bg-white">
+      <h2 className="text-xl font-bold mb-4">Created Decks</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {currentDecks.map((deck) => (
+          <div
+            key={deck.id}
+            onClick={() => navigate(`/deck/${deck.id}`)}
+            className="bg-gray-200 rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-300 ease-in-out duration-300"
+          >
+            <img
+              src={deck.image}
+              alt={deck.title}
+              className="w-full h-32 object-cover"
+            />
+            <div className="p-4">
+              <h3 className="font-semibold">{deck.title}</h3>
             </div>
           </div>
+        ))}
+      </div>
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={previousDeckPage}
+          disabled={deckPage === 1}
+          className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <button
+          onClick={nextDeckPage}
+          disabled={deckPage === totalDeckPages}
+          className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
         </div>
 
 
