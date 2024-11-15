@@ -2,29 +2,36 @@ import Tag from "../db/Tag.js";
 
 
 
- async function checkTag(inputtag) {
+ async function checkTag(inputtags) {
+
+  const validatearray = [];
+  const validtags = [];
+  for(const inputtag of inputtags ){
     const userTag = inputtag.trim().toLowerCase();
     if (!isValid(userTag)) {
-      return {status:400,message:"No special characters are allowed in tag"}
+      validatearray.push({status:400,message:"No special characters are allowed in tag"});
+      continue;
     }
-    const existtag = await Tag.findOne({ name: userTag });
-   if(existtag){
-     return {status:400,message:"the tag already exist please choose existing tag",existtag};
-   }
     let checkTag = userTag.slice(0, -1);
-
+   
+    let isSimilar = false;
    const similartag = await Tag.find({ name: { $regex: `^${checkTag}` } });
-   console.log(similartag);
-   for (let tag of similartag) {
+  
+for (let tag of similartag) {
      const taglength = tag.name.length;
      const inputtaglength = userTag.length;
       if (userTag.startsWith(tag.name) && Math.abs(inputtaglength - taglength) === 1 ) {
-       return {status:400, message: "The similar tag already exists. Please choose an existing tag."};
+        validtags.push(tag.name); 
+        isSimilar = true;
+        break;
       }
- 
-   //}
+    }
+    if(!isSimilar){
+      validtags.push(userTag);
+    }
  }
- return null;
+ return { errors: validatearray, validtags };
+
   }
 
   function isValid(input){

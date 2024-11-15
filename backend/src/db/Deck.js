@@ -5,7 +5,7 @@ const deckSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  deck_Image:{
+  deck_image:{
     url : String,
     filename : String
   },
@@ -13,9 +13,10 @@ const deckSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  is_public: {
-    type: Boolean,
-    default: true,
+  deck_status: {
+    type: String,
+    enum:['Public','Private','Deleted'],
+    default:'public'
   },
   created_by: {
     type: mongoose.Schema.Types.ObjectId,

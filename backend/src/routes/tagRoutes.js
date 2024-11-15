@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTag, removeTagFromDeck, getTags } from '../controllers/tagController.js';
+import { createTag, removeTagFromDeck, getTags,searchTag } from '../controllers/tagController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
@@ -27,4 +27,12 @@ router.post('/', userAuthMiddleware, createTag);
  */
 router.delete('/:deckId', userAuthMiddleware, removeTagFromDeck);
 
+
+/**
+ * @route GET /api/tags/suggest
+ * @desc suggestion to search tags
+ * @access Private (User Auth)
+ */
+
+router.get('/suggest',userAuthMiddleware,searchTag)
 export default router;
