@@ -18,14 +18,14 @@ const testimonialsData = [
         image: Testimonials_image_2,
         name: 'Divyashakti Pal',
         title: 'Student',
-        feedback: 'I’m studying for a certification, and this tools has been incredibly useful. I love that I can organize topics into different decks and use the random shuffle for practice.',
+        feedback: 'I’m studying for a certification, and this tool has been incredibly useful. I love that I can organize topics into different decks and use the random shuffle for practice.',
         rating: 5,
     },
     {
         image: Testimonials_image_3,
         name: 'Jatin',
         title: 'Student',
-        feedback: 'Excellent platform! The lessons are easy to understand, and the community is very supportive',
+        feedback: "StudyBuddy is an outstanding platform! The lessons are incredibly easy to grasp, and the community offers fantastic support.",
         rating: 5,
     },
     {
@@ -39,7 +39,7 @@ const testimonialsData = [
         image: Testimonials_image_5,
         name: 'Nitesh Rajput',
         title: 'Student',
-        feedback: 'Learning a new language has its challenges, but using flashcards has made vocabulary practice much easier. I love how simple it is to create decks and review them ',
+        feedback: 'Learning a new language has its challenges, but using flashcards has made vocabulary practice much easier. I love how simple it is to create decks and review them.',
         rating: 5,
     },
     {
@@ -52,24 +52,22 @@ const testimonialsData = [
 ];
 
 const Testimonial = ({ image, name, title, feedback, rating }) => {
-    const renderStars = (rating) => {
-        return Array(rating)
-            .fill()
-            .map((_, i) => (
-                <span key={i} className="text-yellow-400 text-xl">★</span>
-            ));
-    };
+    const renderStars = (rating) => (
+        Array.from({ length: rating }, (_, i) => (
+            <span key={i} className="text-yellow-400 text-xl">★</span>
+        ))
+    );
 
     return (
-        <div className="bg-green-100 p-6 min-w-80 rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center">
-            <img src={image} alt={name} className="w-20 h-20 rounded-full mb-4" />
+        <div className="bg-white p-6 min-w-[320px] rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 flex flex-col items-center">
+            <img src={image} alt={name} className="w-24 h-24 rounded-full mb-4" />
             <h3 className="text-lg font-semibold text-gray-800 text-center">{name}</h3>
             <p className="text-sm text-gray-500 text-center">{title}</p>
             <div className="flex justify-center mt-2">
                 {renderStars(rating)}
             </div>
             <p className="text-gray-600 text-center mt-4">{feedback}</p>
-            <button className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+            <button className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
                 Read More
             </button>
         </div>
@@ -83,42 +81,32 @@ const Testimonials = () => {
         const { current } = scrollRef;
         const scrollAmount = 300;
 
-        if (direction === 'left') {
-            current.scrollLeft -= scrollAmount;
-        } else {
-            current.scrollLeft += scrollAmount;
-        }
+        current.scrollLeft += direction === 'left' ? -scrollAmount : scrollAmount;
     };
 
     return (
-        <section className="bg-green-50 py-12 relative">
-            <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">What Our Learners Say</h2>
-                <div className="flex items-center">
+        <section className="bg-green-50 py-12">
+            <div className="max-w-6xl mx-auto px-4 lg:px-8">
+                <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">What Our Learners Say</h2>
+                <div className="relative flex items-center">
                     <button
                         onClick={() => scroll('left')}
-                        className="p-2 bg-gray-900 text-white rounded-full mr-2 hover:bg-blue-600 transition"
+                        className="p-2 bg-gray-700 text-white rounded-full hover:bg-indigo-500 transition-colors"
                     >
                         ◀
                     </button>
                     <div
                         ref={scrollRef}
-                        className="flex gap-8 w-full overflow-x-scroll scrollbar-hide"
+                        className="flex gap-6 w-full overflow-x-scroll px-4"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
                         {testimonialsData.map((testimonial, index) => (
-                            <Testimonial
-                                key={index}
-                                image={testimonial.image}
-                                name={testimonial.name}
-                                title={testimonial.title}
-                                feedback={testimonial.feedback}
-                                rating={testimonial.rating}
-                            />
+                            <Testimonial key={index} {...testimonial} />
                         ))}
                     </div>
                     <button
                         onClick={() => scroll('right')}
-                        className="p-2 bg-gray-900 text-white rounded-full ml-2 hover:bg-blue-600 transition"
+                        className="p-2 bg-gray-700 text-white rounded-full hover:bg-indigo-500 transition-colors"
                     >
                         ▶
                     </button>
