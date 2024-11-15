@@ -1,7 +1,6 @@
 import { useState } from 'react'; 
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import './ResetPassword.css';
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
@@ -30,7 +29,6 @@ const ResetPassword = () => {
             console.log('Response:', response.data); 
             setSuccess('Password reset successful. Redirecting to login...');
             
-            
             setTimeout(() => {
                 navigate('/login');
             }, 1000);
@@ -41,29 +39,38 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className="container">
-            <h2>Reset Password</h2>
-            {error && <p className="text-danger">{error}</p>}
-            {success && <p className="text-success">{success}</p>}
-            <form onSubmit={handleSubmit}>
-                <label>New Password:</label>
-                <input
-                    type="password"
-                    placeholder='Enter New Password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <label>Confirm Password:</label>
-                <input
-                    type="password"
-                    placeholder='Confirm Password'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Reset Password</button>
-            </form>
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h2 className="text-center text-2xl font-semibold text-gray-800 mb-6">Reset Password</h2>
+                {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+                {success && <p className="text-green-600 text-center mb-4">{success}</p>}
+                <form onSubmit={handleSubmit} className="flex flex-col">
+                    <label className="mb-2 font-bold text-gray-800">New Password:</label>
+                    <input
+                        type="password"
+                        placeholder='Enter New Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="p-3 mb-5 rounded border border-gray-300 text-lg"
+                    />
+                    <label className="mb-2 font-bold text-gray-800">Confirm Password:</label>
+                    <input
+                        type="password"
+                        placeholder='Confirm Password'
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        className="p-3 mb-5 rounded border border-gray-300 text-lg"
+                    />
+                    <button
+                        type="submit"
+                        className="py-3 bg-green-500 text-white text-lg rounded hover:bg-green-600 active:bg-green-700 transition duration-300 ease-in-out"
+                    >
+                        Reset Password
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

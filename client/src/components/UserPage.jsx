@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
 import banner1 from '../assets/banner1.png';
 import logoDefault from '../assets/logo.png';
 // import logo from '../assets/images.png';
 import { FaEdit } from 'react-icons/fa';
-import logo1 from '../assets/photo.jpg';
+import logo1 from '../assets/logo1.png';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -13,18 +14,6 @@ import axios from 'axios';
 const Userpagebody = () => {
   const navigate = useNavigate();
 
-  
-  const [deckCounts, setDeckCounts] = useState({
-    createDeck: 3,
-    likedDeck: 1,
-    favoriteDeck: 2,
-  });
-
-  const [flashcardCounts, setFlashcardCounts] = useState({
-    createFlashcard: 5,
-    likedFlashcard: 2,
-    favoriteFlashcard: 4,
-  });
 
   const [userInfo, setUserInfo] = useState({
     fullName: '',
@@ -56,6 +45,7 @@ const Userpagebody = () => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get('http://localhost:9000/api/users/profile', { withCredentials: true });
+
       const data = response.data.user;
 
       setUserInfo({
@@ -165,13 +155,6 @@ const Userpagebody = () => {
     setShowFlashcards(!showFlashcards);
   };
 
-  const handleEditUserClick = () => {
-    setEditedUserInfo(userInfo);
-    setEditedBio(bio);
-    setShowUserModal(true);
-    document.body.style.overflow = 'hidden';
-  };
-
 
   const handleEditPersonalInfoClick = () => {
     setEditedUserInfo({
@@ -203,9 +186,6 @@ const Userpagebody = () => {
       
     }
   
-
-  
-
   useEffect(() => {
     const mainContent = document.getElementById('main-content');
     if (showUserModal || showPersonalInfoModal) {
@@ -242,22 +222,98 @@ const Userpagebody = () => {
     console.log('Form submitted:', formData);
     setFormData({ fullName: '', email: '', message: '' });
   };
+
+  const handleEditUserClick = () => {
+    setEditedUserInfo(userInfo);
+    setEditedBio(bio);
+    setShowUserModal(true);
+    document.body.style.overflow = 'hidden';
+  };
+  
+  const validateImage = (file) => {
+    const validFormats = ['image/jpeg', 'image/png', 'image/jpg'];
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    const minSize = 2 * 1024 * 1024; // 2MB in bytes
+  
+    if (!validFormats.includes(file.type)) {
+      alert('The image format should be JPEG, PNG, or JPG.');
+      return false;
+    }
+  
+    if (file.size < minSize || file.size > maxSize) {
+      alert('The photo size should be between 2MB and 5MB.');
+      return false;
+    }
+  
+    return true;
+  };
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && validateImage(file)) {
+      setLogoFile(file);
+    } else {
+      e.target.value = ''; // Clear the input if the file is invalid
+    }
+  };
+
+  const exampleDecks = [
+    { id: 1, title: "Math Basics", image: "https://via.placeholder.com/150" },
+    { id: 2, title: "Science Facts", image: "https://via.placeholder.com/150" },
+    { id: 3, title: "History Highlights", image: "https://via.placeholder.com/150" },
+    { id: 4, title: "Programming 101", image: "https://via.placeholder.com/150" },
+    { id: 5, title: "Geography Insights", image: "https://via.placeholder.com/150" },
+    { id: 6, title: "Chemistry Basics", image: "https://via.placeholder.com/150" },
+    { id: 7, title: "Physics Concepts", image: "https://via.placeholder.com/150" },
+    { id: 8, title: "English Literature", image: "https://via.placeholder.com/150" },
+    { id: 9, title: "Art and Design", image: "https://via.placeholder.com/150" },
+    { id: 10, title: "Health and Wellness", image: "https://via.placeholder.com/150" },
+  ];
+
+  // State variables for pagination
+  const [currentDecks, setCurrentDecks] = useState([]);
+  const [deckPage, setDeckPage] = useState(1);
+  const decksPerPage = 8; // Number of decks per page
+  const totalDeckPages = Math.ceil(exampleDecks.length / decksPerPage);
+
+  useEffect(() => {
+    // Set the initial page decks
+    const startIndex = (deckPage - 1) * decksPerPage;
+    const endIndex = startIndex + decksPerPage;
+    setCurrentDecks(exampleDecks.slice(startIndex, endIndex));
+  }, [deckPage]);
+
+  // Handle pagination
+  const previousDeckPage = () => {
+    if (deckPage > 1) setDeckPage(deckPage - 1);
+  };
+
+  const nextDeckPage = () => {
+    if (deckPage < totalDeckPages) setDeckPage(deckPage + 1);
+  };
+
   return (
-    <div className=' bg-gray-100'>
-      <nav className="flex justify-between items-center p-4 bg-purple-800 text-white relative z-10 m-0" >
+    // <div className=' bg-gray-100'>
+    <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
+      <nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0" >
         <div className="navbar-logo">
           <img
-            src={logo}
+            src={logo1}
             alt="Logo"
             className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
           />
         </div>
-        <div className={`hidden md:flex items-center gap-6 transition-transform duration-300 ${isOpen ? "open" : ""}`}>
-          <a href="/main-page" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Home</a>
-          <a href="/decks" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Create Decks</a>
-          <a href="/logout" className="font-bold text-white hover:text-yellow-400 transition-colors duration-300">Logout</a>
+        <div className="hidden md:flex items-center gap-6 bg-white py-4 px-8  transition-transform duration-300">
+          <a href="/main-page" className="text-green-500 bg-white border border-green-500 px-4 py-2 rounded-full shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300 font-bold">
+          Home
+          </a>
+          <a href="/decks" className="text-green-500 bg-white border border-green-500 px-4 py-2 rounded-full shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300 font-bold">
+          Create Decks
+          </a>
+          <a href="/logout" className="text-green-500 bg-white border border-green-500 px-4 py-2 rounded-full shadow-md hover:bg-green-500 hover:text-white transition-colors duration-300 font-bold">
+          Logout
+          </a>
         </div>
-
         <div className="md:hidden">
           <button onClick={toggleMenu} className="focus:outline-none">
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -279,19 +335,19 @@ const Userpagebody = () => {
 
             <div className='flex justify-between items-center mt-4'>
               <div className="flex items-center">
-                <div className="relative w-24 h-24">
-                  <img
-                    className="w-full h-full object-cover rounded-full border-2 border-gray-200 shadow-lg"
-                    src={logo}
-                    alt="User"
-                  />
-                  <button
-                    className="absolute bottom-1 right-1 bg-white border border-gray-300 text-gray-500 rounded-full p-1 hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out shadow-lg hover:shadow-blue-500/50"
-                    onClick={handleEditUserClick}
-                    aria-label="Edit Profile Picture"
-                  >
-                    <FaEdit className="w-4 h-4 transform transition-transform duration-300 hover:scale-125 " />
-                  </button>
+              <div className="relative w-24 h-24">
+    <img
+      className="w-full h-full object-cover rounded-full border-2 border-gray-200 shadow-lg"
+      src={logo}
+      alt="User"
+    />
+    <button
+      className="absolute bottom-1 right-1 bg-white border border-gray-300 text-gray-500 rounded-full p-1 hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out shadow-lg hover:shadow-blue-500/50"
+      onClick={handleEditUserClick}
+      aria-label="Edit Profile Picture"
+    >
+      <FaEdit className="w-4 h-4 transform transition-transform duration-300 hover:scale-125" />
+    </button>
                 </div>
                 <div className="flex-grow items-center" style={{ marginLeft: '25px' }}>
 
@@ -325,14 +381,18 @@ const Userpagebody = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Personal Information</h3>
               <div className='b'>
-                <button
+                {/* <button
                   onClick={handleEditPersonalInfoClick}
-                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out"
-                >
+                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
                   Edit Info
+                </button> */}
+                <button 
+                 onClick={handleEditPersonalInfoClick}
+                 className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300" >
+                 Edit Info
                 </button>
+                </div>
               </div>
-            </div>
 
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
@@ -364,69 +424,79 @@ const Userpagebody = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 mt-2 section user-actions block sm:flex ">
-            <div className="flex flex-col items-center shadow-md rounded-lg p-4 decks w-[1000px] mx-auto">
-
-              <button
-                className="bg-blue-500 text-white py-3 px-6 rounded-lg cursor-pointer font-bold text-lg mb-2 transition-transform duration-300 shadow-lg create-decks hover:bg-blue-700 hover:scale-105"
-                onClick={handleCreateDeckClick}
-              >
-                <span className="mr-2 plus-symbol">+</span> Create Decks
-              </button>
-
-              <div className="flex justify-center deck-actions w-[90%] max-w-[800px] mt-4 mx-auto" style={{ gap: '160px' }}>
-                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
-                  <span >Created Deck</span>
-                  <span className="font-semibold count ml-4">{deckCounts.createDeck}</span>
-                </div>
-
-                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
-                  <span>Liked Deck</span>
-                  <span className="font-semibold count">{deckCounts.likedDeck}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-md action-item gap-x-4">
-                  <span>Favorite Deck</span>
-                  <span className="font-semibold count">{deckCounts.favoriteDeck}</span>
-                </div>
-              </div>
-
+          <div className="p-4 mt-2 rounded-lg shadow-lg bg-white">
+      <h2 className="text-xl font-bold mb-4">Created Decks</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {currentDecks.map((deck) => (
+          <div
+            key={deck.id}
+            onClick={() => navigate(`/deck/${deck.id}`)}
+            className="bg-gray-200 rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-300 ease-in-out duration-300"
+          >
+            <img
+              src={deck.image}
+              alt={deck.title}
+              className="w-full h-32 object-cover"
+            />
+            <div className="p-4">
+              <h3 className="font-semibold">{deck.title}</h3>
             </div>
           </div>
+        ))}
+      </div>
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={previousDeckPage}
+          disabled={deckPage === 1}
+          className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <button
+          onClick={nextDeckPage}
+          disabled={deckPage === totalDeckPages}
+          className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
         </div>
 
 
         {showUserModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-8 w-96 shadow-lg">
-              <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg p-8 w-99 shadow-lg">
+          <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+          <div className="mb-4">
+  <label className="block font-semibold mb-2">Profile Picture:</label>
+  <input
+    type="file"
+    accept="image/*"
+    className="w-full p-2 border border-gray-300 rounded-lg"
+    onChange={handleImageChange}
+  />
+  <p className="text-red-600 mt-2">* The image should be between 2MB and 5MB.</p>
+  <p className="text-red-600">* The image should be in JPEG, JPG, or PNG format.</p>
+</div>
 
-              <div className="mb-4">
-                <label className="block font-semibold mb-2">Profile Picture:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  onChange={(e) => setLogoFile(e.target.files[0])}
-                />
-              </div>
-
-
-              <div className="flex justify-between mt-6">
-                <button
-                  onClick={handleSaveUserClick}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={handleCancelModal}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-bold"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={handleSaveUserClick}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancelModal}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-bold"
+            >
+              Cancel
+            </button>
           </div>
+        </div>
+      </div>
         )}
         {showPersonalInfoModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm z-50">

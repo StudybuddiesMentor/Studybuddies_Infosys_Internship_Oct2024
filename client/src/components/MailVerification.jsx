@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './MailVerification.css';
-// import image from './assets/loginani.png';
 import logo from '@/assets/logo1.png';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,6 +9,7 @@ const MailVerification = () => {
     const [otp, setOtp] = useState('');
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
+    const [isOtpSent, setIsOtpSent] = useState(false); // New state to control button color
     const navigate = useNavigate();
 
     const handleOtpChange = (e) => {
@@ -30,10 +30,12 @@ const MailVerification = () => {
             console.log('OTP sent successfully:', response.data);
             setSuccess(response.data.message);
             setError('');
+            setIsOtpSent(true); // Update the button color
         } catch (error) {
             console.error('Error sending OTP:', error);
             setError(error.response?.data?.message || 'Failed to send OTP');
             setSuccess('');
+            setIsOtpSent(false); // Reset the button color on error
         }
     };
 
@@ -76,7 +78,16 @@ const MailVerification = () => {
                         onChange={handleEmailChange}
                     />
                 </div>
-                <button type="button" className="otp-btn" onClick={handleSendOtp}>Send OTP</button>
+                
+                <button
+                    type="button"
+                    className="otp-btn"
+                    style={{ backgroundColor: isOtpSent ? "blue" : "green" }}
+                    onClick={handleSendOtp}
+                >
+                    Send OTP
+                </button>
+
                 {/* OTP Input Field */}
                 <div className="form-card-input-wrapper">
                     <input
@@ -107,3 +118,4 @@ const MailVerification = () => {
 };
 
 export default MailVerification;
+
