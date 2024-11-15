@@ -16,7 +16,9 @@ const Nav = () => {
   useEffect(() => {
     axios
       .get("http://localhost:9000/api/tags")
-      .then((response) => setAvailableTags(response.data))
+      .then((response) => {
+        setAvailableTags(response.data.tags || []);
+      })
       .catch((error) => console.error("Error fetching tags:", error));
   }, []);
 
