@@ -102,11 +102,13 @@ const Adminpagebody = () => {
 
 <nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0">
       <div className="navbar-logo">
-        <img 
-          src={logo1} 
-          alt="Logo" 
-          className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
-        />
+        <a href="/main-page">
+            <img
+              src={logo1}
+              alt="Logo"
+              className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
+            />
+          </a>
       </div>
       <div className={`hidden md:flex items-center gap-6 transition-transform duration-300 ${isOpen ? "open" : ""}`}>
       <a href="/home" className="font-bold text-black hover:text-green-700 transition-colors duration-300">Home</a>
