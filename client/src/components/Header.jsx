@@ -5,7 +5,7 @@ import logo from '../assets/logo1.png'; // adjust path according to actual locat
 function Header() {
   return (
     <div>
-        <header className="bg-green-200">
+        <header className="bg-green-200 fixed top-0 left-0 w-full z-50">
         <div className="px-4 mx-auto sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 lg:h-20">
                 <div className="flex-shrink-0">
@@ -32,6 +32,8 @@ function Header() {
             </div>
         </div>
     </header>
+      {/* Add margin to account for the fixed header */}
+      <div className="h-16 lg:h-20"></div>
     </div>
   )
 }
