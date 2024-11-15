@@ -1,17 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Nav = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Track the search query
+  const [availableTags, setAvailableTags] = useState([]); // Tags from backend
+  const [showDropdown, setShowDropdown] = useState(false); // Control dropdown visibility
+
   const navigate = useNavigate();
 
-  // Function to handle the search
+  // Fetch tags from backend
+  useEffect(() => {
+    axios
+      .get("http://localhost:9000/api/tags")
+      .then((response) => setAvailableTags(response.data))
+      .catch((error) => console.error("Error fetching tags:", error));
+  }, []);
+
+  // Filter tags based on search query
+  const filteredTags = availableTags.filter((tag) =>
+    tag.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Function to handle search
   const handleSearch = () => {
     if (searchQuery) {
-      navigate(`/explore/${searchQuery}`); // Redirect to explore page with search query
+      navigate(`/explore/${searchQuery}`);
     }
   };
 
@@ -28,17 +45,20 @@ const Nav = () => {
         </Link>
 
         {/* Search Bar for Larger Screens */}
-        <div className="hidden md:flex flex-1 mx-6 order-2 lg:order-1">
+        <div className="hidden md:flex flex-1 mx-6 order-2 lg:order-1 relative">
           <div className="relative w-full">
             <input
               type="text"
               placeholder="Search flashcards..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowDropdown(true);
+              }}
               className="border rounded-full px-4 py-2 w-full shadow-md focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-300 transition"
             />
             <button
-              onClick={handleSearch} // Trigger the search on click
+              onClick={handleSearch}
               className="absolute right-4 top-2 text-gray-600 hover:text-green-500 transition"
             >
               <img
@@ -48,7 +68,27 @@ const Nav = () => {
               />
             </button>
           </div>
+
+          {/* Dropdown for tag suggestions */}
+          {showDropdown && filteredTags.length > 0 && (
+            <div className="absolute mt-2 bg-white border rounded-lg shadow-lg w-full z-10 max-h-40 overflow-y-auto">
+              {filteredTags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="px-4 py-2 text-gray-700 hover:bg-green-100 cursor-pointer"
+                  onClick={() => {
+                    setSearchQuery(tag.name); // Update search query with selected tag
+                    setShowDropdown(false); // Close dropdown after selection
+                    handleSearch(); // Trigger search
+                  }}
+                >
+                  {tag.name}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
 
         {/* Search Icon and Hamburger Menu for Smaller Screens */}
         <div className="flex items-center space-x-4 md:hidden">
@@ -119,7 +159,7 @@ const Nav = () => {
       {/* Dropdown Menu for Smaller Screens */}
       {menuOpen && (
         <div className="md:hidden absolute top-16 right-0 w-full bg-white p-4 shadow-md z-50">
-          <button
+           <button
             className="bg-green-500 text-white px-4 py-2 w-full rounded-full shadow-md mb-4 hover:bg-green-600 transition-colors duration-300"
             onClick={() => navigate("/deck")}
           >
@@ -186,11 +226,14 @@ const Nav = () => {
             type="text"
             placeholder="Search flashcards..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setShowDropdown(true);
+            }}
             className="border rounded-full px-4 py-2 w-full shadow-md focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-300 transition"
           />
           <button
-            onClick={handleSearch} // Trigger the search on click
+            onClick={handleSearch}
             className="absolute right-4 top-2 text-gray-600 hover:text-green-500 transition"
           >
             <img
@@ -199,6 +242,25 @@ const Nav = () => {
               className="w-6 h-6"
             />
           </button>
+
+          {/* Dropdown for tag suggestions on small screens */}
+          {showDropdown && filteredTags.length > 0 && (
+            <div className="absolute mt-2 bg-white border rounded-lg shadow-lg w-full z-10 max-h-40 overflow-y-auto">
+              {filteredTags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="px-4 py-2 text-gray-700 hover:bg-green-100 cursor-pointer"
+                  onClick={() => {
+                    setSearchQuery(tag.name); // Update search query with selected tag
+                    setShowDropdown(false); // Close dropdown after selection
+                    handleSearch(); // Trigger search
+                  }}
+                >
+                  {tag.name}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </nav>
