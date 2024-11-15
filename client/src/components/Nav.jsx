@@ -21,9 +21,9 @@ const Nav = () => {
         {/* Logo */}
         <Link to="/main-page">
           <img
-            src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
+            src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo1.png"
             alt="Study Buddy Logo"
-            className="rounded-full w-14 h-14 hover:scale-105 transition-transform duration-300"
+            className="h-14 hover:scale-105 transition-transform duration-300"
           />
         </Link>
 
