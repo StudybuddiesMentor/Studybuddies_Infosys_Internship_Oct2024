@@ -5,7 +5,7 @@ const Nav = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
@@ -13,9 +13,9 @@ const Nav = () => {
         {/* Logo */}
         <Link to="/main-page">
           <img
-            src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo.png"
+            src="https://raw.githubusercontent.com/StudybuddiesMentor/Studybuddies_Infosys_Internship_Oct2024/refs/heads/main/client/src/assets/logo1.png"
             alt="Study Buddy Logo"
-            className="rounded-full w-14 h-14 hover:scale-105 transition-transform duration-300"
+            className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
           />
         </Link>
 
@@ -59,7 +59,7 @@ const Nav = () => {
         <div className="hidden md:flex items-center space-x-4 order-3 lg:order-2">
           <button
             className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300"
-            onClick={() => Navigate("/deck")}
+            onClick={() => navigate("/deck")}
           >
             Create Deck
           </button>
@@ -96,7 +96,7 @@ const Nav = () => {
           </div>
 
           {/* Additional Links */}
-          {["Help", "Explore"].map((item) => (
+          {["Help", "Explore", "Response"].map((item) => (
             <Link
               key={item}
               to={`/${item.toLowerCase()}`}
@@ -128,7 +128,7 @@ const Nav = () => {
         <div className="md:hidden absolute top-16 right-0 w-full bg-white p-4 shadow-md z-50">
           <button
             className="bg-green-500 text-white px-4 py-2 w-full rounded-full shadow-md mb-4 hover:bg-green-600 transition-colors duration-300"
-            onClick={() => Navigate("/deck")}
+            onClick={() => navigate("/deck")}
           >
             Create Deck
           </button>
@@ -165,7 +165,7 @@ const Nav = () => {
               )}
             </div>
 
-            {["Help", "Explore"].map((item) => (
+            {["Help", "Explore", "Response"].map((item) => (
               <Link
                 key={item}
                 to={`/${item.toLowerCase()}`}
