@@ -112,6 +112,28 @@ const MainPage = () => {
             />
           </div>
         </div>
+ <div className="bg-green-50 py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Welcome to StudyBuddies!
+            </h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              StudyBuddies is your personalized learning companion, offering a
+              platform to create, share, and explore flashcards. Whether you're
+              revising for an exam or learning something new, our
+              community-driven decks make studying fun, interactive, and
+              effective.
+            </p>
+            <div className="mt-8">
+              <Link
+                to="/explore"
+                className="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition duration-300"
+              >
+                Start Exploring Flashcards
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {/* Recently Visited Flashcards */}
         <section className="mt-12">
