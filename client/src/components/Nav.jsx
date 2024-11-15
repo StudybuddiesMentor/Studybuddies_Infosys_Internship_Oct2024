@@ -150,7 +150,9 @@ const Nav = () => {
         </div>
         {/* Logout Button - Always Visible */}
         <div className="flex items-center space-x-8 ml-4 order-1 lg:order-2">
-          <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+          <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300"
+          onClick={() => navigate("/")} 
+          >
             Logout
           </button>
         </div>
