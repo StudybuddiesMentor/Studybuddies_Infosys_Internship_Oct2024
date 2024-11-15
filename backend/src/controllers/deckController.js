@@ -36,7 +36,6 @@ export const createDeck = async (req, res) => {
     }
 
     await newDeck.save();
-<<<<<<< HEAD
 
     let deckTags = [];
     let errors = [];
@@ -69,18 +68,6 @@ export const createDeck = async (req, res) => {
 
 
     return res.status(201).json({ message: "Deck has been created",newDeck, deckTags:getDeckTags });
-=======
-//     let deckTag = null;
-// if (tag) {
-      
-//     let findtag = await Tag.findOneAndUpdate({ name: tag },  { name: tag },{ upsert: true, new: true });
-    
-//      deckTag = await DeckTag.create({deck_id: newDeck._id,  tag_id: findtag._id});
-//   }
-    
-      
-//    return res.status(201).json({message:"Deck has been created", newDeck,deckTag });
->>>>>>> 2f3336cecddfe85e8bb82a67d1be5e313a794092
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server error." });
