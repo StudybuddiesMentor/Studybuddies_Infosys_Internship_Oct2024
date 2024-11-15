@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
 import banner1 from '../assets/banner1.png';
@@ -56,6 +57,7 @@ const Userpagebody = () => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get('http://localhost:9000/api/users/profile', { withCredentials: true });
+
       const data = response.data.user;
 
       setUserInfo({
@@ -165,13 +167,6 @@ const Userpagebody = () => {
     setShowFlashcards(!showFlashcards);
   };
 
-  const handleEditUserClick = () => {
-    setEditedUserInfo(userInfo);
-    setEditedBio(bio);
-    setShowUserModal(true);
-    document.body.style.overflow = 'hidden';
-  };
-
 
   const handleEditPersonalInfoClick = () => {
     setEditedUserInfo({
@@ -203,9 +198,6 @@ const Userpagebody = () => {
       
     }
   
-
-  
-
   useEffect(() => {
     const mainContent = document.getElementById('main-content');
     if (showUserModal || showPersonalInfoModal) {
@@ -241,6 +233,40 @@ const Userpagebody = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setFormData({ fullName: '', email: '', message: '' });
+  };
+
+  const handleEditUserClick = () => {
+    setEditedUserInfo(userInfo);
+    setEditedBio(bio);
+    setShowUserModal(true);
+    document.body.style.overflow = 'hidden';
+  };
+  
+  const validateImage = (file) => {
+    const validFormats = ['image/jpeg', 'image/png', 'image/jpg'];
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    const minSize = 2 * 1024 * 1024; // 2MB in bytes
+  
+    if (!validFormats.includes(file.type)) {
+      alert('The image format should be JPEG, PNG, or JPG.');
+      return false;
+    }
+  
+    if (file.size < minSize || file.size > maxSize) {
+      alert('The photo size should be between 2MB and 5MB.');
+      return false;
+    }
+  
+    return true;
+  };
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && validateImage(file)) {
+      setLogoFile(file);
+    } else {
+      e.target.value = ''; // Clear the input if the file is invalid
+    }
   };
   return (
     // <div className=' bg-gray-100'>
@@ -285,19 +311,19 @@ const Userpagebody = () => {
 
             <div className='flex justify-between items-center mt-4'>
               <div className="flex items-center">
-                <div className="relative w-24 h-24">
-                  <img
-                    className="w-full h-full object-cover rounded-full border-2 border-gray-200 shadow-lg"
-                    src={logo}
-                    alt="User"
-                  />
-                  <button
-                    className="absolute bottom-1 right-1 bg-white border border-gray-300 text-gray-500 rounded-full p-1 hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out shadow-lg hover:shadow-blue-500/50"
-                    onClick={handleEditUserClick}
-                    aria-label="Edit Profile Picture"
-                  >
-                    <FaEdit className="w-4 h-4 transform transition-transform duration-300 hover:scale-125 " />
-                  </button>
+              <div className="relative w-24 h-24">
+    <img
+      className="w-full h-full object-cover rounded-full border-2 border-gray-200 shadow-lg"
+      src={logo}
+      alt="User"
+    />
+    <button
+      className="absolute bottom-1 right-1 bg-white border border-gray-300 text-gray-500 rounded-full p-1 hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out shadow-lg hover:shadow-blue-500/50"
+      onClick={handleEditUserClick}
+      aria-label="Edit Profile Picture"
+    >
+      <FaEdit className="w-4 h-4 transform transition-transform duration-300 hover:scale-125" />
+    </button>
                 </div>
                 <div className="flex-grow items-center" style={{ marginLeft: '25px' }}>
 
@@ -411,37 +437,37 @@ const Userpagebody = () => {
 
 
         {showUserModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-8 w-96 shadow-lg">
-              <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg p-8 w-99 shadow-lg">
+          <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+          <div className="mb-4">
+  <label className="block font-semibold mb-2">Profile Picture:</label>
+  <input
+    type="file"
+    accept="image/*"
+    className="w-full p-2 border border-gray-300 rounded-lg"
+    onChange={handleImageChange}
+  />
+  <p className="text-red-600 mt-2">* The image should be between 2MB and 5MB.</p>
+  <p className="text-red-600">* The image should be in JPEG, JPG, or PNG format.</p>
+</div>
 
-              <div className="mb-4">
-                <label className="block font-semibold mb-2">Profile Picture:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  onChange={(e) => setLogoFile(e.target.files[0])}
-                />
-              </div>
-
-
-              <div className="flex justify-between mt-6">
-                <button
-                  onClick={handleSaveUserClick}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={handleCancelModal}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-bold"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={handleSaveUserClick}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancelModal}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-bold"
+            >
+              Cancel
+            </button>
           </div>
+        </div>
+      </div>
         )}
         {showPersonalInfoModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm z-50">
