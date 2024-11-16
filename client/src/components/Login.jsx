@@ -120,7 +120,6 @@ function Login() {
             <button type="submit" className="btn-submit">
               Sign In
             </button>
-            <OAuth />
             <button
               type="button"
               className="btn-links p-5"

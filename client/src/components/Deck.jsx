@@ -232,9 +232,10 @@ const Deck = () => {
             type="file"
             ref={fileInputRef}
             accept="image/*"
-            className="border border-gray-300 rounded-lg p-2 w-full shadow focus:outline-none"
+            className="border border-gray-300 rounded-lg p-2 w-full shadow focus:outline-none active:scale-95"
             onChange={handleImageUpload}
           />
+
           {deckImage && (
             <img
               src={deckImage}
@@ -380,7 +381,10 @@ const Deck = () => {
             />
           </svg>
 
-          <span>Add Flashcard</span>
+          <span className="active:scale-95 focus:outline-none transition-transform duration-200">
+            Add Flashcard
+          </span>
+
         </button>
 
         <div className="mt-8 justify-center">
@@ -402,7 +406,9 @@ const Deck = () => {
                 d="m9 13.5 3 3m0 0 3-3m-3 3v-6m1.06-4.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
               />
             </svg>
-            <span>Save Deck</span>
+            <span className="active:scale-95 focus:outline-none transition-transform duration-200">
+              Save Deck
+            </span>
           </button>
           {/* Render the Alert component if alert is visible */}
           {alert.visible && (
@@ -431,7 +437,9 @@ const Deck = () => {
                 d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
               />
             </svg>
-            <span>View Flashcards</span>
+            <span className="active:scale-95 focus:outline-none transition-transform duration-200">
+              View Flashcards
+            </span>
           </button>
         </div>
       </div>

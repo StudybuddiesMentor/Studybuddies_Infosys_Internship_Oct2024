@@ -124,12 +124,10 @@ const MainPage = () => {
               effective.
             </p>
             <div className="mt-8">
-              <Link
-                to="/explore"
-                className="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition duration-300"
-              >
-                Start Exploring Flashcards
-              </Link>
+            <Link to="/explore" className="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition-transform duration-200 active:scale-95">
+              Start Exploring Flashcards
+            </Link>
+
             </div>
           </div>
         </div>

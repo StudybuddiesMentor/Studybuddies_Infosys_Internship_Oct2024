@@ -134,12 +134,10 @@ const Nav = () => {
 
         {/* Action Buttons & Links for Larger Screens */}
         <div className="hidden md:flex items-center space-x-4 order-3 lg:order-2">
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300"
-            onClick={() => navigate("/deck")}
-          >
-            Create Deck
-          </button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95" onClick={() => navigate("/deck")}>
+          Create Deck
+        </button>
+
 
        
 
@@ -165,11 +163,13 @@ const Nav = () => {
         </div>
         {/* Logout Button - Always Visible */}
         <div className="flex items-center space-x-8 ml-4 order-1 lg:order-2">
-          <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300"
-          onClick={() => navigate("/")} 
-          >
-            Logout
-          </button>
+          <button
+  className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95"
+  onClick={() => navigate("/")}
+>
+  Logout
+</button>
+
         </div>
       </div>
 
