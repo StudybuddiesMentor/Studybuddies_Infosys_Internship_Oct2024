@@ -117,6 +117,7 @@ function Register() {
                             />
                         </div>
                         <button type="submit" className="btn-submit">Register</button>
+                        <OAuth />
                     </form>
                     <p className="text-center">
                         Already have an account? <button className="btn-links" onClick={() => navigate('/login')}>Login here</button>
