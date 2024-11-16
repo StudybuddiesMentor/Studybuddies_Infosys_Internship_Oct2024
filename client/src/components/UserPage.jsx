@@ -257,33 +257,63 @@ const Userpagebody = () => {
     }
   };
 
-  const exampleDecks = [
-    { id: 1, title: "Math Basics", image: "https://via.placeholder.com/150" },
-    { id: 2, title: "Science Facts", image: "https://via.placeholder.com/150" },
-    { id: 3, title: "History Highlights", image: "https://via.placeholder.com/150" },
-    { id: 4, title: "Programming 101", image: "https://via.placeholder.com/150" },
-    { id: 5, title: "Geography Insights", image: "https://via.placeholder.com/150" },
-    { id: 6, title: "Chemistry Basics", image: "https://via.placeholder.com/150" },
-    { id: 7, title: "Physics Concepts", image: "https://via.placeholder.com/150" },
-    { id: 8, title: "English Literature", image: "https://via.placeholder.com/150" },
-    { id: 9, title: "Art and Design", image: "https://via.placeholder.com/150" },
-    { id: 10, title: "Health and Wellness", image: "https://via.placeholder.com/150" },
-  ];
-
-  // State variables for pagination
-  const [currentDecks, setCurrentDecks] = useState([]);
-  const [deckPage, setDeckPage] = useState(1);
+  const [currentDecks, setCurrentDecks] = useState([]); // State for the current page's decks
+  const [deckPage, setDeckPage] = useState(1);           // Current page number
+  const [totalDeckPages, setTotalDeckPages] = useState(1); // Total number of pages
+  const [userdecks, setUserdecks] = useState([]); // State to store all decks
   const decksPerPage = 8; // Number of decks per page
-  const totalDeckPages = Math.ceil(exampleDecks.length / decksPerPage);
+
+  const fetchUserDecks = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/api/decks', {
+        withCredentials: true,
+      });
+
+    
+      const decks = response.data.userdecks;
+
+      
+      const mappedDecks = decks.map((deckObj) => {
+        const deck = deckObj.deck;
+
+        const deckData = {
+          image: deck.deck_image?.url,
+          title: deck.deck_name,
+          description: deck.description,
+          status: deck.deck_status,
+        };
+
+        const tags = deckObj.tags.map((tag) => ({
+         
+          name: tag.name,
+       
+        }));
+
+        return { ...deckData, tags };
+      });
+
+      // Update state with the mapped decks
+      setUserdecks(mappedDecks);
+
+      // Calculate total pages based on the number of decks
+      const totalPages = Math.ceil(mappedDecks.length / decksPerPage);
+      setTotalDeckPages(totalPages);
+
+      // Set current decks for the current page
+      const startIndex = (deckPage - 1) * decksPerPage;
+      const endIndex = startIndex + decksPerPage;
+      setCurrentDecks(mappedDecks.slice(startIndex, endIndex));
+
+    } catch (error) {
+      console.error('Error fetching decks:', error);
+    }
+  };
 
   useEffect(() => {
-    // Set the initial page decks
-    const startIndex = (deckPage - 1) * decksPerPage;
-    const endIndex = startIndex + decksPerPage;
-    setCurrentDecks(exampleDecks.slice(startIndex, endIndex));
-  }, [deckPage]);
+    fetchUserDecks();
+  }, [deckPage]); // Fetch decks whenever the page changes
 
-  // Handle pagination
+  // Handle pagination (previous and next)
   const previousDeckPage = () => {
     if (deckPage > 1) setDeckPage(deckPage - 1);
   };

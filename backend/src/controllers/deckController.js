@@ -80,7 +80,13 @@ export const createDeck = async (req, res) => {
 export const getDecks = async (req, res) => {
   try {
     const decks = await Deck.find({$and:[{ created_by: req.user.id },{deck_status:{$ne:"Deleted"}}]});
-   return res.status(200).json({message:"Here are your Decks",decks});
+    const userdecks = await Promise.all( decks.map( async (deck)=>{
+      const deckTags = await DeckTag.find({ deck_id: deck._id }).populate('tag_id');
+
+      const tags = deckTags.map((deckTag) => deckTag.tag_id);
+      return {deck,tags};
+    }))
+   return res.status(200).json({message:"Here are your Decks", userdecks});
   } catch (error) {
     console.error(error);
      return res.status(500).json({ message: "Internal Server error." });

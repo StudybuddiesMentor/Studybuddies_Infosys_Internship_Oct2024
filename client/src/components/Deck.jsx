@@ -15,23 +15,15 @@ const Deck = () => {
   // const [lastCreatedTime, setLastCreatedTime] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [deckImage, setDeckImage] = useState(null);
+  const [deckImage, setDeckImage] = useState("");
   const navigate = useNavigate();
   const [deckImageName, setDeckImageName] = useState("");
+  const [image, setImage] = useState(null);
+  const [error, setError] = useState("");
 
   const [alert, setAlert] = useState({ visible: false, message: "", type: "" });
 
-  axios.defaults.withCredentials = true;
-  useEffect(() => {
-    axios
-      .get("http://localhost:9000/api/decks")
-      .then((response) => {
-        setCreatedDecks(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  
 
   const addFlashcard = () => {
     setFlashcards([...flashcards, { title: "", content: "" }]);
@@ -76,32 +68,32 @@ const Deck = () => {
   //   }
   // };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    
 
-    // Resize and compress the image
-    Resizer.imageFileResizer(
-      file,
-      800, // max width
-      800, // max height
-      "JPEG",
-      70, // quality (0-100)
-      0, // rotation
-      async (compressedFile) => {
-        // Use FileReader to convert compressed image to dataURL
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setDeckImage(reader.result); // Set deckImage to the dataURL for preview or storage
-          setDeckImageName(file.name); // Store the file name
-        };
-        reader.readAsDataURL(compressedFile); // Read the compressed file as data URL
-      },
-      "blob" // output type
-    );
+    try {
+    
+      const formData = new FormData();
+      formData.append("deck_image", file);
+
+      const response = await axios.post("http://localhost:9000/api/decks/deckimage", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },withCredentials: true,
+      });
+
+      const { imageUrl, fileName } = response.data;
+      console.log(response.data);
+      setDeckImage(imageUrl);
+      setDeckImageName(fileName);
+      setImage(imageUrl)
+      
+    } catch (err) {
+      setError("Error uploading image: " , err.message);
+    }
   };
 
-  const fileInputRef = useRef(null);
   const saveDeck = async () => {
     try {
       const newDeck = {
@@ -116,7 +108,7 @@ const Deck = () => {
       // Attempt to post the new deck to the API
       const response = await axios.post(
         "http://localhost:9000/api/decks",
-        newDeck
+        newDeck,{ withCredentials: true }
       );
 
       // Show success alert if the request was successful
@@ -132,18 +124,11 @@ const Deck = () => {
       setTags([]);
       setFlashcards([{ title: "", content: "" }]);
       setIsPublic(false);
-      setDeckImage(null);
-      setDeckImageName(""); // Clear the deck image name
+      setDeckImage("");
+      setDeckImageName("");
+      setImage("")
 
-      // Reset the file input field using ref
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Reset the file input field
-      }
-
-      // Safely update createdDecks
-      setCreatedDecks((prevDecks) =>
-        Array.isArray(prevDecks) ? [...prevDecks, response.data] : [response.data]
-      );
+      
 
       // Auto-hide the alert after 3 seconds
       setTimeout(() => {
@@ -230,7 +215,7 @@ const Deck = () => {
           <label className="block text-gray-700">Upload Deck Image</label>
           <input
             type="file"
-            ref={fileInputRef}
+            
             accept="image/*"
             className="border border-gray-300 rounded-lg p-2 w-full shadow focus:outline-none active:scale-95"
             onChange={handleImageUpload}
@@ -238,7 +223,7 @@ const Deck = () => {
 
           {deckImage && (
             <img
-              src={deckImage}
+              src={image}
               alt="Deck Preview"
               className="mt-4 w-full h-48 object-cover rounded-lg shadow"
             />

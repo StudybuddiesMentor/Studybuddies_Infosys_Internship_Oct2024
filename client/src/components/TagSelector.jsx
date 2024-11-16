@@ -32,7 +32,7 @@ const TagSelector = ({ tags, setTags }) => {
     if (newTag) {
       // Add new tag to backend and update the state
       axios
-        .post("http://localhost:9000/api/tags", { name: newTag })
+        .post("http://localhost:9000/api/tags", { name: newTag },{ withCredentials: true })
         .then((response) => {
           setTags([...tags, newTag]);
           setAvailableTags([...availableTags, response.data]);
