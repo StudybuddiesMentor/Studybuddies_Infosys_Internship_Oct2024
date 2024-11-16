@@ -116,9 +116,8 @@ function Login() {
                 Need an Account?
               </button>
             </div>
-            <button type="submit" className="btn-submit">
-              Sign In
-            </button>
+            <button type="submit" id="btn-signin" className="btn-submit px-6 py-2 text-base font-semibold transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95">Sign In</button>
+
             <button
               type="button"
               className="btn-links p-5"

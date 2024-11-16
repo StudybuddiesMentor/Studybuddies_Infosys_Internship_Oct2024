@@ -115,7 +115,8 @@ function Register() {
                                 required
                             />
                         </div>
-                        <button type="submit" className="btn-submit">Register</button>
+                        <button type="submit" id="btn-register" className="btn-submit px-6 py-2 text-base font-semibold transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95">Register</button>
+
                     </form>
                     <p className="text-center">
                         Already have an account? <button className="btn-links" onClick={() => navigate('/login')}>Login here</button>
