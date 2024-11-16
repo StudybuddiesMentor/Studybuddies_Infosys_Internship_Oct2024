@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import image from '@/assets/register.png';
 import logo from '@/assets/logo1.png'; 
+import OAuth from './OAuth';
 
 function Register() {
     const [name, setName] = useState('');
@@ -116,6 +117,7 @@ function Register() {
                             />
                         </div>
                         <button type="submit" className="btn-submit">Register</button>
+                        <OAuth />
                     </form>
                     <p className="text-center">
                         Already have an account? <button className="btn-links" onClick={() => navigate('/login')}>Login here</button>

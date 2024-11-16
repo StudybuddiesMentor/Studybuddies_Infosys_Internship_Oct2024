@@ -122,6 +122,24 @@ body {
   background-color: #67be6a;
 }
 
+.btn-submit2 {
+  width: 100%;
+  padding: 12px;
+  background-color: #e21212;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-submit2:hover {
+  background-color: #ff0000;
+}
+
 .text-danger {
   color: red;
 }

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import image from "@/assets/loginani.png";
 import logo from "@/assets/logo1.png";
+import OAuth from "./OAuth";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -119,6 +120,7 @@ function Login() {
             <button type="submit" className="btn-submit">
               Sign In
             </button>
+            <OAuth />
             <button
               type="button"
               className="btn-links p-5"
