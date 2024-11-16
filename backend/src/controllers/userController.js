@@ -261,7 +261,7 @@ export const updateUserProfile =  async (req, res) => {
       }
          user.updatedAt = Date.now();
          await user.save();
-         console.log("after updated",user)
+         
          return res.status(200).json({ message:"Personal Information has been updated", user });
         }
      catch (error) {

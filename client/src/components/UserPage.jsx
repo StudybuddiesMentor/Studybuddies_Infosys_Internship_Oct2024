@@ -233,7 +233,7 @@ const Userpagebody = () => {
   const validateImage = (file) => {
     const validFormats = ['image/jpeg', 'image/png', 'image/jpg'];
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-    const minSize = 2 * 1024 * 1024; // 2MB in bytes
+    const minSize = 1 * 1024 * 1024; // 2MB in bytes
   
     if (!validFormats.includes(file.type)) {
       alert('The image format should be JPEG, PNG, or JPG.');

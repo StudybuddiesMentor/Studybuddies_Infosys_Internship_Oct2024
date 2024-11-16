@@ -1,6 +1,6 @@
 
 const MAX_SIZE = 6 * 1024 * 1024; // 6MB
-const MIN_SIZE = 78388; // Minimum file size in bytes (~76.5KB)
+const MIN_SIZE = 40000; // Minimum file size in bytes (~76.5KB)
 import multer from "multer";
 import { storage, deckstorage } from "../cloudConfig.js";
 import cloudinary from "cloudinary";
@@ -35,12 +35,13 @@ const deckImageUpload = multer({
     },
 });
 
-const checkMinFileSize = (minSize) => async (req, res, next) => {
+const checkMinFileSize  = async (req, res, next) => {
     const file = req.file;
+    
     if (!file) {
         return res.status(400).json({ message: "No file uploaded." });
     }
-    if (file.size < minSize) {
+    if (file.size < MIN_SIZE) {
         try {
             if (file.path && file.path.startsWith("https://res.cloudinary.com")) {
                 const publicId = extractPublicIdFromUrl(file.path);
@@ -53,9 +54,7 @@ const checkMinFileSize = (minSize) => async (req, res, next) => {
             return res.status(500).json({ message: "Internal server error" });
         }
 
-        return res.status(400).json({
-            message: `File size is too small. Minimum size is ${(minSize / 1024).toFixed(2)}KB.`,
-        });
+        return res.status(400).json({message: 'File size is too small. Minimum size is 2MB.'});
     }
     next();
 };
@@ -65,7 +64,7 @@ function extractPublicIdFromUrl(url) {
     if (match && match[1]) {
         return match[1];
     }
-    console.warn("Failed to extract public ID from URL:", url);
+    //console.warn("Failed to extract public ID from URL:", url);
     return null;
 }
 
