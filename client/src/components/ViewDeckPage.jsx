@@ -60,7 +60,7 @@ const ViewDeckPage = () => {
       <h1 className="text-3xl font-bold text-left">You opened {deck.deck_name} Deck</h1>
       <p className="text-lg text-center">{deck.description}</p>
       <img
-        src={deck.deck_Image || '/path/to/default/image.jpg'}
+        src={deck.deck_image?.url || '/path/to/default/image.jpg'}
         alt={deck.deck_name}
         className="w-60 h-60 object-cover rounded-md"
       />
