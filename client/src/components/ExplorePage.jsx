@@ -81,7 +81,7 @@ const ExplorePage = () => {
               key={deck._id}
               title={deck.deck_name}
               description={deck.description}
-              imageUrl={deck.deck_Image || deck.defaultImageUrl}
+              imageUrl={deck.deck_image?.url || deck.defaultImageUrl}
               deckId={deck._id}
             />
           ))}

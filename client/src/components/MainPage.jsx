@@ -197,7 +197,7 @@ const MainPage = () => {
                   title={deck.deck_name}
                   description={deck.description}
                   imageUrl={
-                    deck.deck_Image ? deck.deck_Image.url : deck.defaultImageUrl
+                    deck.deck_image?.url || deck.defaultImageUrl
                   }
                   deckId={deck._id}
                 />
