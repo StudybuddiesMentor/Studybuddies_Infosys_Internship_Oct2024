@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const TagSelector = ({ tags, setTags }) => {
@@ -8,10 +8,15 @@ const TagSelector = ({ tags, setTags }) => {
   const [newTag, setNewTag] = useState(""); // New tag entered manually
   const [showDropdown, setShowDropdown] = useState(false); // Control dropdown visibility
 
+  const dropdownRef = useRef(null); // Ref for detecting outside clicks
+
+  // Fetch tags from the backend
   useEffect(() => {
-    // Fetch tags from backend
-    axios.get("http://localhost:9000/api/tags")
-      .then((response) => setAvailableTags(response.data))
+    axios
+      .get("http://localhost:9000/api/tags")
+      .then((response) => {
+        setAvailableTags(response.data.tags || []);
+      })
       .catch((error) => console.error("Error fetching tags:", error));
   }, []);
 
@@ -26,7 +31,8 @@ const TagSelector = ({ tags, setTags }) => {
 
     if (newTag) {
       // Add new tag to backend and update the state
-      axios.post("http://localhost:9000/api/tags", { name: newTag })
+      axios
+        .post("http://localhost:9000/api/tags", { name: newTag })
         .then((response) => {
           setTags([...tags, newTag]);
           setAvailableTags([...availableTags, response.data]);
@@ -42,37 +48,67 @@ const TagSelector = ({ tags, setTags }) => {
     }
   };
 
+  // Filter tags based on the search query
+  const filteredTags = Array.isArray(availableTags)
+    ? availableTags.filter((tag) => {
+        if (tag && tag.name) {
+          return selectedTag
+            ? tag.name.toLowerCase().includes(selectedTag.toLowerCase())
+            : true; // Return all tags if selectedTag is empty
+        }
+        return false; // Exclude invalid tag objects
+      })
+    : [];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false); // Close dropdown
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-4" ref={dropdownRef}>
       {/* Tag input field */}
       <div className="relative">
+        {/* Input for selecting/searching tags */}
         <input
           type="text"
-          placeholder="Search or select a tag..."
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+          placeholder="Search or select a tag"
           value={selectedTag}
           onChange={(e) => {
             setSelectedTag(e.target.value);
             setShowDropdown(true); // Show dropdown while typing
           }}
+          className="border rounded-lg px-4 py-2 w-full shadow focus:outline-none focus:border-green-500"
         />
+
         {/* Dropdown suggestions */}
-        {showDropdown && selectedTag && (
+        {showDropdown && (
           <div className="absolute left-0 right-0 mt-2 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-            {availableTags
-              .filter(tag => tag.name.toLowerCase().includes(selectedTag.toLowerCase()))
-              .map((tag, index) => (
+            {filteredTags.length > 0 ? (
+              filteredTags.map((tag, index) => (
                 <div
                   key={index}
                   className="p-2 cursor-pointer hover:bg-green-100 transition-colors"
                   onClick={() => {
-                    setSelectedTag(tag.name);
+                    setSelectedTag(tag.name); // Select the tag
                     setShowDropdown(false); // Close dropdown after selection
                   }}
                 >
                   {tag.name}
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="p-2 text-gray-500">No tags found</div>
+            )}
           </div>
         )}
       </div>
@@ -100,7 +136,7 @@ const TagSelector = ({ tags, setTags }) => {
 // PropTypes validation
 TagSelector.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setTags: PropTypes.func.isRequired
+  setTags: PropTypes.func.isRequired,
 };
 
 export default TagSelector;

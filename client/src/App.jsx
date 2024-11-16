@@ -39,6 +39,7 @@ function App() {
         <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
         <Route path="/help" element={<Help />} />
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
+        <Route path="/explore/:id" element={<ExplorePage />} />
         <Route path="/Deck" element={<Deck />} />
         <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/UserPage" element={<UserPage />} />
@@ -52,6 +53,8 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/view-deck/:id" element={<ViewDeckPage/>} />
         <Route path="/explore-admin" element={<ExplorePageadmin />} /> 
+        
+
       </Routes>
     </Router>
   );

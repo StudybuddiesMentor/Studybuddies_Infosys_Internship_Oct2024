@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -10,6 +10,7 @@ const Nav = () => {
   const [availableTags, setAvailableTags] = useState([]); // Tags from backend
   const [showDropdown, setShowDropdown] = useState(false); // Control dropdown visibility
 
+  const dropdownRef = useRef(null); // Ref for detecting outside clicks
   const navigate = useNavigate();
 
   // Fetch tags from backend
@@ -17,8 +18,8 @@ const Nav = () => {
     axios
       .get("http://localhost:9000/api/tags")
       .then((response) => {
-        setAvailableTags(response.data.tags || []);
-      })
+        setAvailableTags(response.data.tags || []);
+      })
       .catch((error) => console.error("Error fetching tags:", error));
   }, []);
 
@@ -27,15 +28,28 @@ const Nav = () => {
     tag.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false); // Close dropdown
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // Function to handle search
   const handleSearch = () => {
     if (searchQuery) {
       navigate(`/explore/${searchQuery}`);
     }
   };
-
   return (
-    <nav className="bg-white shadow-lg py-4 sticky top-0 z-50">
+    <nav className="bg-white shadow-lg py-4 sticky top-0 z-50" ref={dropdownRef}>
       <div className="container mx-auto flex justify-between items-center px-6">
         {/* Logo */}
         <Link to="/main-page">
@@ -73,15 +87,14 @@ const Nav = () => {
 
           {/* Dropdown for tag suggestions */}
           {showDropdown && filteredTags.length > 0 && (
-            <div className="absolute mt-2 bg-white border rounded-lg shadow-lg w-full z-10 max-h-40 overflow-y-auto">
+            <div className="absolute mt-11 bg-white border rounded-lg shadow-lg w-full z-10 max-h-40 overflow-y-auto">
               {filteredTags.map((tag, index) => (
                 <div
                   key={index}
                   className="px-4 py-2 text-gray-700 hover:bg-green-100 cursor-pointer"
                   onClick={() => {
                     setSearchQuery(tag.name); // Update search query with selected tag
-                    setShowDropdown(false); // Close dropdown after selection
-                    handleSearch(); // Trigger search
+                    setShowDropdown(false); // Close dropdown
                   }}
                 >
                   {tag.name}

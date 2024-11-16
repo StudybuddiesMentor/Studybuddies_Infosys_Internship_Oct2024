@@ -94,7 +94,6 @@ const MainPage = () => {
     fetchPublicDecks();
   }, []);
 
-
   return (
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
       {/* Navbar */}
@@ -112,7 +111,7 @@ const MainPage = () => {
             />
           </div>
         </div>
- <div className="bg-green-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-green-50 py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto text-center">
             <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
               Welcome to StudyBuddies!
@@ -141,17 +140,17 @@ const MainPage = () => {
             Recently Visited
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {decks.slice(0, 3).map((deck)=>(
+            {decks.slice(0, 3).map((deck) => (
               <div
-              key={`recent-${deck._id}`}
+                key={`recent-${deck._id}`}
                 className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
               >
-             <MainDeck
+                <MainDeck
                   key={deck._id}
                   title={deck.deck_name}
                   description={deck.description}
                   imageUrl={
-                    deck.deck_Image ? deck.deck_Image.url : deck.defaultImageUrl
+                    deck.deck_image ? deck.deck_image.url : deck.defaultImageUrl
                   }
                   deckId={deck._id}
                 />
@@ -182,11 +181,9 @@ const MainPage = () => {
               Explore Flashcards
             </h3>
             <Link to="/explore">
-            <button
-              className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300"
-            >
-              Show More &rarr;
-            </button>
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
+                Show More &rarr;
+              </button>
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -215,7 +212,7 @@ const MainPage = () => {
                     }
                     alt="Favorite"
                     className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => `toggleFavorite(recent-${deck._id})`}
+                    onClick={() => toggleFavorite(`recent-${deck._id}`)}
                   />
                 </div>
               </div>

@@ -5,16 +5,16 @@ const Alert = ({ message, type, onClose }) => {
   const getAlertStyle = () => {
     switch (type) {
       case 'success':
-        return 'bg-green-100 border-green-500 text-green-700';
+        return 'bg-green-100 border-green-500 text-green-700 z-50';
       case 'error':
-        return 'bg-red-100 border-red-500 text-red-700';
+        return 'bg-red-100 border-red-500 text-red-700 z-50';
       default:
-        return 'bg-blue-100 border-blue-500 text-blue-700';
+        return 'bg-blue-100 border-blue-500 text-blue-700 z-50';
     }
   };
 
   return (
-    <div className={`fixed top-5 right-5 max-w-sm w-full border-t-4 rounded-b-lg shadow-lg ${getAlertStyle()} px-4 py-3`} role="alert">
+    <div className={`fixed top-5 right-5 max-w-sm w-full border-t-4 rounded-b-lg shadow-lg ${getAlertStyle()} px-4 mt-16 py-3`} role="alert">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           {type === 'success' ? (
