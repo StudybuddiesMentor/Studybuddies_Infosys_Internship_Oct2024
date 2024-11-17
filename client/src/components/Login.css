@@ -1,33 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Oriya:wght@400..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Oriya:wght@400..700&family=Spicy+Rice&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spicy+Rice&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Prociono&display=swap');
 
-/* Logo container */
-.logo-container img {
-  width: 220px;
-  height: 65px;
-}
-
-.studybuddy {
-  font-family: "Spicy Rice", serif;
-  color: rgba(0, 0, 0, 0.814);
-  font-size: 20px;
-}
-
-.logo {
-  width: 50px;
-  height: auto;
-}
-
+/* Global Styles */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  background-color: #f7f9fc; /* Light background for a clean look */
+  color: #333; /* Dark text for readability */
 }
 
-/* Page layout to center elements */
+/* Page Layout */
 .page {
-  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,157 +20,174 @@ body {
   width: 100vw;
   padding: 20px;
   box-sizing: border-box;
+  background-color: #f7f9fc;
 }
 
-.login-right {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
+/* Logo Container */
+.logo-container img {
+  width: 220px;
+  height: auto;
 }
 
+.studybuddy {
+  font-family: "Spicy Rice", cursive;
+  color: #4a4a4a; /* Softer dark color for text */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Login Container */
 .login-container {
-  background-color: #fff;
+  background-color: #ffffff; /* White background for contrast */
   padding: 40px;
-  border-radius: 10px;
+  border-radius: 12px;
   max-width: 500px;
   width: 100%;
-  border: 2px solid #ccc; /* Added border */
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15), 0px 8px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for visibility */
+  border: 1px solid #dcdfe3;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); /* Softer shadow for a modern look */
+  text-align: center;
 }
 
 .login-header {
-  font-family: "Noto Serif Oriya", serif, ui-serif, Georgia, "Times New Roman", Times;
-  margin-bottom: 30px;
+  font-family: "Noto Serif Oriya", serif;
   font-size: 24px;
-  font-weight: 500;
+  margin-bottom: 20px;
+  color: #333; /* Dark text for readability */
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
 .form-label {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
+  display: block;
+  color: #555; /* Softer text for labels */
 }
 
 .form-control {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px;
+  border: 1px solid #dcdfe3;
+  border-radius: 8px;
   font-size: 16px;
+  background-color: #f9f9f9; /* Light input background */
+  color: #333;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: #67be6a;
-  box-shadow: 0px 0px 8px rgba(26, 144, 36, 0.4);
+  border-color: #3ab07e; /* Accent color for focus */
+  box-shadow: 0px 0px 8px rgba(58, 176, 126, 0.3);
 }
 
 .login-links {
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
   margin-bottom: 20px;
 }
 
 .btn-links {
   background: none;
   border: none;
-  color: #67be6a;
+  color: #3ab07e; /* Accent color for links */
   cursor: pointer;
-  padding: 0;
-  margin: 0;
+  font-size: 14px;
+  transition: color 0.3s;
 }
 
 .btn-links:hover {
-  color: #5ba85f;
-  background-color: transparent;
+  color: #349e71; /* Slightly darker accent on hover */
 }
 
+/* Buttons */
 .btn-submit {
   width: 100%;
   padding: 12px;
-  background-color: #53c06c;
-  color: white;
+  background-color: #3ab07e; /* Primary button color */
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-submit:hover {
-  background-color: #67be6a;
+  background-color: #349e71;
+  transform: scale(1.02);
 }
 
 .btn-submit2 {
   width: 100%;
   padding: 12px;
-  background-color: #e21212;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: white;
+  background-color: #f44336; /* Secondary button color (red) */
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin: 10px 0;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-submit2:hover {
-  background-color: #ff0000;
+  background-color: #e53935;
+  transform: scale(1.02);
 }
 
-.text-danger {
-  color: red;
-}
-
-.text-success {
-  color: green;
-}
-
+/* Fly Image */
 .fly-img {
   position: absolute;
+  top: 0;
   right: 0;
-  top: 0; 
-  height: 100%; 
+  height: 100%;
+  width: auto;
+  z-index: 1;
+  overflow: hidden;
 }
 
 .fly-img img {
   width: auto;
-  max-width: 100%; 
-  height: auto; 
-  max-height: 100vh; 
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: transform 0.5s, opacity 0.5s;
 }
 
-/* Styling for the quote */
+.fly-img img:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+/* Quote Styling */
 .quote-container {
   position: absolute;
   top: 20px;
   left: 30px;
   max-width: 400px;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.9); /* Light background with slight transparency */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .quote-text {
-  font-size: 20px;
+  font-size: 18px;
   font-family: "Prociono", serif;
-  color: #10030398;
-  font-weight: 500;
-  line-height: 1.5;
-  text-align: left;
+  color: #555; /* Softer text for quote */
+  line-height: 1.6;
 }
 
-/* Responsive styling */
+/* Responsive Styles */
 @media (max-width: 768px) {
   .page {
     flex-direction: column;
-    padding: 20px;
   }
 
   .fly-img {
@@ -193,19 +195,19 @@ body {
   }
 
   .login-container {
-    padding: 30px;
     width: 90%;
-    max-width: 350px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-header {
+    font-size: 20px;
   }
 
-  .login-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .logo-container {
-    top: 10px;
-    left: 10px;
+  .btn-submit,
+  .btn-submit2 {
+    font-size: 14px;
+    padding: 10px;
   }
 }
