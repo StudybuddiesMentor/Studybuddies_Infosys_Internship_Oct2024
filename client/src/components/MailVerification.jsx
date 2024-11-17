@@ -1,121 +1,177 @@
-import { useState } from 'react';
-import './MailVerification.css';
-import logo from '@/assets/logo1.png';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import "./MailVerification.css";
+import logo from "@/assets/logo1.png";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const MailVerification = () => {
-    const [email, setEmail] = useState('');
-    const [otp, setOtp] = useState('');
-    const [success, setSuccess] = useState('');
-    const [error, setError] = useState('');
-    const [isOtpSent, setIsOtpSent] = useState(false); // New state to control button color
-    const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [resendTimer, setResendTimer] = useState(30);
+  const navigate = useNavigate();
 
-    const handleOtpChange = (e) => {
-        const { value } = e.target;
-        if (/^\d*$/.test(value) && value.length <= 4) {
-            setOtp(value);
-        }
-    };
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
+  const handleOtpChange = (e) => {
+    const { value } = e.target;
+    if (/^\d*$/.test(value) && value.length <= 4) {
+      setOtp(value);
+    }
+  };
 
-    const handleSendOtp = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:9000/api/users/send-otp', { email });
-            console.log('OTP sent successfully:', response.data);
-            setSuccess(response.data.message);
-            setError('');
-            setIsOtpSent(true); // Update the button color
-        } catch (error) {
-            console.error('Error sending OTP:', error);
-            setError(error.response?.data?.message || 'Failed to send OTP');
-            setSuccess('');
-            setIsOtpSent(false); // Reset the button color on error
-        }
-    };
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (!isValidEmail(value)) {
+      setError("Invalid email address");
+    } else {
+      setError("");
+    }
+    if (isOtpSent) {
+      setIsOtpSent(false);
+      setResendTimer(30);
+    }
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:9000/api/users/verify-otp', { email, otp });
-            console.log('OTP verification successful:', response.data);
-            setSuccess(response.data.message);
-            setError('');
-            navigate('/login'); // Redirect on success
-        } catch (error) {
-            console.error('Error verifying OTP:', error);
-            setError(error.response?.data?.message || 'Verification failed');
-            setOtp(''); // Clear the OTP field on error
-            setSuccess('');
-        }
-    };
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    setIsSendingOtp(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/users/send-otp",
+        { email }
+      );
+      setSuccess(response.data.message);
+      setError("");
+      setIsOtpSent(true);
+      setResendTimer(30);
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to send OTP");
+      setSuccess("");
+      setIsOtpSent(false);
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
 
-    return (
-        <div className="page">
-            {/* Logo container */}
-            <div className="logo-container">
-                <img src={logo} alt="Logo" className="logo" />
-            </div>
-            <form className="otp-form" onSubmit={handleSubmit}>
-                <span className="mainHeading">Email Verification</span>
-                <p className="otpSubheading">
-                    We will send a verification code to your email address
-                </p>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsVerifying(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/users/verify-otp",
+        { email, otp }
+      );
+      setSuccess(response.data.message);
+      setError("");
+      navigate("/login");
+    } catch (error) {
+      setError(error.response?.data?.message || "Verification failed");
+      setOtp("");
+      setSuccess("");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
-                {/* Email Input Field */}
-                <div className="inputContainer emailContainer">
-                    <input
-                        required
-                        type="email"
-                        className="email-input"
-                        placeholder="Email"
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
-                </div>
-                
-                <button
-                    type="button"
-                    className="otp-btn"
-                    style={{ backgroundColor: isOtpSent ? "blue" : "green" }}
-                    onClick={handleSendOtp}
-                >
-                    Send OTP
-                </button>
+  useEffect(() => {
+    let timer;
+    if (resendTimer > 0 && isOtpSent) {
+      timer = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [resendTimer, isOtpSent]);
 
-                {/* OTP Input Field */}
-                <div className="form-card-input-wrapper">
-                    <input
-                        className="form-card-input"
-                        placeholder="_  _  _  _"
-                        maxLength="4"
-                        type="text" 
-                        value={otp}
-                        onChange={handleOtpChange}
-                    />
-                    <div className="form-card-input-bg"></div>
-                </div>
-
-                {/* Verify Button */}
-                <button className="verifyButton" type="submit">
-                    Verify
-                </button>
-
-                {/* Resend Code Section */}
-                <p className="resendNote">
-                    Didn't receive the code? <button type="button" className="resend-Btn" onClick={handleSendOtp}>Resend Code</button>
-                </p>
-                {success && <p className="success-message">{success}</p>}
-                {error && <p className="error-message">{error}</p>}
-            </form>
+  return (
+    <div className="page">
+      <div className="logo-container">
+        <img src={logo} alt="Logo" className="logo" />
+      </div>
+      <form className="otp-form" onSubmit={handleSubmit}>
+        <span className="mainHeading">Email Verification</span>
+        <p className="otpSubheading">
+          We will send a verification code to your email address
+        </p>
+        <div className="inputContainer emailContainer">
+          <input
+            required
+            type="email"
+            className="email-input"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmailChange}
+            autoComplete="off"
+          />
         </div>
-    );
+        <button
+          type="button"
+          className="otp-btn"
+          style={{ backgroundColor: isOtpSent ? "blue" : "green" }}
+          onClick={handleSendOtp}
+          disabled={isSendingOtp || isOtpSent}
+        >
+          {isSendingOtp
+            ? "Sending..."
+            : isOtpSent
+            ? "OTP Sent"
+            : "Send OTP"}
+        </button>
+        <div className="form-card-input-wrapper">
+          <input
+            className={`form-card-input ${error ? "input-error" : "input-success"}`}
+            placeholder="_  _  _  _"
+            maxLength="4"
+            type="password"
+            value={otp}
+            onChange={handleOtpChange}
+            autoComplete="off"
+          />
+          <div className="form-card-input-bg"></div>
+        </div>
+        <button
+          className={`verifyButton ${isVerifying ? "verifying" : ""}`}
+          type="submit"
+          disabled={isVerifying}
+        >
+          {isVerifying ? "Verifying..." : "Verify"}
+        </button>
+        <p className="resendNote">
+          Didn't receive the code?{" "}
+          <button
+            type="button"
+            className="resend-Btn"
+            onClick={handleSendOtp}
+            disabled={resendTimer > 0}
+          >
+            {resendTimer > 0 ? `Resend Code in ${resendTimer}s` : "Resend Code"}
+          </button>
+        </p>
+        {success && (
+          <div className="success-message">
+            {success}{" "}
+            <button onClick={() => setSuccess("")}>x</button>
+          </div>
+        )}
+        {error && (
+          <div className="error-message">
+            {error}{" "}
+            <button onClick={() => setError("")}>x</button>
+          </div>
+        )}
+      </form>
+    </div>
+  );
 };
 
 export default MailVerification;
-
