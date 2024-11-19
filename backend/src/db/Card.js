@@ -22,6 +22,7 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  deleted: { type: Boolean, default: false },
 });
 
 const Card = mongoose.model("Card", cardSchema);

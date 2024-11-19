@@ -4,7 +4,7 @@ import Tag from "../db/Tag.js";
 import DeckTag from "../db/DeckTag.js";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
 import cloudinary from 'cloudinary';
-import checkTag from "../middlewares/TagValidate.js";
+import checkTag from "../utils/TagValidate.js";
 
 
 export const createDeck = async (req, res) => {

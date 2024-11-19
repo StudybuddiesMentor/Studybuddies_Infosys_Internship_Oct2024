@@ -1,6 +1,6 @@
 import Deck from "../db/Deck.js";
 import Tag from "../db/Tag.js";
-import checkTag from "../middlewares/TagValidate.js";
+import checkTag from "../utils/TagValidate.js";
 
 // Create a new tag
 export const createTag = async (req, res) => {

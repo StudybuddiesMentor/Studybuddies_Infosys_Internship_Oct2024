@@ -5,9 +5,9 @@ import Deck from "../db/Deck.js";
 export const createCard = async (req, res) => {
   try {
     const { Title, Content } = req.body;
-    //console.log(req.body)
+   
     const {deckId }= req.params;
-    //console.log(req.params);
+   
 
     const deck = await Deck.findById(deckId);
     if (!deck) {
@@ -53,14 +53,14 @@ export const updateCard = async (req, res) => {
 // Delete a card
 export const deleteCard = async (req, res) => {
   const{cardId} = req.params;
-  console.log(cardId);
+ 
   try {
     const card = await Card.findById(cardId);
     if (!card) {
       return res.status(404).json({ message: "Card not found." });
     }
 
-    await card.remove();
+    await card.updateOne({deleted:true});
    return res.status(200).json({ message: "Card deleted successfully." });
   } catch (error) {
     
@@ -72,8 +72,8 @@ export const deleteCard = async (req, res) => {
 export const getCards = async(req,res)=>{
   const {deckId} = req.params;
   try{
-    const cards = await Card.find({deck_id:deckId});
-    if(!cards){
+    const cards = await Card.find({$and:[{deck_id:deckId},{deleted:{$ne:true}}]});
+    if(cards.length === 0){
      return res.status(404).json({message:"deck doesn't have any flashcards currently"})
     }
 
