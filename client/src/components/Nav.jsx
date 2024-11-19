@@ -174,7 +174,7 @@ const Nav = () => {
                 <Link to="/help" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
                   Help
                 </Link>
-                <Link to="/TermNCondition" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
+                <Link to="/terms-of-service" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
                   Terms and Conditions
                 </Link>
                 <button
