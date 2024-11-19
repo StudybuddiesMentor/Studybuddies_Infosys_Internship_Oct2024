@@ -1,6 +1,7 @@
 import React from 'react';
 import './Footer.css';
 import studybuddylogo from './assets/temp-logo.jpg'
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -46,8 +47,8 @@ const Footer = () => {
       <div className="footer-bottom">
         <div>&copy; 2024 Study Buddies. All rights reserved.</div>
         <div>
-          <a href="#terms-of-service">Terms of Service</a>
-          <a href="#privacy-policy">Privacy Policy</a>
+        <Link to="/terms-of-service">Terms of Service</Link>
+          <Link to="/privacy-policy">Privacy Policy</Link>
         </div>
       </div>
     </footer>
