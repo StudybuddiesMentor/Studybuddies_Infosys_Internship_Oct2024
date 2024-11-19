@@ -114,27 +114,30 @@ const Nav = () => {
 
           {/* Create Deck Button */}
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-transform duration-200"
+            className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-transform duration-200 active:scale-95"
             onClick={() => navigate("/deck")}
           >
             Create
           </button>
+
         </div>
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-20 items-center">
-          <Link to="/explore" className="text-gray-700 hover:text-green-500 transition">
-            Explore
-          </Link>
+        <Link to="/explore" className="text-gray-700 hover:text-green-500 transition active:scale-95">
+          Explore
+        </Link>
+
 
           {/* Categories Dropdown */}
           <div className="relative mr-15" ref={categoriesRef}>
-            <button
-              className="text-gray-700 hover:text-green-500 transition"
-              onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-            >
-              Categories
-            </button>
+          <button
+            className="text-gray-700 hover:text-green-500 transition active:scale-95"
+            onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
+          >
+            Categories
+          </button>
+
             {categoriesDropdownOpen && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg z-50">
                 {["Math", "Science", "Languages", "History"].map((category) => (
@@ -152,16 +155,17 @@ const Nav = () => {
 
           {/* User Dropdown */}
           <div className="relative ml-15" ref={userRef}>
-            <button
-              onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-              className="text-gray-700 hover:text-green-500 transition"
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"
-                alt="User Icon"
-                className="w-6 h-6"
-              />
-            </button>
+          <button
+            onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+            className="text-gray-700 hover:text-green-500 transition active:scale-95"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"
+              alt="User Icon"
+              className="w-6 h-6"
+            />
+          </button>
+
             {userDropdownOpen && (
               <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg w-48 z-100">
                 <Link to="/userpage" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
