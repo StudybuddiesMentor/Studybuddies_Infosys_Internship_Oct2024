@@ -1,40 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Flashcard from './Flashcard';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';// Import necessary hooks from React
+import axios from 'axios';// Import Axios for HTTP requests
+import Flashcard from './Flashcard';// Import the Flashcard component
+import { useParams } from 'react-router-dom'; // Import useParams to extract route parameters
 
 const ViewDeckPage = () => {
+  // Extract deck ID from the URL parameters
   const { id: deckId } = useParams();
-  const [deck, setDeck] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [liked, setLiked] = useState(false);
+  // State variables
+  const [deck, setDeck] = useState(null); // Store the deck data
+  const [error, setError] = useState(''); // Store any error message
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [liked, setLiked] = useState(false); // Track whether the deck is liked
 
+   // Fetch deck data when the component mounts or when deckId changes
   useEffect(() => {
     const fetchDeck = async () => {
       try {
+         // Make a GET request to fetch the deck data
         const response = await axios.get(`http://localhost:9000/api/decks/${deckId}`, {
-          withCredentials: true,
+          withCredentials: true,  // Include credentials for authentication
         });
 
         if (response.data.deck) {
-          setDeck(response.data.deck);
+          setDeck(response.data.deck); // Set the deck data if found
         } else {
-          setError('Deck not found.');
+          setError('Deck not found.'); // Handle case where the deck doesn't exist
         }
       } catch (err) {
-        setError('Failed to fetch the deck.');
-        console.error(err);
+        setError('Failed to fetch the deck.');//handle fetch error
+        console.error(err); // log thye error for debugging
       } finally {
-        setLoading(false);
+        setLoading(false); //set loading to false after the request completes
       }
     };
 
     fetchDeck();
-  }, [deckId]);
+  }, [deckId]); // Dependency array includes deckId to refetch if it changes
 
+  // Handle the "Like" button click
   const handleLike = async () => {
     try {
+      // Make a POST request to like the deck
       const response = await axios.post(
         `http://localhost:9000/api/decks/like/${deckId}`,
         {},
@@ -46,11 +52,12 @@ const ViewDeckPage = () => {
       console.error(err);
     }
   };
-
+   // Show a loading message while the deck data is being fetched
   if (loading) {
     return <p>Loading deck...</p>;
   }
 
+  // Display an error message if something goes wrong
   if (error) {
     return <p>{error}</p>;
   }
