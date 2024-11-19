@@ -48,7 +48,7 @@ function App() {
         <Route path="/Decks" element={<Deck />} />
         <Route path="/AdminPage" element={<Adminpage/>} />
         <Route path="/privacy-policy" element={<Privacy />} />
-        <Route path="/terms-of service" element={<TermsNCondition />} />
+        <Route path="/terms-of-service" element={<TermsNCondition />} />
         <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/view-deck/:id" element={<ViewDeckPage/>} />
