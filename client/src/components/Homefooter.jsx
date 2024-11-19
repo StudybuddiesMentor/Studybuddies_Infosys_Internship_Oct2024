@@ -61,8 +61,8 @@ function HomeFooter() {
                 </li>
 
                 <li>
-                  <a href="/terms-of service" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
-                    Term and Conditions
+                <a href="/terms-of-service" title="Terms and Conditions" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600">
+                    Terms and Conditions
                   </a>
                 </li>
                 
