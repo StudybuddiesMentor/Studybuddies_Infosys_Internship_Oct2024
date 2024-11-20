@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import image from "@/assets/loginani.png";
 import logo from "@/assets/logo1.png";
 import OAuth from "./OAuth";
-
+import { GoogleLogin } from "@react-oauth/google";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -101,6 +101,14 @@ function Login() {
                 required
               />
             </div>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                console.log(credentialResponse);
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
             <div className="login-links">
               <button
                 type="button"
@@ -120,7 +128,7 @@ function Login() {
             <button type="submit" className="btn-submit">
               Sign In
             </button>
-            <OAuth />
+            
             <button
               type="button"
               className="btn-links p-5"
