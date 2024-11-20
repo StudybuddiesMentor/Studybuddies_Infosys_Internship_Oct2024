@@ -25,6 +25,8 @@ import TermsNCondition from './components/TermNCondition.jsx';
 import ContactUs from './components/ContactUs'; // Import ContactUs Page
 import ViewDeckPage from './components/ViewDeckPage';
 import Testimonials from './components/Testimonials.jsx';
+import CreateFlashcardPage from './components/Flashcards.jsx';
+import Userflashcards from './components/Userflashcards.jsx';
 
 function App() {
   return (
@@ -53,8 +55,8 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/view-deck/:id" element={<ViewDeckPage/>} />
         <Route path="/explore-admin" element={<ExplorePageadmin />} /> 
-        
-
+        <Route path="/CreateFlashcard/:id" element={<CreateFlashcardPage />} /> 
+        <Route path="/userflashcards" element={<Userflashcards />} /> 
       </Routes>
     </Router>
   );

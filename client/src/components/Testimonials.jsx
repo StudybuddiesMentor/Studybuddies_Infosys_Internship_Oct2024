@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useRef } from 'react';
+import { useEffect,useRef } from 'react';
 import Testimonials_image_1 from '../assets/Testimonials_image_1.jpg';
 import Testimonials_image_2 from '../assets/Testimonials_image_2.jpg';
 import Testimonials_image_3 from '../assets/Testimonials_image_3.jpg';

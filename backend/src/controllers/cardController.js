@@ -74,8 +74,8 @@ export const getCards = async(req,res)=>{
   try{
     const cards = await Card.find({$and:[{deck_id:deckId},{deleted:{$ne:true}}]});
     if(cards.length === 0){
-     return res.status(404).json({message:"deck doesn't have any flashcards currently"})
-    }
+      return res.status(200).json({ message: "No flashcards found.",cards:[]});
+        }
 
     return res.status(200).json({message:"Here are the cards of deck",cards})
   }
