@@ -1,14 +1,19 @@
-import { useNavigate } from 'react-router-dom';
-import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Deck = ({ title, description, imageUrl, deckId }) => {
   // Default image URL for decks without an image
   const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
 
   const handleOpenDeck = () => {
-    alert(`Opening ${title} Deck`);
-    navigate(`/view-deck/${deckId}`); // Navigate to ViewDeckPage with deck ID
+    // Check if the current page is "/userflashcards"
+    if (location.pathname === '/userflashcards') {
+      navigate(`/CreateFlashcard/${deckId}`); // Navigate to Create Flashcards page
+    } else {
+      alert(`Opening ${title} Deck`); // Regular alert for normal behavior
+      navigate(`/view-deck/${deckId}`); // Navigate to ViewDeckPage with deck ID
+    }
   };
 
   return (

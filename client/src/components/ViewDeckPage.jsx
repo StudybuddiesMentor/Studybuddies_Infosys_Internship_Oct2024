@@ -11,31 +11,44 @@ const ViewDeckPage = () => {
   const [error, setError] = useState(''); // Store any error message
   const [loading, setLoading] = useState(true); // Track loading state
   const [liked, setLiked] = useState(false); // Track whether the deck is liked
+  const [flashcards, setFlashcards] = useState([]); // Store flashcards
 
    // Fetch deck data when the component mounts or when deckId changes
-  useEffect(() => {
-    const fetchDeck = async () => {
+   useEffect(() => {
+    const fetchDeckAndFlashcards = async () => {
       try {
-         // Make a GET request to fetch the deck data
-        const response = await axios.get(`http://localhost:9000/api/decks/${deckId}`, {
-          withCredentials: true,  // Include credentials for authentication
-        });
-
-        if (response.data.deck) {
-          setDeck(response.data.deck); // Set the deck data if found
+        // Fetch deck details
+        const deckResponse = await axios.get(
+         `http://localhost:9000/api/decks/${deckId}`,
+          { withCredentials: true }
+        );
+  
+        if (deckResponse.data.deck) {
+          setDeck(deckResponse.data.deck); // Set deck data
         } else {
-          setError('Deck not found.'); // Handle case where the deck doesn't exist
+          setError("Deck not found.");
+          return;
         }
+  
+        // Fetch flashcards for the deck
+        const flashcardsResponse = await axios.get(
+          `http://localhost:9000/api/cards/${deckId}`,
+          { withCredentials: true }
+        );
+  
+        // Handle cards response
+        setFlashcards(flashcardsResponse.data.cards || []);
       } catch (err) {
-        setError('Failed to fetch the deck.');//handle fetch error
-        console.error(err); // log thye error for debugging
+        setError("Failed to fetch deck or flashcards.");
+        console.error(err);
       } finally {
-        setLoading(false); //set loading to false after the request completes
+        setLoading(false);
       }
     };
-
-    fetchDeck();
-  }, [deckId]); // Dependency array includes deckId to refetch if it changes
+  
+    fetchDeckAndFlashcards();
+  }, [deckId]);
+  // Dependency array includes deckId to refetch if it changes
 
   // Handle the "Like" button click
   const handleLike = async () => {
@@ -80,8 +93,8 @@ const ViewDeckPage = () => {
       </button>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-        {deck.flashcards && Array.isArray(deck.flashcards) ? (
-          deck.flashcards.map((flashcard) => (
+        {flashcards.length > 0 ? (
+          flashcards.map((flashcard) => (
             <Flashcard
               key={flashcard._id}
               question={flashcard.question}
@@ -93,6 +106,7 @@ const ViewDeckPage = () => {
         )}
       </div>
     </div>
+    
   );
 };
 

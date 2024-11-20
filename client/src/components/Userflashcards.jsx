@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Deck from "./Deck_explore";
 import { useNavigate } from "react-router-dom";
+import Nav from "./Nav"
 
 // Component to display and manage user-created decks with filter options
 const UserFlashcards = () => {
@@ -74,6 +75,7 @@ const UserFlashcards = () => {
 
   return (
     <div>
+      <Nav/>
       <div className="p-4 overflow-y-auto max-h-screen flex flex-col items-center">
         <h1 className="text-2xl font-bold mb-4">Your Decks</h1>
 

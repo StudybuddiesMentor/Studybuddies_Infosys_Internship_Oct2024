@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Nav from "./Nav";
 
 const CreateFlashcardPage = () => {
   const { id: deckId } = useParams();
@@ -70,7 +71,8 @@ const CreateFlashcardPage = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-700 mb-5 text-center relative">
+      <Nav/>
+      <h2 className="mt-5 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-700 mb-5 text-center relative">
         Flashcards for Deck ID: {deckId}
         <span className="block mt-2 h-1 w-1/6 mx-auto bg-gradient-to-r from-green-500 to-green-700 rounded-full"></span>
       </h2>
