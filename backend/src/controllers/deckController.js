@@ -1,3 +1,4 @@
+// Import dependencies
 import Deck from "../db/Deck.js";
 import User from "../db/User.js";
 import Tag from "../db/Tag.js";
@@ -5,29 +6,38 @@ import DeckTag from "../db/DeckTag.js";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
 import cloudinary from 'cloudinary';
 import checkTag from "../utils/TagValidate.js";
-
-
+/**
+ * Create a new deck with associated tags and optional image.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 export const createDeck = async (req, res) => {
   try {
     const { deck_name, description, deck_status, tags, imageUrl, fileName } = req.body;
-     let existTag = [];
-     let  newTag = [];
-     const arraytags = Array.isArray(tags) ? tags : [tags]; 
-     if(arraytags.length>0){
-      for(const tag of arraytags){
-        const existingtag = await Tag.findOne({name:tag.toLowerCase()})
-        if(existingtag){
-          existTag.push(tag.toLowerCase());
-        }else{
-          newTag.push(tag.toLowerCase());
-        }
-      }
-    }
+
+    // Validate user
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
-    const newDeck = new Deck({deck_name,description,deck_status,
+
+    // Process tags
+    const tagArray = Array.isArray(tags) ? tags : [tags];
+    const existingTags = [];
+    const newTags = [];
+
+    if (tagArray.length > 0) {
+      for (const tag of tagArray) {
+        const existingTag = await Tag.findOne({ name: tag.toLowerCase() });
+        existingTag ? existingTags.push(tag.toLowerCase()) : newTags.push(tag.toLowerCase());
+      }
+    }
+
+    // Create a new deck
+    const newDeck = new Deck({
+      deck_name,
+      description,
+      deck_status,
       created_by: user._id,
     });
 
@@ -37,83 +47,125 @@ export const createDeck = async (req, res) => {
 
     await newDeck.save();
 
-    let deckTags = [];
-    let errors = [];
-    if(existTag && existTag.length>0){
-      const decktag = existTag.map(async (tag) => {
-        const existingTag = await Tag.findOne({ name: tag });
-    return DeckTag.create({ deck_id: newDeck._id, tag_id: existingTag._id });
-  });
-  deckTags = await Promise.all(decktag);
-  }
-  if(newTag && newTag.length>0){
-    const { errors, validtags } = await checkTag(newTag);
-    if (errors && errors.length > 0){
-      return res.status(400).json(errors);
-    }
-    const newtag = validtags.map(async (tag) => {
-      const createdTag = new Tag({ name: tag });
-      await createdTag.save();
-      return DeckTag.create({ deck_id: newDeck._id, tag_id: createdTag._id });
+    // Handle tag associations
+    const deckTags = await handleTags(newDeck._id, existingTags, newTags);
+
+    // Format tags for response
+    const formattedTags = await Promise.all(
+      deckTags.map(async (deckTag) => {
+        const tag = await Tag.findById(deckTag.tag_id);
+        return { tag_id: tag._id, tag_name: tag.name };
+      })
+    );
+
+    return res.status(201).json({
+      message: "Deck has been created.",
+      newDeck,
+      deckTags: formattedTags,
     });
-    const newDeckTags = await Promise.all(newtag);
-    deckTags.push(...newDeckTags);
-  }
-  const getDeckTags = await Promise.all(
-    deckTags.map(async (deckTag) => {
-      const tag = await Tag.findById(deckTag.tag_id);
-      return { tag_id: tag._id, tag_name: tag.name };
-    })
-  );
-
-
-    return res.status(201).json({ message: "Deck has been created",newDeck, deckTags:getDeckTags });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server error." });
+    console.error("Error creating deck:", error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
-
-
-// Get all public decks or user's private decks
+/**
+ * Get all public decks or user's private decks.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 export const getDecks = async (req, res) => {
   try {
-    const decks = await Deck.find({$and:[{ created_by: req.user.id },{deck_status:{$ne:"Deleted"}}]});
-    const userdecks = await Promise.all( decks.map( async (deck)=>{
-      const deckTags = await DeckTag.find({ deck_id: deck._id }).populate('tag_id');
+    const decks = await Deck.find({
+      $and: [
+        { created_by: req.user.id },
+        { deck_status: { $ne: "Deleted" } },
+      ],
+    });
 
-      const tags = deckTags.map((deckTag) => deckTag.tag_id);
-      return {deck,tags};
-    }))
-   return res.status(200).json({message:"Here are your Decks", userdecks});
+    const userDecks = await Promise.all(
+      decks.map(async (deck) => {
+        const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
+        const tags = deckTags.map((deckTag) => deckTag.tag_id);
+        return { deck, tags };
+      })
+    );
+
+    return res.status(200).json({ message: "Here are your decks.", userDecks });
   } catch (error) {
-    console.error(error);
-     return res.status(500).json({ message: "Internal Server error." });
+    console.error("Error fetching decks:", error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
-// Get a specific deck by ID
+/**
+ * Get a specific deck by ID.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 export const getDeckById = async (req, res) => {
   try {
+    // Validate user
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
+
+    // Find the deck
     const deck = await Deck.findById(req.params.id);
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }
-    const deckTags = await DeckTag.find({ deck_id: deck._id }).populate('tag_id');
 
+    const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
     const tags = deckTags.map((deckTag) => deckTag.tag_id);
 
-   return res.status(200).json({message:"Deck found",deck,tags});
+    return res.status(200).json({ message: "Deck found.", deck, tags });
   } catch (error) {
-    console.error(error);
-   return res.status(500).json({ message: "Server error." });
+    console.error("Error fetching deck by ID:", error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
+
+/**
+ * Handle tags for a new deck.
+ * @param {String} deckId - ID of the newly created deck
+ * @param {Array} existingTags - Tags already present in the database
+ * @param {Array} newTags - New tags to be added
+ * @returns {Promise<Array>} - Array of DeckTag objects
+ */
+const handleTags = async (deckId, existingTags, newTags) => {
+  const deckTags = [];
+
+  // Associate existing tags
+  if (existingTags.length > 0) {
+    const existingTagPromises = existingTags.map(async (tag) => {
+      const existingTag = await Tag.findOne({ name: tag });
+      return DeckTag.create({ deck_id: deckId, tag_id: existingTag._id });
+    });
+    const existingDeckTags = await Promise.all(existingTagPromises);
+    deckTags.push(...existingDeckTags);
+  }
+
+  // Validate and add new tags
+  if (newTags.length > 0) {
+    const { errors, validTags } = await checkTagValidity(newTags);
+    if (errors.length > 0) {
+      throw new Error(errors.join(", "));
+    }
+
+    const newTagPromises = validTags.map(async (tag) => {
+      const createdTag = new Tag({ name: tag });
+      await createdTag.save();
+      return DeckTag.create({ deck_id: deckId, tag_id: createdTag._id });
+    });
+    const newDeckTags = await Promise.all(newTagPromises);
+    deckTags.push(...newDeckTags);
+  }
+
+  return deckTags;
+};
+
 
 // Update a deck
 export const updateDeck = async (req, res) => {
