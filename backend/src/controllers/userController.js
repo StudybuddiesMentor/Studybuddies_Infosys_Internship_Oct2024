@@ -133,8 +133,7 @@ export const SendOtp = async(req,res)=>{
         from: process.env.GMAIL_ID,
         to: user.email,
         subject: 'StudyBuddies - veify with otp',
-        html: <h3>Your One Time Password (OTP): ${verifyotp} </h3>
-               <p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>
+        html: "<h3>Your One Time Password (OTP): ${verifyotp} </h3><p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>"
       
    };
     await transporter.sendMail(mailOptions);
@@ -187,10 +186,7 @@ export const forgotPassword = async (req, res) => {
             to: user.email,
             subject: 'StudyBuddies - reset password',
            html: 
-           <h3>Reset Your Password</h3>
-           <p>Click the link below to reset your password:</p>
-           <a href="http://localhost:5173/reset-password/${user._id}/${token}">Reset Password</a>
-           <p>Reset Link is valid for only 15:00 min.</p>
+           "<h3>Reset Your Password</h3><p>Click the link below to reset your password:</p><a href='http://localhost:5173/reset-password/${user._id}/${token}'>Reset Password</a><p>Reset Link is valid for only 15:00 min.</p>"
        };
        // Send the email
         transporter.sendMail(mailOptions, (error, info) => {
@@ -330,7 +326,7 @@ export const logoutUser = async (req, res) => {
     });
 
     // Log the logout action
-    console.log(User logged out successfully at ${new Date().toISOString()});
+    console.log("User logged out successfully at ${new Date().toISOString()}");
 
     return res.status(200).json({
       message: 'User logged out successfully',
