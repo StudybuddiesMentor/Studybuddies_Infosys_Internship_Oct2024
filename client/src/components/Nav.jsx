@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import LogoutButton from "./LogoutButton"; 
+
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -177,15 +179,7 @@ const Nav = () => {
                 <Link to="/terms-of-service" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
                   Terms and Conditions
                 </Link>
-                <button
-                  className="bg-red-500 text-white px-4 py-2 w-full rounded-full shadow-md mt-4 hover:bg-red-600 transition-colors"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/");
-                  }}
-                >
-                  Logout
-                </button>
+                <LogoutButton />
               </div>
             )}
           </div>
