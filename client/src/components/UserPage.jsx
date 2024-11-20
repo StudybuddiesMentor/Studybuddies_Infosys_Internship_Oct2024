@@ -13,7 +13,7 @@ import axios from 'axios';
 
 const Userpagebody = () => {
   const navigate = useNavigate();
-
+  const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg'; 
 
   const [userInfo, setUserInfo] = useState({
     fullName: '',
@@ -270,14 +270,14 @@ const Userpagebody = () => {
       });
 
     
-      const decks = response.data.userdecks;
+      const decks = response.data.userDecks;
 
       
       const mappedDecks = decks.map((deckObj) => {
         const deck = deckObj.deck;
 
         const deckData = {
-          image: deck.deck_image?.url,
+          image: deck.deck_image?.url || defaultImageUrl,
           title: deck.deck_name,
           description: deck.description,
           status: deck.deck_status,
