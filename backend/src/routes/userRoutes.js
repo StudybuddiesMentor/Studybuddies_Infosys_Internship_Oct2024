@@ -83,6 +83,6 @@ router.post('/reset-password/:id/:token', passwordReset);
  */
 
 
-router.get('/logout',logoutUser);
+router.post('/logout',logoutUser);
 
 export default router;
