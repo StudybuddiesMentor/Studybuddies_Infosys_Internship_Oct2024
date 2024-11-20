@@ -313,13 +313,35 @@ export const getUserProfile = async(req,res)=>{
 
 }
 
-export const logoutUser = async(req,res)=>{
-    try{
-    res.clearCookie('token'); 
-    return res.status(200).json({ message: 'user logged out successfully' });
+// Logout user 
+
+export const logoutUser = async (req, res) => {
+    try {
+    const token = req.cookies.token; // Get token before clearing
+    if (!token) {
+      return res.status(400).json({ message: 'No token found, user not logged in' });
     }
-    catch(error){
-      res.status(500).json({ message: "Error logging out user", error });
-    }
-  };
+
+    // Clear the cookie
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    // Log the logout action
+    console.log(`User logged out successfully at ${new Date().toISOString()}`);
+
+    return res.status(200).json({
+      message: 'User logged out successfully',
+      user: req.user ? { id: req.user.id, email: req.user.email } : null,
+    });
+  } catch (error) {
+    console.error("Error logging out user:", error.message, { errorStack: error.stack });
+    return res.status(500).json({ 
+      message: "Error logging out user", 
+      error: error.message 
+    });
+  }
+};
   
