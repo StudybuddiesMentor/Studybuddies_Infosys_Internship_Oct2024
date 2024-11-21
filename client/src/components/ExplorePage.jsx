@@ -1,96 +1,102 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Deck from "./Deck_explore";
 import { useParams } from "react-router-dom";
 import Nav from "./Nav";
 
-// Component to display and manage a collection of public decks for user exploration
+// Main component for the Explore Page
 const ExplorePage = () => {
-  const { tag } = useParams(); // Get tag from the URL
-  // State variables to store deck data, error messages, and loading status
-  const [decks, setDecks] = useState([]);
+  const { tag } = useParams(); 
+  const [decks, setDecks] = useState([]); 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
 
-  // useEffect hook to fetch public decks when the component mounts
+  // Fetch public decks from the server when the component is mounted or when `tag` changes
   useEffect(() => {
-    // Async function to retrieve deck data from the server
+    // Function to retrieve public decks from the backend
     const fetchPublicDecks = async () => {
       try {
-        // Perform GET request to fetch deck data from the backend
+        // Send a GET request to the backend to fetch decks
         const response = await axios.get(
           "http://localhost:9000/api/decks/exploredeck",
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true } 
         );
 
-        // Accessing the decks array from the response data
-        if (response.data.decks && Array.isArray(response.data.decks)) {
-          const allDecks = response.data.decks;
-          console.log("ALL dec:",allDecks);
-          console.log("ALL dec tags:",allDecks.tags);
-          // Filter decks if a tag is provided
-          if (tag) {
-            const filteredDecks = allDecks.filter((deck) =>
-              deck.tags && deck.tags.includes(tag)
-            );
-            setDecks(filteredDecks);
-          } else {
-            setDecks(allDecks); // Show all decks when no tag is provided
-          }
+        // Check if the response contains a valid array of decks
+        const allDecks = response.data.decks || [];
+        if (tag) {
+          // If a tag is specified, filter the decks based on the tag
+          const filteredDecks = allDecks.filter((deck) =>
+            deck.tags && deck.tags.includes(tag)
+          );
+          setDecks(filteredDecks);
         } else {
-          setError("Unexpected response format");
+          setDecks(allDecks); 
         }
       } catch (err) {
-        // Error handling: show server error message if available or network error if not
-        if (err.response) {
-          setError(err.response.data.message || "Failed to fetch decks.");
-        } else {
-          setError("Network error. Please check your connection or server.");
-        }
-        console.error(err);
+        // Handle any errors during the API call
+        const errorMessage =
+          err.response?.data?.message || "Failed to fetch decks. Please try again.";
+        setError(errorMessage);
+        console.error("Error fetching decks:", err); 
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPublicDecks();
-  }, [tag]); // Re-run the effect if the tag changes
-// Display a loading message while the data is being retrieved
+    fetchPublicDecks(); 
+  }, [tag]); 
+
+  // Show a loading message while the decks are being fetched
   if (loading) {
-    return <p>Loading decks...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-600">Loading decks...</p>
+      </div>
+    );
   }
-// Display an error message if fetching data fails
+
+  // Show an error message if there is an issue fetching decks
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-red-500">
+          {error}
+        </p>
+      </div>
+    );
   }
 
   return (
     <div>
+      {/* Navigation bar component */}
       <Nav />
 
-      <div className="p-4 overflow-y-auto max-h-screen flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-4">
-          {tag ? `Showing decks tagged with "${tag}"` : "Explore Decks"}
+      <div className="p-4 max-h-screen flex flex-col items-center">
+        {/* Header text, dynamically showing tag-based results or general decks */}
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+          {tag ? `Decks tagged "${tag}"` : "Explore Decks"}
         </h1>
-        {/* Display deck items in a responsive grid layout */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+
+        {/* Display the list of decks in a responsive grid layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {decks.map((deck) => (
             <Deck
-              key={deck._id}
-              title={deck.deck_name}
-              description={deck.description}
-              imageUrl={deck.deck_image?.url || deck.defaultImageUrl}
-              deckId={deck._id}
+              key={deck._id} 
+              title={deck.deck_name || "Untitled Deck"} 
+              description={deck.description || "No description available"} 
+              imageUrl={deck.deck_image?.url || "/default-deck-image.jpg"} 
+              deckId={deck._id} 
             />
           ))}
         </div>
+
+        {/* Message for when no decks are available */}
         {decks.length === 0 && (
-          <p className="text-gray-500 mt-4">
+          <p className="text-gray-500 mt-6 text-center">
             {tag
-              ? `No decks found with the tag "${tag}".`
-              : "No decks available at the moment."}
+              ? `No decks found with the tag "${tag}".` 
+              : "No decks available at the moment. Please check back later."}
           </p>
         )}
       </div>
