@@ -171,67 +171,64 @@ const handleTags = async (deckId, existingTags, newTags) => {
 // Update a deck
 export const updateDeck = async (req, res) => {
   try {
-    // Destructure fields from request body
-    const { deck_name, description, deck_status } = req.body;
+    const { deck_name, description, deck_status,tag } = req.body;
 
-    // Find the deck by its ID
     const deck = await Deck.findById(req.params.id);
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }
 
-    // Update only the fields provided in the request
-    if (deck_name) deck.deck_name = deck_name;
-    if (deck_status) deck.deck_status = deck_status;
-    if (description) deck.description = description;
+    // Update deck details
+    deck.deck_name = deck_name || deck.deck_name;
+    deck.deck_status = deck_status || deck.deck_status;
+    deck.description = description || deck.description;
 
-    // Save the updated deck
+
     await deck.save();
     return res.status(200).json({ message: "Deck has been updated successfully", deck });
   } catch (error) {
-    console.error("Error updating deck:", error.message);
+    console.error(error);
     return res.status(500).json({ message: "Server error." });
   }
 };
 
-// Soft delete a deck by changing its status to "Deleted"
+
+// Delete a deck
 export const deleteDeck = async (req, res) => {
   try {
-    // Find the deck by its ID
     const deck = await Deck.findById(req.params.id);
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }
 
-    // Soft delete by setting deck_status to "Deleted"
-    deck.deck_status = "Deleted";
-    await deck.save();
-
-    return res.status(200).json({ message: "Deck deleted successfully." });
+    await deck.updateOne({deck_status:"Deleted"});
+       return res.status(200).json({ message: "Deck deleted successfully." });
   } catch (error) {
-    console.error("Error deleting deck:", error.message);
-    return res.status(500).json({ message: "Server error." });
+    
+   return res.status(500).json({ message: "Server error." });
   }
 };
 
-// Get all public decks
-export const getPublicDecks = async (req, res) => {
-  try {
-    // Fetch decks with the status "Public"
-    const decks = await Deck.find({ deck_status: "Public" });
 
-    // Check if there are any public decks
-    if (!decks.length) {
-      return res.status(404).json({ message: "Currently there are no public decks." });
-    }
-
-    // Return the list of public decks
-    return res.status(200).json({ decks });
-  } catch (error) {
-    console.error("Error fetching public decks:", error.message);
-    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+export const getPublicDecks = async(req,res)=>{
+  
+try{
+  const user = await User.findById(req.user.id);
+  if(!user){
+    return res.status(404).json({message:"user not found"})
   }
-};
+  const decks = await Deck.find({deck_status:"Public"});
+
+
+  if(decks.length == 0){
+   return res.status(404).json({message:"Currently there are no such decks"})
+  }
+  return res.status(200).json({message:"Public Decks",decks})
+
+}catch(error){
+ return res.status(500).json({message:"Internal Serval Error", error:error.message});
+}
+}
 
 
 export const RemoveAllDecks = async(req,res)=>{
