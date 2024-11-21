@@ -66,10 +66,14 @@ const Testimonial = ({ image, name, title, feedback, rating }) => {
             <div className="flex justify-center mt-2">
                 {renderStars(rating)}
             </div>
-            <p className="text-gray-600 text-center mt-4">{feedback}</p>
-            <button className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
+            <p className="text-gray-600 text-center mt-4">{feedback}</p> 
+            {/* <button className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
+                Read More
+            </button> */}
+            <button className=" mt-6 px-4 py-2 bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
                 Read More
             </button>
+
         </div>
     );
 };
