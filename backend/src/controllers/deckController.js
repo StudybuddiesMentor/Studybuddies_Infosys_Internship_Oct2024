@@ -6,6 +6,7 @@ import DeckTag from "../db/DeckTag.js";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
 import cloudinary from 'cloudinary';
 import checkTag from "../utils/TagValidate.js";
+import SendMail from "../utils/SenddeckMail.js";
 /**
  * Create a new deck with associated tags and optional image.
  * @param {Object} req - Express request object
@@ -304,3 +305,57 @@ export const deckImageUpdate = async(req,res)=>{
  }
 
 }
+
+
+
+export const softdeleteDeck = async (req, res) => {
+  try {
+    
+    const deck = await Deck.findById(req.params.id).populate('created_by','username email');
+    if (!deck) {
+      return res.status(404).json({ message: "Deck not found" });
+    }
+    
+    try {
+      await SendMail(deck.created_by.username, deck.created_by.email, deck.deck_name);
+    } catch (mailError) {
+      return res.status(500).json({ message: "Failed to send mail" });
+    }
+    
+
+    await deck.updateOne({deck_status:"Deleted"});
+
+       return res.status(200).json({ message: "Deck deleted successfully" });
+  } catch (error) {
+    
+   return res.status(500).json({ message: "Internal Server error" });
+  }
+};
+
+
+export const HardDelete = async(req,res)=>{
+try{
+  const deck = await Deck.findByIdAndDelete(req.params.id);
+  if (!deck) {
+    return res.status(404).json({ message: "Deck not found" });
+  }
+  return res.status(200).json({ message: "Deck deleted successfully." });
+} catch (error) {
+  return res.status(500).json({ message: "Internal Server error", error:error.message });
+}
+};
+
+export const RevokeDelete = async(req,res)=>{
+  try{
+    const deck = await Deck.findByIdAndDelete(req.params.id);
+  if (!deck) {
+    return res.status(404).json({ message: "Deck not found" });
+  }
+  await deck.updateOne({deck_status:"Public"});
+
+  return res.status(200).json({ message: "Deck deleted successfully" });
+} catch (error) {
+
+return res.status(500).json({ message: "Internal Server error" });
+}
+};

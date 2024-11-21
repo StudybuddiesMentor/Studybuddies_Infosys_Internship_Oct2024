@@ -1,5 +1,5 @@
 import express from 'express';
-import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,
+import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,softdeleteDeck,HardDelete,RevokeDelete,
   RemoveAllDecks,countDecks,deckImage,deckImageUpdate } from '../controllers/deckController.js';
 import { userAuthMiddleware, adminAuthMiddleware } from '../middlewares/auth.js';
 import Deck from '../models/Deck.js';
@@ -82,7 +82,24 @@ router.post('/deckimage',userAuthMiddleware,deckImageUpload.single('deck_image')
 
 router.put('/deckimage/:id',userAuthMiddleware,deckImageUpload.single('deck_image'),checkMinFileSize,deckImageUpdate);;
 
-
+/**
+ * @route DELETE /api/decks/deletedeck/:id
+ * @desc soft delete deck by admin 
+ * @access  Private (admin Auth)
+ */
+router.delete('/deletedeck/:id',adminAuthMiddleware,softdeleteDeck)
+/**
+ * @route DELETE /api/decks/admindelete/:id
+ * @desc hard delete deck by admin 
+ * @access  Private (admin Auth)
+ */
+router.delete('/admindelete/:id',adminAuthMiddleware,HardDelete);
+/**
+ * @route DELETE /api/decks/revokedeck/:id
+ * @desc delete deck by admin 
+ * @access  Private (admin Auth)
+ */
+router.put('/revokedeck/:id',adminAuthMiddleware,RevokeDelete);
 
 
 

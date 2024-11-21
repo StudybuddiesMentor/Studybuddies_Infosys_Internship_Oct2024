@@ -25,8 +25,7 @@ export const userAuthMiddleware =  (req, res, next) => {
 };
 // Middleware for Admin Authentication (User + Admin role check)
 export const adminAuthMiddleware = (req, res, next) => {
-  // Get token from headers
-  const token = req.header("Authorization")?.replace("Bearer ", "");
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
   if (!token) {
     return res
       .status(401)
@@ -35,7 +34,7 @@ export const adminAuthMiddleware = (req, res, next) => {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded; // Attach decoded token (user info) to the request object
 
     // Check if user has admin privileges

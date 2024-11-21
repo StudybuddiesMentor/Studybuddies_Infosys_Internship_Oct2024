@@ -30,7 +30,7 @@ export const loginUser = async (req, res) => {
         }
        
         
-        const token = jwt.sign({ id : user._id, email: user.email }, JWT_SECRET, { expiresIn: "10d" });
+        const token = jwt.sign({ id : user._id, role : user.role }, JWT_SECRET, { expiresIn: "10d" });
 
         
         res.cookie("token", token, {
@@ -340,3 +340,28 @@ export const logoutUser = async (req, res) => {
     });
   }
 };
+
+export const switchRole = async(req,res)=>{
+    const{password} = req.body;
+try{
+    const user = await User.findOne({$and: [{ _id: req.user.id },{ role: "user" }]});
+    if(!user){
+        return res.status(404).json({message:"user not found"});
+    }
+    const isvalid = await bcrypt.compare(password,user.password);
+   
+ if(!isvalid){
+       
+        return res.status(401).json({message:"Invalid Password. Please check again"})
+    }
+    user.role = "admin";
+    await user.save();
+      
+    return res.status(200).json({message:"Your request for change role is successfull."})
+}
+catch(error){
+    return res.status(500).json({message:"Internal Server Error", error:error.message})
+}
+
+
+ }

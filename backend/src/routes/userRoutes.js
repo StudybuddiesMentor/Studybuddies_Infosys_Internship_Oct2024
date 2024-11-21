@@ -3,7 +3,7 @@ import {
    
   getUserProfile, 
   updateUserProfile,loginUser,registerUser,logoutUser,updateUserPic,
-  verifyotp,forgotPassword,passwordReset,SendOtp
+  verifyotp,forgotPassword,passwordReset,SendOtp,switchRole
    
 } from '../controllers/userController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
@@ -84,5 +84,18 @@ router.post('/reset-password/:id/:token', passwordReset);
 
 
 router.post('/logout',logoutUser);
+
+
+
+/**
+ * @route PUT /api/users/switchrole
+ * @desc switching role from user to admin
+ * @access Private
+ */
+ 
+router.put('/switchrole',userAuthMiddleware,switchRole);
+
+
+
 
 export default router;
