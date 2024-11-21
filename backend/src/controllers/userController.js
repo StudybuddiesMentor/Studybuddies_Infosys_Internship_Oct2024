@@ -18,12 +18,12 @@ export const loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(400).json({ message: "Invalid email" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(400).json({ message: "Invalid  password" });
         }
          if (!user.is_verified) {
             return res.status(403).json({ message: "Please verify your email before logging in." });
@@ -133,7 +133,8 @@ export const SendOtp = async(req,res)=>{
         from: process.env.GMAIL_ID,
         to: user.email,
         subject: 'StudyBuddies - veify with otp',
-        html: "<h3>Your One Time Password (OTP): ${verifyotp} </h3><p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>"
+        html: `<h3>Your One Time Password (OTP): ${verifyotp} </h3>
+        <p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>`
       
    };
     await transporter.sendMail(mailOptions);
