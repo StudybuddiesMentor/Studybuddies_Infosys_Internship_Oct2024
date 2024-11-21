@@ -459,8 +459,8 @@ const Userpagebody = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {currentDecks.map((deck) => (
           <div
-            key={deck.id}
-            onClick={() => navigate(`/deck/${deck.id}`)}
+            key={deck._id}
+            onClick={() => navigate(`/view-deck/${deck._id}`)}
             className="bg-gray-200 rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-300 ease-in-out duration-300"
           >
             <img
