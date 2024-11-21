@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LogoutButton from "./LogoutButton"; 
 
-
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
@@ -13,6 +12,7 @@ const Nav = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const categoriesRef = useRef(null);
   const userRef = useRef(null);
+  const menuRef = useRef(null);  // Reference for the mobile menu
   const navigate = useNavigate();
 
   // Fetch tags from backend
@@ -30,21 +30,17 @@ const Nav = () => {
   // Close categories dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (categoriesRef.current && !categoriesRef.current.contains(event.target)) {
+      if (
+        categoriesRef.current &&
+        !categoriesRef.current.contains(event.target) &&
+        userRef.current &&
+        !userRef.current.contains(event.target) &&
+        menuRef.current && 
+        !menuRef.current.contains(event.target)
+      ) {
         setCategoriesDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // Close user dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (userRef.current && !userRef.current.contains(event.target)) {
         setUserDropdownOpen(false);
+        setMenuOpen(false);  // Close mobile menu
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -72,7 +68,7 @@ const Nav = () => {
         </Link>
 
         {/* Search Bar and Create Button */}
-        <div className="flex-1 flex justify-center items-center relative space-x-4 md:space-x-8">
+        <div className="flex-1 flex justify-center items-center relative space-x-4 md:space-x-30">
           <div className="relative w-full max-w-md sm:max-w-xs md:max-w-lg lg:max-w-xl xl:max-w-2xl">
             <input
               type="text"
@@ -126,19 +122,18 @@ const Nav = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-20 items-center">
-        <Link to="/explore" className="text-gray-700 hover:text-green-500 transition active:scale-95">
-          Explore
-        </Link>
-
+          <Link to="/explore" className="text-gray-700 hover:text-green-500 transition active:scale-95">
+            Explore
+          </Link>
 
           {/* Categories Dropdown */}
           <div className="relative mr-15" ref={categoriesRef}>
-          <button
-            className="text-gray-700 hover:text-green-500 transition active:scale-95"
-            onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-          >
-            Categories
-          </button>
+            <button
+              className="text-gray-700 hover:text-green-500 transition active:scale-95"
+              onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
+            >
+              Categories
+            </button>
 
             {categoriesDropdownOpen && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg z-50">
@@ -157,16 +152,16 @@ const Nav = () => {
 
           {/* User Dropdown */}
           <div className="relative ml-15" ref={userRef}>
-          <button
-            onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-            className="text-gray-700 hover:text-green-500 transition active:scale-95"
-          >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"
-              alt="User Icon"
-              className="w-6 h-6"
-            />
-          </button>
+            <button
+              onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+              className="text-gray-700 hover:text-green-500 transition active:scale-95"
+            >
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"
+                alt="User Icon"
+                className="w-6 h-6"
+              />
+            </button>
 
             {userDropdownOpen && (
               <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg w-48 z-100">
@@ -197,7 +192,7 @@ const Nav = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden absolute top-16 right-0 w-full bg-white p-4 shadow-md z-50">
+        <div className="md:hidden absolute top-16 right-0 w-full bg-white p-4 shadow-md z-50" ref={menuRef}>
           <div className="space-y-4">
             <Link
               to="/userpage"
