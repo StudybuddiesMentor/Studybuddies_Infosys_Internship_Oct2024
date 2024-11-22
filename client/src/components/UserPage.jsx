@@ -371,13 +371,20 @@ const Userpagebody = () => {
       src={logo}
       alt="User"
     />
-    <button
+    {/* <button
       className="absolute bottom-1 right-1 bg-white border border-gray-300 text-gray-500 rounded-full p-1 hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out shadow-lg hover:shadow-blue-500/50"
       onClick={handleEditUserClick}
       aria-label="Edit Profile Picture"
     >
       <FaEdit className="w-4 h-4 transform transition-transform duration-300 hover:scale-125" />
-    </button>
+    </button> */}
+    <button
+  className="absolute bottom-1 right-1 bg-white border border-gray-300 text-gray-500 rounded-full p-1 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-lg hover:shadow-green-500/50"
+  onClick={handleEditUserClick}
+  aria-label="Edit Profile Picture"
+>
+  <FaEdit className="w-4 h-4 transform transition-transform duration-300 hover:scale-125" />
+</button>
                 </div>
                 <div className="flex-grow items-center" style={{ marginLeft: '25px' }}>
 
