@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';// Import necessary hooks from React
 import axios from 'axios';// Import Axios for HTTP requests
 import Flashcard from './Flashcard';// Import the Flashcard component
-import { useParams } from 'react-router-dom'; // Import useParams to extract route parameters
+import { useNavigate, useParams } from 'react-router-dom'; // Import useParams to extract route parameters
+import Nav from './Nav';
 
 const ViewDeckPage = () => {
+  const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
+
+  const navigate = useNavigate(); // Initialize useNavigate
+
   // Extract deck ID from the URL parameters
   const { id: deckId } = useParams();
   // State variables
@@ -35,7 +40,6 @@ const ViewDeckPage = () => {
           `http://localhost:9000/api/cards/${deckId}`,
           { withCredentials: true }
         );
-  
         // Handle cards response
         setFlashcards(flashcardsResponse.data.cards || []);
       } catch (err) {
@@ -65,23 +69,50 @@ const ViewDeckPage = () => {
       console.error(err);
     }
   };
-   // Show a loading message while the deck data is being fetched
+
+  // Determine the previous URL to navigate back
+  const handleBack = () => {
+    const previousURL = "/explore"; // Default to "/explorepage" if no previous state
+    navigate(previousURL);
+  };
+
+  // Show a loading message while the decks are being fetched
   if (loading) {
-    return <p>Loading deck...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-600">Loading decks...</p>
+      </div>
+    );
   }
 
-  // Display an error message if something goes wrong
+  // Show an error message if there is an issue fetching decks
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-red-500">
+          {error}
+        </p>
+      </div>
+    );
   }
 
   return (
     <div className="p-6 flex flex-col space-y-6">
-      <h1 className="text-3xl font-bold text-left">You opened {deck.deck_name} Deck</h1>
+      <Nav/>
+
+      {/* Back Button */}
+      <button
+        onClick={handleBack}
+        className="absolute top-24 left-4 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700"
+      >
+        ← Back
+      </button>
+
+      <h1 className="text-3xl text-center font-bold"> {deck.deck_name} </h1>
       <p className="text-lg text-center">{deck.description}</p>
       <img
-        src={deck.deck_image?.url || '/path/to/default/image.jpg'}
-        alt={deck.deck_name}
+        src={deck.deck_image?.url || defaultImageUrl}
+        alt={deck.description}
         className="w-60 h-60 object-cover rounded-md"
       />
 
@@ -97,8 +128,8 @@ const ViewDeckPage = () => {
           flashcards.map((flashcard) => (
             <Flashcard
               key={flashcard._id}
-              question={flashcard.question}
-              answer={flashcard.answer}
+              question={flashcard.Title}
+              answer={flashcard.Content}
             />
           ))
         ) : (

@@ -63,15 +63,25 @@ const UserFlashcards = () => {
   }, [filter]); // Re-run the effect if the filter changes
   // Re-run the effect if the filter changes
 
-  // Display a loading message while data is being fetched
-  if (loading) {
-    return <p>Loading your decks...</p>;
-  }
+ // Show a loading message while the decks are being fetched
+ if (loading) {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <p className="text-lg font-semibold text-gray-600">Loading decks...</p>
+    </div>
+  );
+}
 
-  // Display an error message if fetching data fails
-  if (error) {
-    return <p>{error}</p>;
-  }
+// Show an error message if there is an issue fetching decks
+if (error) {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <p className="text-lg font-semibold text-red-500">
+        {error}
+      </p>
+    </div>
+  );
+}
 
   return (
     <div>

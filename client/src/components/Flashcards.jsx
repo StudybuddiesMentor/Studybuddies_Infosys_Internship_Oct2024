@@ -1,18 +1,31 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
 
 const CreateFlashcardPage = () => {
   const { id: deckId } = useParams();
-
+  const [deck, setDeck] = useState(null); // Store the deck data
   const [flashcards, setFlashcards] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false); // Controls the visibility of the add flashcard form
   const [newFlashcard, setNewFlashcard] = useState({ Title: "", Content: "" });
 
+  const navigate = useNavigate(); // Initialize useNavigate
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
+        const deckResponse = await axios.get(
+          `http://localhost:9000/api/decks/${deckId}`,
+          { withCredentials: true }
+        );
+        console.log("Deck Response:", deckResponse.data);
+        if (deckResponse.data.deck) {
+          setDeck(deckResponse.data.deck);
+        } else {
+          console.error("Deck not found.");
+          return;
+        }
+
         const response = await axios.get(
           `http://localhost:9000/api/cards/${deckId}`,
           { withCredentials: true }
@@ -43,10 +56,10 @@ const CreateFlashcardPage = () => {
         newFlashcard,
         { withCredentials: true }
       );
-  
+
       setNewFlashcard({ Title: "", Content: "" });
       setShowAddForm(false); // Hide the form after adding
-  
+
       // Refetch flashcards
       const updatedFlashcards = await axios.get(
         `http://localhost:9000/api/cards/${deckId}`,
@@ -61,19 +74,33 @@ const CreateFlashcardPage = () => {
       console.error("Error adding flashcard:", error);
     }
   };
-  
 
-  
   const cancelAddFlashcard = () => {
     setShowAddForm(false); // Close the form without saving
     setNewFlashcard({ Title: "", Content: "" }); // Clear the input fields
   };
 
+  // Determine the previous URL to navigate back
+  const handleBack = () => {
+    const previousURL = "/userflashcards"; // Default to "/explorepage" if no previous state
+    navigate(previousURL);
+  };
+
+
   return (
     <div>
-      <Nav/>
+      <Nav />
+
+      {/* Back Button */}
+      <button
+        onClick={handleBack}
+        className="absolute top-24 left-4 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700"
+      >
+        ← Back
+      </button>
+
       <h2 className="mt-5 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-700 mb-5 text-center relative">
-        Flashcards for Deck ID: {deckId}
+        Flashcards for Deck: {deck ? deck.deck_name : ""}
         <span className="block mt-2 h-1 w-1/6 mx-auto bg-gradient-to-r from-green-500 to-green-700 rounded-full"></span>
       </h2>
 
