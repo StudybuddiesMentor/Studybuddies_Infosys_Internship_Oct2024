@@ -25,11 +25,12 @@ const app = express();
 // CORS settings
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allows all origins
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"], // Allows all common HTTP methods
-    credentials: true, // No credentials for security reasons when using origin "*"
-  }),
+    origin: ["http://localhost:5173", "http://localhost:5174"], // Allow both localhost URLs
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
+    credentials: true, // Allow cookies or other credentials
+  })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
