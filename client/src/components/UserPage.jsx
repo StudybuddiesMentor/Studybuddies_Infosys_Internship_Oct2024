@@ -281,6 +281,7 @@ const Userpagebody = () => {
           title: deck.deck_name,
           description: deck.description,
           status: deck.deck_status,
+          _id:deck._id,
         };
 
         const tags = deckObj.tags.map((tag) => ({

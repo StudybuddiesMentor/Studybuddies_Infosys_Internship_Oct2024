@@ -11,7 +11,6 @@ const Deck = ({ title, description, imageUrl, deckId }) => {
     if (location.pathname === '/userflashcards') {
       navigate(`/CreateFlashcard/${deckId}`); // Navigate to Create Flashcards page
     } else {
-      alert(`Opening ${title} Deck`); // Regular alert for normal behavior
       navigate(`/view-deck/${deckId}`); // Navigate to ViewDeckPage with deck ID
     }
   };

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const Flashcard = ({ question, answer }) => {
+const Flashcard = ({ key, question, answer }) => {
   const [flipped, setFlipped] = useState(false);
 
   const handleFlip = () => {
@@ -13,37 +13,14 @@ const Flashcard = ({ question, answer }) => {
       onClick={handleFlip}
     >
       <div
-        className={`absolute inset-0 w-full h-full bg-white shadow-lg rounded-lg transform transition-transform duration-500 ${
-          flipped ? 'rotate-y-180' : ''
-        }`}
-        style={{
-          transformStyle: 'preserve-3d',
-        }}
+        className={`absolute inset-0 w-full h-full bg-white shadow-lg rounded-lg`}
       >
-        {/* Front of the card */}
         <div
-          className="absolute w-full h-full backface-hidden flex flex-col justify-center items-center p-4"
-          style={{ backfaceVisibility: 'hidden' }}
+          key={key}
+          className="bg-green-200 w-full h-full p-4 rounded-lg shadow flex-shrink-0"
         >
-          <p className="text-xl font-semibold">{question}</p>
-          {/* {image && (
-            <img
-              src={image}
-              alt="flashcard"
-              className="mt-4 w-20 h-20 object-cover rounded-lg"
-            />
-          )} */}
-        </div>
-
-        {/* Back of the card */}
-        <div
-          className="absolute w-full h-full backface-hidden flex justify-center items-center bg-blue-500 text-white rounded-lg p-4"
-          style={{
-            transform: 'rotateY(180deg)',
-            backfaceVisibility: 'hidden',
-          }}
-        >
-          <p className="text-lg">{answer}</p>
+          <h3 className="text-lg font-bold">{question}</h3>
+          <p className="text-sm">{answer}</p>
         </div>
       </div>
     </div>
