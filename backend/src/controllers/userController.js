@@ -291,21 +291,29 @@ export const updateUserPic = async (req, res) => {
     }
 };
 
-export const getUserProfile = async(req,res)=>{
-    try{
-        const user = await User.findById(req.user.id)
-        if(!user){
-            return res.status(404).json({message:"user not found"});
-        }
-        return res.status(200).json({message:"User Profile",user})
-        
-
+export const getUserProfile = async (req, res) => {
+    const { user } = req;
+  
+    try {
+      const foundUser = await User.findById(user.id);
+  
+      if (!foundUser) {
+        return res.status(404).json({ message: "User profile not found." });
+      }
+  
+      return res.status(200).json({
+        message: "User profile fetched successfully.",
+        user: foundUser,
+      });
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      return res.status(500).json({
+        message: "Internal server error. Could not fetch user profile.",
+        error: error.message,
+      });
     }
-    catch(error){
-        res.status(500).json({message:"Internal Server error",error:error.message})
-    }
-
-}
+  };
+  
 
 // Logout user 
 
