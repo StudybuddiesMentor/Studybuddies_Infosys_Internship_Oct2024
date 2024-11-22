@@ -27,6 +27,7 @@ import ViewDeckPage from './components/ViewDeckPage';
 import Testimonials from './components/Testimonials.jsx';
 import CreateFlashcardPage from './components/Flashcards.jsx';
 import Userflashcards from './components/Userflashcards.jsx';
+import EditDeckPage from './components/EditDeckPage.jsx';
 
 function App() {
   return (
@@ -57,6 +58,8 @@ function App() {
         <Route path="/explore-admin" element={<ExplorePageadmin />} /> 
         <Route path="/CreateFlashcard/:id" element={<CreateFlashcardPage />} /> 
         <Route path="/userflashcards" element={<Userflashcards />} /> 
+        <Route path="/userflashcards/:id" element={<Userflashcards />} /> 
+        <Route path="/edit-deck/:deckId" element={<EditDeckPage/>}/>
       </Routes>
     </Router>
   );

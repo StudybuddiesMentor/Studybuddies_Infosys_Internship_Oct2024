@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt }) => {
+const DeckUser = ({ title, description, imageUrl, deckId, tags, status, createdAt }) => {
   const defaultImageUrl =
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
   const navigate = useNavigate();
@@ -13,6 +13,10 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
     } else {
       navigate(`/view-deck/${deckId}`);
     }
+  };
+
+  const handleEditDeck = () => {
+    navigate(`/edit-deck/${deckId}`); // Redirect to an edit page for the deck
   };
 
   return (
@@ -48,7 +52,7 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
         </div>
 
         {/* Tags */}
-        {/* <div className="mb-4">
+        <div className="mb-4">
           {tags.map((tag, index) => (
             <span
               key={index}
@@ -57,7 +61,7 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
               {tag.name}
             </span>
           ))}
-        </div> */}
+        </div>
 
         {/* Action Buttons */}
         <div className="flex justify-between">
@@ -67,10 +71,16 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
           >
             Open Deck
           </button>
+          <button
+            onClick={handleEditDeck}
+            className="text-sm bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 transition duration-200"
+          >
+            Edit Deck
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Deck;
+export default DeckUser;

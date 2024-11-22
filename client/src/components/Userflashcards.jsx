@@ -3,6 +3,7 @@ import axios from "axios";
 import Deck from "./Deck_explore";
 import { useNavigate } from "react-router-dom";
 import Nav from "./Nav"
+import DeckUser from "./Deck_user";
 
 // Component to display and manage user-created decks with filter options
 const UserFlashcards = () => {
@@ -109,15 +110,16 @@ if (error) {
         {/* Display user-created decks */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {decks.map((deckObj) => (
-            <Deck
-              key={deckObj.deck._id} // Use deckObj.deck._id to ensure you're referencing the correct id
-              title={deckObj.deck.deck_name}
-              description={deckObj.deck.description}
-              imageUrl={
-                deckObj.deck.deck_image?.url || deckObj.deck.defaultImageUrl
-              }
-              deckId={deckObj.deck._id}
-            />
+           <DeckUser
+           key={deckObj.deck._id}
+           title={deckObj.deck.deck_name}
+           description={deckObj.deck.description}
+           imageUrl={deckObj.deck.deck_image?.url || deckObj.deck.defaultImageUrl}
+           deckId={deckObj.deck._id}
+           tags={deckObj.tags} // Pass tags
+           status={deckObj.deck.deck_status} // Pass status
+           createdAt={deckObj.deck.created_at} // Pass creation date
+         />
           ))}
         </div>
 

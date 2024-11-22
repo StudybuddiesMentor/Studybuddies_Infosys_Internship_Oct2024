@@ -20,6 +20,8 @@ const ViewDeckPage = () => {
 
    // Fetch deck data when the component mounts or when deckId changes
    useEffect(() => {
+    // Ensure the page scrolls to the top whenever this component is loaded
+    window.scrollTo(0, 0);
     const fetchDeckAndFlashcards = async () => {
       try {
         // Fetch deck details
@@ -54,6 +56,7 @@ const ViewDeckPage = () => {
   }, [deckId]);
   // Dependency array includes deckId to refetch if it changes
 
+  
   // Handle the "Like" button click
   const handleLike = async () => {
     try {

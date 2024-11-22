@@ -51,7 +51,11 @@ const Nav = () => {
 
   const handleSearch = () => {
     if (searchQuery) {
-      navigate(`/explore/${searchQuery}`);
+      if (location.pathname.startsWith("/userflashcards")) {
+        navigate(`/userflashcards/${searchQuery}`);
+      } else {
+        navigate(`/explore/${searchQuery}`);
+      }
     }
   };
 

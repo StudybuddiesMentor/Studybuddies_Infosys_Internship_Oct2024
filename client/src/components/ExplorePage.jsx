@@ -6,6 +6,8 @@ import Nav from "./Nav";
 
 // Main component for the Explore Page
 const ExplorePage = () => {
+  const defaultImageUrl =
+    "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
   const { tag } = useParams(); 
   const [decks, setDecks] = useState([]); 
   const [error, setError] = useState("");
@@ -26,8 +28,8 @@ const ExplorePage = () => {
         const allDecks = response.data.decks || [];
         if (tag) {
           // If a tag is specified, filter the decks based on the tag
-          const filteredDecks = allDecks.filter((deck) =>
-            deck.tags && deck.tags.includes(tag)
+          const filteredDecks = allDecks.filter(
+            (deck) => deck.tags && deck.tags.includes(tag)
           );
           setDecks(filteredDecks);
         } else {
@@ -85,8 +87,12 @@ const ExplorePage = () => {
               key={deck._id} 
               title={deck.deck_name || "Untitled Deck"} 
               description={deck.description || "No description available"} 
-              imageUrl={deck.deck_image?.url || "/default-deck-image.jpg"} 
+              imageUrl={deck.deck_image?.url || defaultImageUrl} 
               deckId={deck._id} 
+              // tags={deck.tags} 
+              status={deck.deck_status} 
+              createdAt={deck.created_at}
+
             />
           ))}
         </div>
