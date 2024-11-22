@@ -239,33 +239,30 @@ export const passwordReset = async (req, res) => {
     });
 };
 
-export const updateUserProfile =  async (req, res) => {
-    const {  gender, email,fullName,username,professionalTitle,bio } = req.body;
-    
-    try{
-    const user = await User.findById(req.user.id);
-    
-    if(!user){
-        return res.status(404).json({ message: "User not found" })
-    } 
-         user.gender = gender|| user.gender;
-         user.fullName = fullName || user.fullName;
-         user.bio = bio || user.bio;
-         user.professionalTitle = professionalTitle || user.professionalTitle;
-         user.username = username || user.username;
-         if(email){
-         user.email = email 
-      }
-         user.updatedAt = Date.now();
-         await user.save();
-         
-         return res.status(200).json({ message:"Personal Information has been updated", user });
-        }
-     catch (error) {
-        return res.status(500).json({ message: "Internal server error", error: error.message });
+export const updateUserProfile = async (req, res) => {
+    const { gender, email, fullName, username, professionalTitle, bio } = req.body;
+  
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) return res.status(404).json({ message: "User not found" });
+  
+      Object.assign(user, {
+        gender: gender || user.gender,
+        fullName: fullName || user.fullName,
+        bio: bio || user.bio,
+        professionalTitle: professionalTitle || user.professionalTitle,
+        username: username || user.username,
+        email: email || user.email,
+        updatedAt: Date.now(),
+      });
+  
+      await user.save();
+      res.status(200).json({ message: "Personal Information has been updated", user });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error", error: error.message });
     }
-};
-
+  };
+  
 export const updateUserPic = async (req, res) => {
     const profilePic = req.file;
     try {
