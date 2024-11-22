@@ -7,6 +7,7 @@ import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
 import cloudinary from 'cloudinary';
 import checkTag from "../utils/TagValidate.js";
 import SendMail from "../utils/SenddeckMail.js";
+import Card from "../db/Card.js";
 /**
  * Create a new deck with associated tags and optional image.
  * @param {Object} req - Express request object
@@ -120,8 +121,9 @@ export const getDeckById = async (req, res) => {
 
     const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
     const tags = deckTags.map((deckTag) => deckTag.tag_id);
+    const flashcards = await Card.find({deck_id :deck._id})
 
-    return res.status(200).json({ message: "Deck found.", deck, tags });
+    return res.status(200).json({ message: "Deck found.", deck, tags,flashcards });
   } catch (error) {
     console.error("Error fetching deck by ID:", error);
     return res.status(500).json({ message: "Internal server error." });
@@ -219,11 +221,17 @@ try{
   }
   const decks = await Deck.find({deck_status:"Public"});
 
-
   if(decks.length == 0){
    return res.status(404).json({message:"Currently there are no such decks"})
   }
-  return res.status(200).json({message:"Public Decks",decks})
+  const publicDecks = await Promise.all(
+    decks.map(async (deck) => {
+      const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
+      const tags = deckTags.map((deckTag) => deckTag.tag_id);
+      return { deck, tags };
+    })
+  );
+  return res.status(200).json({message:"Public Decks",publicDecks})
 
 }catch(error){
  return res.status(500).json({message:"Internal Serval Error", error:error.message});
