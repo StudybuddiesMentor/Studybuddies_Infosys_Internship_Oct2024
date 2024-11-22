@@ -73,8 +73,8 @@ const MainPage = () => {
         );
 
         // Accessing the decks array from the response data
-        if (response.data.decks && Array.isArray(response.data.decks)) {
-          setDecks(response.data.decks); // Set the decks state with the array
+        if (response.data.publicDecks && Array.isArray(response.data.publicDecks)) {
+          setDecks(response.data.publicDecks); // Set the decks state with the array
         } else {
           setError("Unexpected response format");
         }
@@ -140,31 +140,31 @@ const MainPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {decks.slice(0, 3).map((deck) => (
               <div
-                key={`recent-${deck._id}`}
+                key={`recent-${deck.deck._id}`}
                 className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
               >
                 <MainDeck
-                  key={deck._id}
-                  title={deck.deck_name}
-                  description={deck.description}
+                  key={deck.deck._id}
+                  title={deck.deck.deck_name}
+                  description={deck.deck.description}
                   imageUrl={
-                    deck.deck_image ? deck.deck_image.url : deck.defaultImageUrl
+                    deck.deck.deck_image ? deck.deck.deck_image.url : deck.defaultImageUrl
                   }
-                  deckId={deck._id}
+                  deckId={deck.deck._id}
                 />
 
                 <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
                   <img
                     src={
                       favorites.find(
-                        (favorite) => favorite.id === `recent-${deck._id}`
+                        (favorite) => favorite.id === `recent-${deck.deck._id}`
                       )
                         ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
                         : "https://cdn-icons-png.freepik.com/512/57/57602.png"
                     }
                     alt="Favorite"
                     className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => toggleFavorite(`recent-${deck._id}`)}
+                    onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
                   />
                 </div>
               </div>
@@ -191,26 +191,26 @@ const MainPage = () => {
                 className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
               >
                 <MainDeck
-                  key={deck._id}
-                  title={deck.deck_name}
-                  description={deck.description}
+                  key={deck.deck._id}
+                  title={deck.deck.deck_name}
+                  description={deck.deck.description}
                   imageUrl={
-                    deck.deck_image?.url || deck.defaultImageUrl
+                    deck.deck.deck_image?.url || deck.defaultImageUrl
                   }
-                  deckId={deck._id}
+                  deckId={deck.deck._id}
                 />
                 <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
                   <img
                     src={
                       favorites.find(
-                        (favorite) => favorite.id === `recent-${deck._id}`
+                        (favorite) => favorite.id === `recent-${deck.deck._id}`
                       )
                         ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
                         : "https://cdn-icons-png.freepik.com/512/57/57602.png"
                     }
                     alt="Favorite"
                     className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => toggleFavorite(`recent-${deck._id}`)}
+                    onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
                   />
                 </div>
               </div>

@@ -48,7 +48,7 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
         </div>
 
         {/* Tags */}
-        {/* <div className="mb-4">
+        <div className="mb-4">
           {tags.map((tag, index) => (
             <span
               key={index}
@@ -57,7 +57,7 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
               {tag.name}
             </span>
           ))}
-        </div> */}
+        </div>
 
         {/* Action Buttons */}
         <div className="flex justify-between">

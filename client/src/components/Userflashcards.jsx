@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Deck from "./Deck_explore";
-import { useNavigate } from "react-router-dom";
 import Nav from "./Nav"
 import DeckUser from "./Deck_user";
+import { useParams } from "react-router-dom";
 
 // Component to display and manage user-created decks with filter options
 const UserFlashcards = () => {
@@ -11,7 +10,7 @@ const UserFlashcards = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all"); // Default filter: Show all decks
-
+  const { id } = useParams();
   // Fetch user-created decks
   useEffect(() => {
     const fetchUserDecks = async () => {
@@ -30,8 +29,17 @@ const UserFlashcards = () => {
 
           // Filter decks based on filter condition
           const filteredDecks = sortedDecks.filter((deckObj) => {
-            const deck = deckObj.deck;
+            const tags = deckObj.tags || [];
 
+            // Debugging: Log the tags and searched tag
+            console.log("Deck tags:", tags);
+            console.log("Searching for:", id);
+
+            if (id) {
+              // Filter based on the 'name' property of each tag
+              return tags.some(tag => tag.name.toLowerCase() === id.toLowerCase());
+            }
+            
             if (filter === "has_flashcards") {
               // Assuming you want to filter based on tags instead of flashcards
               return deckObj.tags && deckObj.tags.length > 0;
@@ -61,7 +69,7 @@ const UserFlashcards = () => {
     };
 
     fetchUserDecks();
-  }, [filter]); // Re-run the effect if the filter changes
+  }, [filter,id]); // Re-run the effect if the filter changes
   // Re-run the effect if the filter changes
 
  // Show a loading message while the decks are being fetched

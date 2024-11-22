@@ -8,7 +8,7 @@ import Nav from "./Nav";
 const ExplorePage = () => {
   const defaultImageUrl =
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
-  const { tag } = useParams(); 
+  const { id } = useParams(); 
   const [decks, setDecks] = useState([]); 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true); 
@@ -25,12 +25,20 @@ const ExplorePage = () => {
         );
 
         // Check if the response contains a valid array of decks
-        const allDecks = response.data.decks || [];
-        if (tag) {
+        const allDecks = response.data.publicDecks || [];
+        if (id) {
           // If a tag is specified, filter the decks based on the tag
-          const filteredDecks = allDecks.filter(
-            (deck) => deck.tags && deck.tags.includes(tag)
-          );
+          const filteredDecks = allDecks.filter((deck) => {
+            const tags = deck.tags || [];
+
+            // Debugging: Log the tags and searched tag
+            console.log("Deck tags:", tags);
+            console.log("Searching for:", id);
+
+            return tags.some((tagObj) => 
+              tagObj.name.toLowerCase() === id.toLowerCase()
+            );
+          });
           setDecks(filteredDecks);
         } else {
           setDecks(allDecks); 
@@ -47,7 +55,7 @@ const ExplorePage = () => {
     };
 
     fetchPublicDecks(); 
-  }, [tag]); 
+  }, [id]); 
 
   // Show a loading message while the decks are being fetched
   if (loading) {
@@ -77,21 +85,21 @@ const ExplorePage = () => {
       <div className="p-4 max-h-screen flex flex-col items-center">
         {/* Header text, dynamically showing tag-based results or general decks */}
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
-          {tag ? `Decks tagged "${tag}"` : "Explore Decks"}
+          {id ? `Decks tagged "${id}"` : "Explore Decks"}
         </h1>
 
         {/* Display the list of decks in a responsive grid layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {decks.map((deck) => (
             <Deck
-              key={deck._id} 
-              title={deck.deck_name || "Untitled Deck"} 
-              description={deck.description || "No description available"} 
-              imageUrl={deck.deck_image?.url || defaultImageUrl} 
-              deckId={deck._id} 
-              // tags={deck.tags} 
-              status={deck.deck_status} 
-              createdAt={deck.created_at}
+              key={deck.deck._id} 
+              title={deck.deck.deck_name || "Untitled Deck"} 
+              description={deck.deck.description || "No description available"} 
+              imageUrl={deck.deck.deck_image?.url || defaultImageUrl} 
+              deckId={deck.deck._id} 
+              tags={deck.tags} 
+              status={deck.deck.deck_status} 
+              createdAt={deck.deck.created_at}
 
             />
           ))}
@@ -100,8 +108,8 @@ const ExplorePage = () => {
         {/* Message for when no decks are available */}
         {decks.length === 0 && (
           <p className="text-gray-500 mt-6 text-center">
-            {tag
-              ? `No decks found with the tag "${tag}".` 
+            {id
+              ? `No decks found with the tag "${id}".` 
               : "No decks available at the moment. Please check back later."}
           </p>
         )}
