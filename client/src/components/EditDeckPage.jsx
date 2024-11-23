@@ -207,7 +207,7 @@ const EditDeckPage = () => {
           deck_name: deckData.title,
           description: deckData.description,
           deck_status: deckData.status,
-          tags: deckData.tags, // Directly send the tags from state
+          tags: processedTags, // Directly send the tags from state
         },
         { withCredentials: true }
       );
