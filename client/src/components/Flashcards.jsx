@@ -24,7 +24,6 @@ const CreateFlashcardPage = () => {
           { withCredentials: true }
         );
         if (deckResponse.data.deck) {
-          console.log(deckResponse.data);
           setDeck(deckResponse.data.deck);
           setTag(deckResponse.data);
         }
@@ -174,7 +173,7 @@ const CreateFlashcardPage = () => {
               key={flashcard._id}
               className="w-full max-w-xs bg-green-200 p-6 rounded-lg shadow-lg relative transform transition-transform duration-300 hover:scale-105"
             >
-              <div className="absolute top-2 right-2 flex space-x-2">
+              {/* <div className="absolute top-2 right-2 flex space-x-2">
                 <button
                   onClick={() => handleDeleteClick(flashcard._id)}
                   className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
@@ -187,7 +186,7 @@ const CreateFlashcardPage = () => {
                 >
                   <FaEdit />
                 </button>
-              </div>
+              </div> */}
               <h3 className="text-xl font-bold text-green-800">{flashcard.Title}</h3>
               <p className="text-sm text-gray-700">{flashcard.Content}</p>
               <div className="mt-4 text-xs text-gray-500">
