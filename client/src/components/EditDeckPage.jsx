@@ -200,7 +200,20 @@ const handleSubmit = async (e) => {
               required
             ></textarea>
           </div>
-
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Status
+            </label>
+            <select
+              name="status"
+              value={deckData.status}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            >
+              <option value="Public">Public</option>
+              <option value="Private">Private</option>
+            </select>
+          </div>
           <div className="mb-4">
   <label className="block text-sm font-medium text-gray-700">
     Tags
