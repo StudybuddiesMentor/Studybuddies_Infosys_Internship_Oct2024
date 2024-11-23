@@ -1,9 +1,9 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import User from "../db/User.js";
 import dotenv from "dotenv";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
+import { hashPassword,sendmailOtp,passwordResetEmail } from "../utils/UserMail.js";
 import cloudinary from 'cloudinary'; 
 const cloudinaryV2 = cloudinary.v2;
 
@@ -12,6 +12,7 @@ dotenv.config();
 
 const JWT_SECRET = "jwt_secret_key";
 
+//User Login
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -46,6 +47,7 @@ export const loginUser = async (req, res) => {
     }
 };
 
+//register user with otp to email
 export const registerUser =  async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -55,18 +57,42 @@ export const registerUser =  async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
+        const hashedPassword = await hashPassword(password)
+        const { mailOptions, verifyotp, otpExpireTime } = sendmailOtp(email);
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            port :465,
+            secure : true,
+            logger : false,
+            debug:true,
+            auth: {
+                user: process.env.GMAIL_ID, 
+                pass: process.env.GMAIL_PASS,
+               
+            },
+            tls:{
+              rejectUnauthorized : true
+            }
+            
+        });
+        try{
+        await transporter.sendMail(mailOptions);
+        }
+        catch(emailError){
+            res.status(503).json({messaage:"Failed to send Otp to Mail"})
+        }
 
-       
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = await User.create({ username, email, password: hashedPassword });
+ const newuser = await User.create({ username, email, password: hashedPassword, otp:verifyotp, otpExpires:otpExpireTime });
         res.status(201).json({ message: "Account created successfully" ,});
+    
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
+//verify user otp
 export const verifyotp = async(req,res)=>{
 
     const{ email, otp} = req.body;
@@ -94,63 +120,49 @@ export const verifyotp = async(req,res)=>{
 
 };
 
-
-export const SendOtp = async(req,res)=>{
+//only for email verification 
+export const sendOtp = async(req,res)=>{
     const{email} = req.body;
     try{
-    const user = await User.findOne({email})
-    if (!user) {
-        // User not found
-        return res.status(404).json({ message: 'User not found' });
-    }
-    function generateOtp() {
-        return Math.floor(1000 + Math.random() * 9000);
-      }
-      
-      const verifyotp = generateOtp();   
-
-      const otpExpire = Date.now() + 5 * 60 * 1000;  // we are using it for 5min
-      
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        port :465,
-        secure : true,
-        logger : false,
-        debug:true,
-        auth: {
-            user: process.env.GMAIL_ID, // Replace with your Gmail
-            pass: process.env.GMAIL_PASS,
-             // Replace with your email password or app-specific password
-        },
-        tls:{
-          rejectUnauthorized : true
+        const user = await User.findOne({email});
+        if(!email){
+            return res.status(404).json({ message: 'User not found' });
         }
-        
-    });
 
-    // Email options
-    const mailOptions = {
-        from: process.env.GMAIL_ID,
-        to: user.email,
-        subject: 'StudyBuddies - veify with otp',
-        html: `<h3>Your One Time Password (OTP): ${verifyotp} </h3>
-        <p>OTP is valid only for 05:00 mins. Do not share this OTP with anyone.</p>`
-      
-   };
-    await transporter.sendMail(mailOptions);
-    user.otp = verifyotp;
-    user.otpExpires = otpExpire; // Set expiration time
-    await user.save();
-   return res.status(200).json({ message: "OTP sent successfully!" });
-    } 
-catch (error) {
-    console.error('Error sending OTP:', error);
-    return res.status(500).json({ message: "Failed to send OTP." });
+        const { mailOptions, verifyotp, otpExpireTime } = sendmailOtp(email);
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            port :465,
+            secure : true,
+            logger : false,
+            debug:true,
+            auth: {
+                user: process.env.GMAIL_ID, 
+                pass: process.env.GMAIL_PASS,
+               
+            },
+            tls:{
+              rejectUnauthorized : true
+            }
+            
+        });
+    
+        await transporter.sendMail(mailOptions);
+        user.otp = verifyotp;
+        user.otpExpires = otpExpireTime; 
+        await user.save();
+       return res.status(200).json({ message: "OTP sent successfully!" });
+
+    }catch(error){
+        if (error.code || error.response) {
+            return res.status(503).json({ message: `Failed to send OTP. Error: ${error.message}` });
+        }
+        return res.status(500).json({ message: "Internal Server Error", error:error.message });
+    }
 }
 
-};
 
-
+//forgot password sends password reset link to email
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
@@ -160,9 +172,7 @@ export const forgotPassword = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: 'Email not found' });
         }
-
-        
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "15min" });
+       const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "15min" });
 
        
         const transporter = nodemailer.createTransport({
@@ -182,13 +192,7 @@ export const forgotPassword = async (req, res) => {
             
         });
     
-        const mailOptions = {
-            from: 'process.env.GMAIL_ID;',
-            to: user.email,
-            subject: 'StudyBuddies - reset password',
-           html: 
-           "<h3>Reset Your Password</h3><p>Click the link below to reset your password:</p><a href='http://localhost:5173/reset-password/${user._id}/${token}'>Reset Password</a><p>Reset Link is valid for only 15:00 min.</p>"
-       };
+        const mailOptions = passwordResetEmail(email);
        // Send the email
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -200,14 +204,14 @@ export const forgotPassword = async (req, res) => {
         });
 
     } 
-    catch (err) {
-        console.error("Error in forgot-password:", err);
-        res.status(500).json({ message: "Internal Server Error" });
+    catch (error) {
+        
+        res.status(500).json({ message: "Internal Server Error", error:error.message });
     }
 };
 
 
-
+//reset password with new password
 export const passwordReset = async (req, res) => {
     const { id, token } = req.params;
 
@@ -220,9 +224,11 @@ export const passwordReset = async (req, res) => {
         }
 
         try {
+            if (decoded.id !== id) {
+                return res.status(403).json({ message: "Token does not match the user" });
+            }
             
-            const hashedPassword = await bcrypt.hash(password, 10);
-            console.log("Hashed Password:", hashedPassword);
+            const hashedPassword = await hashPassword(password);
             const user = await User.findById(id);
             if (!user) {
                 return res.status(404).json({ status: "User not found" });
@@ -239,6 +245,7 @@ export const passwordReset = async (req, res) => {
     });
 };
 
+//update userprofile details
 export const updateUserProfile = async (req, res) => {
     const { gender, email, fullName, username, professionalTitle, bio } = req.body;
   
@@ -263,6 +270,7 @@ export const updateUserProfile = async (req, res) => {
     }
   };
   
+//update userprofile pic
 export const updateUserPic = async (req, res) => {
     const profilePic = req.file;
     try {
@@ -291,6 +299,7 @@ export const updateUserPic = async (req, res) => {
     }
 };
 
+//To get all the user information
 export const getUserProfile = async (req, res) => {
     const { user } = req;
   

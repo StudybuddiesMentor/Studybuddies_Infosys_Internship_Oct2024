@@ -3,7 +3,7 @@ import {
    
   getUserProfile, 
   updateUserProfile,loginUser,registerUser,logoutUser,updateUserPic,
-  verifyotp,forgotPassword,passwordReset,SendOtp,switchRole
+  verifyotp,forgotPassword,passwordReset,sendOtp,switchRole
    
 } from '../controllers/userController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
@@ -14,7 +14,7 @@ const router = express.Router();
 
 /**
  * @route POST /api/users/register
- * @desc Register a new user
+ * @desc Register a new user with OTP
  * @access Public
  */
 router.post('/register', registerUser);
@@ -52,7 +52,7 @@ router.put('/profile-pic', userAuthMiddleware, upload.single('profilePic'),check
  * @desc Send OTP for account verification or password reset
  * @access Public
  */
-router.post('/send-otp', SendOtp);
+router.post('/send-otp', sendOtp);
 
 /**
  * @route POST /api/users/verify-otp
@@ -90,7 +90,7 @@ router.post('/logout',logoutUser);
 /**
  * @route PUT /api/users/switchrole
  * @desc switching role from user to admin
- * @access Private
+ * @access Private (User Auth)
  */
  
 router.put('/switchrole',userAuthMiddleware,switchRole);
