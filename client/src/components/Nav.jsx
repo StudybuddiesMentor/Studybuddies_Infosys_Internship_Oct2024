@@ -152,11 +152,12 @@ const handleKeyDown = (event) => {
               Categories
             </button>
 
+           
             {categoriesDropdownOpen && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg z-50">
                 {["Math", "Science", "Languages", "History"].map((category) => (
                   <Link
-                    to={`/category/${category.toLowerCase()}`}
+                    to={`/explore/${category.toLowerCase()}`}
                     key={category}
                     className="block px-4 py-2 text-gray-700 hover:bg-green-100"
                   >
