@@ -15,7 +15,7 @@ import deckRoutes from "./routes/deckRoutes.js";
 import cardRoutes from "./routes/cardRoutes.js";
 import voteRoutes from "./routes/voteRoutes.js";
 import tagRoutes from "./routes/tagRoutes.js";
-
+import decktagRoutes from "./routes/decktagRoutes.js"
 // Fetch the PORT and MONGODB_URI from .env
 const PORT = process.env.PORT || 9000;
 const MONGODB_URI = 'mongodb+srv://aryan:aryan123@studybuddy.2bajq.mongodb.net/studybuddy';
@@ -40,7 +40,7 @@ app.use("/api/decks", deckRoutes); // Route for deck-related operations
 app.use("/api/cards", cardRoutes); // Route for card-related operations
 app.use("/api/votes", voteRoutes); // Route for voting-related operations
 app.use("/api/tags", tagRoutes); // Route for tag-related operations
-
+app.use("/api/decktags",decktagRoutes)//Route for deck-tag related operations
 // Unified function to connect to MongoDB and start the server
 const startServer = async () => {
   try {

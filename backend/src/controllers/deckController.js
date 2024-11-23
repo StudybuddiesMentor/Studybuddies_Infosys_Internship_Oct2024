@@ -155,7 +155,7 @@ export const updateDeck = async (req, res) => {
         const existingTag = await Tag.findOne({ name: tag.toLowerCase() });
         existingTag ? existingTags.push(tag.toLowerCase()) : newTags.push(tag.toLowerCase());
       }
-      await DeckTag.deleteMany({ deck_id: deck._id });
+      
     }
 
     const deckTags = await handleTags(deck._id, existingTags, newTags);
