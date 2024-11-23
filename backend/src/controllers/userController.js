@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
 import User from "../db/User.js";
 import dotenv from "dotenv";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
@@ -40,10 +41,10 @@ export const loginUser = async (req, res) => {
 
         });
         
-        res.status(200).json({ message: "Login successful",token });
+        return res.status(200).json({ message: "Login successful",token });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -79,16 +80,16 @@ export const registerUser =  async (req, res) => {
         await transporter.sendMail(mailOptions);
         }
         catch(emailError){
-            res.status(503).json({messaage:"Failed to send Otp to Mail"})
+           return res.status(503).json({messaage:"Failed to send Otp to Mail"})
         }
 
  const newuser = await User.create({ username, email, password: hashedPassword, otp:verifyotp, otpExpires:otpExpireTime });
-        res.status(201).json({ message: "Account created successfully" ,});
+       return res.status(201).json({ message: "Account created successfully" ,});
     
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: "Internal Server Error" });
+       return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -206,7 +207,7 @@ export const forgotPassword = async (req, res) => {
     } 
     catch (error) {
         
-        res.status(500).json({ message: "Internal Server Error", error:error.message });
+       return res.status(500).json({ message: "Internal Server Error", error:error.message });
     }
 };
 
@@ -264,9 +265,9 @@ export const updateUserProfile = async (req, res) => {
       });
   
       await user.save();
-      res.status(200).json({ message: "Personal Information has been updated", user });
+     return res.status(200).json({ message: "Personal Information has been updated", user });
     } catch (error) {
-      res.status(500).json({ message: "Internal server error", error: error.message });
+     return res.status(500).json({ message: "Internal server error", error: error.message });
     }
   };
   

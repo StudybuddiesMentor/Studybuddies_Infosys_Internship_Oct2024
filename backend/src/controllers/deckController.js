@@ -5,7 +5,6 @@ import Tag from "../db/Tag.js";
 import DeckTag from "../db/DeckTag.js";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
 import cloudinary from 'cloudinary';
-import checkTag from "../utils/TagValidate.js";
 import handleTags from "../utils/TagUtils.js";
 import SendMail from "../utils/SenddeckMail.js";
 import Card from "../db/Card.js";
@@ -68,7 +67,7 @@ export const createDeck = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating deck:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ message: "Internal server error.",error:error.message });
   }
 };
 
@@ -97,7 +96,7 @@ export const getDecks = async (req, res) => {
     return res.status(200).json({ message: "Here are your decks.", userDecks });
   } catch (error) {
     console.error("Error fetching decks:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ message: "Internal server error.",error:error.message });
   }
 };
 
@@ -127,7 +126,7 @@ export const getDeckById = async (req, res) => {
     return res.status(200).json({ message: "Deck found.", deck, tags,flashcards });
   } catch (error) {
     console.error("Error fetching deck by ID:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ message: "Internal server error.",error:error.message });
   }
 };
 
@@ -137,7 +136,10 @@ export const getDeckById = async (req, res) => {
 // Update a deck
 export const updateDeck = async (req, res) => {
   try {
-    const { deck_name, description, deck_status,tag } = req.body;
+    const { deck_name, description, deck_status,tags } = req.body;
+    const tagArray = Array.isArray(tags) ? tags : [tags];
+    const existingTags = [];
+    const newTags = [];
 
     const deck = await Deck.findById(req.params.id);
     if (!deck) {
@@ -148,13 +150,30 @@ export const updateDeck = async (req, res) => {
     deck.deck_name = deck_name || deck.deck_name;
     deck.deck_status = deck_status || deck.deck_status;
     deck.description = description || deck.description;
+    if (tagArray.length > 0) {
+      for (const tag of tagArray) {
+        const existingTag = await Tag.findOne({ name: tag.toLowerCase() });
+        existingTag ? existingTags.push(tag.toLowerCase()) : newTags.push(tag.toLowerCase());
+      }
+      await DeckTag.deleteMany({ deck_id: deck._id });
+    }
+
+    const deckTags = await handleTags(deck._id, existingTags, newTags);
+
+    // Format tags for response
+    const updatedTags = await Promise.all(
+      deckTags.map(async (deckTag) => {
+        const tag = await Tag.findById(deckTag.tag_id);
+        return { tag_id: tag._id, tag_name: tag.name };
+      })
+    );
 
 
     await deck.save();
-    return res.status(200).json({ message: "Deck has been updated successfully", deck });
+    return res.status(200).json({ message: "Deck has been updated successfully", deck,updatedTags });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error." });
+    return res.status(500).json({ message: "Internal Server error.",error:error.message });
   }
 };
 
@@ -171,11 +190,11 @@ export const deleteDeck = async (req, res) => {
        return res.status(200).json({ message: "Deck deleted successfully." });
   } catch (error) {
     
-   return res.status(500).json({ message: "Server error." });
+   return res.status(500).json({ message: "Internal Server error.",error:error.message });
   }
 };
 
-
+//To get all the public decks 
 export const getPublicDecks = async(req,res)=>{
   
 try{
@@ -202,7 +221,7 @@ try{
 }
 }
 
-
+//To remove all decks for user 
 export const RemoveAllDecks = async(req,res)=>{
   try{
     const user = await User.findById(req.user.id);
@@ -216,6 +235,7 @@ export const RemoveAllDecks = async(req,res)=>{
   }
 }
 
+//particular user total deck count
 export const countDecks = async(req,res)=>{
   
   try{
@@ -230,6 +250,7 @@ export const countDecks = async(req,res)=>{
   }
 }
 
+//upload deck image
 export const deckImage = async(req,res)=>{
   
   if (!req.file) {
@@ -242,11 +263,12 @@ export const deckImage = async(req,res)=>{
     return res.status(200).json({message: 'Image uploaded successfully!',imageUrl,fileName});
   } catch (error) {
     console.error('Error uploading deck image:', error);
-    return res.status(500).json({ error: 'Internal server error.' });
+    return res.status(500).json({ error: 'Internal server error.',error:error.message });
   }
 
 }
 
+//update image with deck id 
 export const deckImageUpdate = async(req,res)=>{
 
   if (!req.file) {
@@ -273,13 +295,13 @@ export const deckImageUpdate = async(req,res)=>{
    return res.status(200).json({message: 'Image uploaded successfully!', deck_image:deck.deck_image});
  } catch (error) {
    console.error('Error uploading deck image:', error);
-   return res.status(500).json({ error: 'Internal server error.' });
+   return res.status(500).json({ error: 'Internal server error.',error:error.message });
  }
 
 }
 
 
-
+//soft deletion of deck by admin
 export const softdeleteDeck = async (req, res) => {
   try {
     
@@ -300,11 +322,11 @@ export const softdeleteDeck = async (req, res) => {
        return res.status(200).json({ message: "Deck deleted successfully" });
   } catch (error) {
     
-   return res.status(500).json({ message: "Internal Server error" });
+   return res.status(500).json({ message: "Internal Server error",error:error.message });
   }
 };
 
-
+//Deck deletion from database by admin
 export const HardDelete = async(req,res)=>{
 try{
   const deck = await Deck.findByIdAndDelete(req.params.id);
@@ -316,7 +338,8 @@ try{
   return res.status(500).json({ message: "Internal Server error", error:error.message });
 }
 };
-
+ 
+//The deleted decks are revoked by admin to normal state
 export const RevokeDelete = async(req,res)=>{
   try{
     const deck = await Deck.findByIdAndDelete(req.params.id);
@@ -328,6 +351,6 @@ export const RevokeDelete = async(req,res)=>{
   return res.status(200).json({ message: "Deck deleted successfully" });
 } catch (error) {
 
-return res.status(500).json({ message: "Internal Server error" });
+return res.status(500).json({ message: "Internal Server error",error:error.message });
 }
 };

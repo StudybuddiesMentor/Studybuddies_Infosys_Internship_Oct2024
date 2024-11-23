@@ -44,7 +44,7 @@ const handleTags = async (deckId, existingTags, newTags) => {
 
   // Validate and add new tags
   if (newTags.length > 0) {
-    const { errors, validTags } = await checkTag(newTags);
+    const { errors, validTags } = await checkTagValidity(newTags);
     if (errors.length > 0) {
       throw new Error(errors.join(", "));
     }
