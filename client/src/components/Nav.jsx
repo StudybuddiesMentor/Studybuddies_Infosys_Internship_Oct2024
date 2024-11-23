@@ -14,6 +14,7 @@ const Nav = () => {
   const userRef = useRef(null);
   const menuRef = useRef(null);  // Reference for the mobile menu
   const navigate = useNavigate();
+  const searchRef = useRef(null); // Define searchRef here
 
   // Fetch tags from backend
   useEffect(() => {
@@ -28,36 +29,47 @@ const Nav = () => {
   );
 
   // Close categories dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        categoriesRef.current &&
-        !categoriesRef.current.contains(event.target) &&
-        userRef.current &&
-        !userRef.current.contains(event.target) &&
-        menuRef.current && 
-        !menuRef.current.contains(event.target)
-      ) {
-        setCategoriesDropdownOpen(false);
-        setUserDropdownOpen(false);
-        setMenuOpen(false);  // Close mobile menu
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleSearch = () => {
-    if (searchQuery) {
-      if (location.pathname.startsWith("/userflashcards")) {
-        navigate(`/userflashcards/${searchQuery}`);
-      } else {
-        navigate(`/explore/${searchQuery}`);
-      }
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      categoriesRef.current &&
+      !categoriesRef.current.contains(event.target) &&
+      userRef.current &&
+      !userRef.current.contains(event.target) &&
+      menuRef.current &&
+      !menuRef.current.contains(event.target) &&
+      searchRef.current &&
+      !searchRef.current.contains(event.target)
+    ) {
+      setCategoriesDropdownOpen(false);
+      setUserDropdownOpen(false);
+      setMenuOpen(false); // Close mobile menu
     }
   };
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
+// Handle search query
+const handleSearch = () => {
+  if (searchQuery) {
+    if (location.pathname.startsWith("/userflashcards")) {
+      navigate(`/userflashcards/${searchQuery}`);
+    } else {
+      navigate(`/explore/${searchQuery}`);
+    }
+  }
+};
+
+// Handle "Enter" key for search
+const handleKeyDown = (event) => {
+  if (event.key === "Enter") {
+    handleSearch();
+  }
+};
+
 
   return (
     <nav className={`bg-white shadow-lg py-4 z-50 ${menuOpen ? "relative" : "sticky top-0"}`}>
@@ -78,6 +90,7 @@ const Nav = () => {
               type="text"
               placeholder="Search flashcards..."
               value={searchQuery}
+              onKeyDown={handleKeyDown} // Trigger search on Enter key
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setShowDropdown(true);

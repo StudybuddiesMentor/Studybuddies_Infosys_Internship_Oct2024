@@ -514,31 +514,31 @@ const Userpagebody = () => {
           </div>
 
           <div className="p-4 mt-2 rounded-lg shadow-lg bg-white">
-            {/* Show More Button */}
-            <button
-              onClick={() => navigate("/userflashcards")}
-              className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50 rounded hover:bg-blue-600 transition-colors ease-in-out duration-300 flex items-center space-x-2"
-            >
-              <span>Show More</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M11.25 3.75l7.5 7.5-7.5 7.5M3.75 12h15"
-                />
-              </svg>
-            </button>
-
             <div>
+              <div className="flex justify-between">
               <h2 className="text-xl font-bold mb-4">Created Decks</h2>
-
+              {/* Show More Button */}
+              <button
+                onClick={() => navigate("/userflashcards")}
+                className="bg-green-500 text-white px-4 py-2 rounded-md mb-3 disabled:opacity-50 hover:bg-blue-600 transition-colors ease-in-out duration-300 flex items-center space-x-2"
+              >
+                <span>Show More</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.25 3.75l7.5 7.5-7.5 7.5M3.75 12h15"
+                  />
+                </svg>
+              </button>
+              </div>
               {loading ? (
                 // Loading indicator
                 <div className="flex items-center justify-center h-48">

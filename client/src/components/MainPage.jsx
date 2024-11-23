@@ -73,7 +73,10 @@ const MainPage = () => {
         );
 
         // Accessing the decks array from the response data
-        if (response.data.publicDecks && Array.isArray(response.data.publicDecks)) {
+        if (
+          response.data.publicDecks &&
+          Array.isArray(response.data.publicDecks)
+        ) {
           setDecks(response.data.publicDecks); // Set the decks state with the array
         } else {
           setError("Unexpected response format");
@@ -124,99 +127,131 @@ const MainPage = () => {
               effective.
             </p>
             <div className="mt-8">
-            <Link to="/explore" className="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition-transform duration-200 active:scale-95">
-              Start Exploring Flashcards
-            </Link>
-
+              <Link
+                to="/explore"
+                className="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition-transform duration-200 active:scale-95"
+              >
+                Start Exploring Flashcards
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Recently Visited Flashcards */}
         <section className="mt-12">
           <h3 className="text-2xl font-semibold mb-6 text-gray-800">
             Recently Visited
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {decks.slice(0, 3).map((deck) => (
-              <div
-                key={`recent-${deck.deck._id}`}
-                className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
-              >
-                <MainDeck
-                  key={deck.deck._id}
-                  title={deck.deck.deck_name}
-                  description={deck.deck.description}
-                  imageUrl={
-                    deck.deck.deck_image ? deck.deck.deck_image.url : deck.defaultImageUrl
-                  }
-                  deckId={deck.deck._id}
-                />
-
-                <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
-                  <img
-                    src={
-                      favorites.find(
-                        (favorite) => favorite.id === `recent-${deck.deck._id}`
-                      )
-                        ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
-                        : "https://cdn-icons-png.freepik.com/512/57/57602.png"
+          {/* Recently Visited Flashcards */}
+          {loading ? (
+            // Loading indicator
+            <div className="flex items-center justify-center h-48">
+              <p className="text-lg font-semibold text-gray-600 animate-pulse">
+                Loading decks...
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {decks.slice(0, 3).map((deck) => (
+                <div
+                  key={`recent-${deck.deck._id}`}
+                  className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
+                >
+                  <MainDeck
+                    key={deck.deck._id}
+                    title={deck.deck.deck_name}
+                    description={deck.deck.description}
+                    imageUrl={
+                      deck.deck.deck_image
+                        ? deck.deck.deck_image.url
+                        : deck.defaultImageUrl
                     }
-                    alt="Favorite"
-                    className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
+                    deckId={deck.deck._id}
                   />
+
+                  <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
+                    <img
+                      src={
+                        favorites.find(
+                          (favorite) =>
+                            favorite.id === `recent-${deck.deck._id}`
+                        )
+                          ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
+                          : "https://cdn-icons-png.freepik.com/512/57/57602.png"
+                      }
+                      alt="Favorite"
+                      className="h-8 cursor-pointer hover:scale-110 transition-transform"
+                      onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* Explore Flashcards Section */}
-        <section className="mt-12 relative">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-semibold text-gray-800">
-              Explore Flashcards
-            </h3>
-            <Link to="/explore">
-              <button className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-colors duration-300">
-                Show More &rarr;
-              </button>
-            </Link>
+        <div className="flex justify-between items-center mt-12">
+          <h3 className="text-2xl font-semibold text-gray-800">
+            Explore Flashcards
+          </h3>
+          <Link to="/explore">
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md 
+                     hover:bg-green-600 transition-colors duration-300 focus:outline-none focus:ring focus:ring-green-300"
+            >
+              Show More &rarr;
+            </button>
+          </Link>
+        </div>
+        {loading ? (
+          // Loading indicator
+          <div className="flex items-center justify-center h-48">
+            <p className="text-lg font-semibold text-gray-600 animate-pulse">
+              Loading decks...
+            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {decks.slice(-3).map((deck) => (
-              <div
-                key={`recent-${deck._id}`}
-                className="bg-white shadow-lg p-6 rounded-lg relative h-80 group transform hover:scale-105 transition-all duration-500 ease-in-out"
-              >
-                <MainDeck
-                  key={deck.deck._id}
-                  title={deck.deck.deck_name}
-                  description={deck.deck.description}
-                  imageUrl={
-                    deck.deck.deck_image?.url || deck.defaultImageUrl
-                  }
-                  deckId={deck.deck._id}
-                />
-                <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
-                  <img
-                    src={
-                      favorites.find(
-                        (favorite) => favorite.id === `recent-${deck.deck._id}`
-                      )
-                        ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
-                        : "https://cdn-icons-png.freepik.com/512/57/57602.png"
-                    }
-                    alt="Favorite"
-                    className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
+        ) : (
+          // Explore Flashcards Section
+          <section className="mt-12 relative">
+            {/* Header */}
+
+            {/* Flashcards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {decks.slice(-3).map((deck) => (
+                <div
+                  key={`recent-${deck._id}`}
+                  className="bg-white shadow-lg p-6 rounded-lg relative h-80 group 
+                     transform hover:scale-105 transition-all duration-500 ease-in-out"
+                >
+                  {/* Main Deck Component */}
+                  <MainDeck
+                    key={deck.deck._id}
+                    title={deck.deck.deck_name}
+                    description={deck.deck.description}
+                    imageUrl={deck.deck.deck_image?.url || deck.defaultImageUrl}
+                    deckId={deck.deck._id}
                   />
+
+                  {/* Favorite Icon */}
+                  <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
+                    <img
+                      src={
+                        favorites.some(
+                          (favorite) =>
+                            favorite.id === `recent-${deck.deck._id}`
+                        )
+                          ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
+                          : "https://cdn-icons-png.freepik.com/512/57/57602.png"
+                      }
+                      alt="Favorite"
+                      className="h-8 cursor-pointer hover:scale-110 transition-transform"
+                      onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       {/* Footer */}

@@ -2,46 +2,47 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
+import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 
 const CreateFlashcardPage = () => {
   const { id: deckId } = useParams();
-  const [deck, setDeck] = useState(null); // Store the deck data
+  const [deck, setDeck] = useState(null);
+  const [tagss, setTag] = useState(null);
   const [flashcards, setFlashcards] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false); // Controls the visibility of the add flashcard form
+  const [showAddForm, setShowAddForm] = useState(false);
   const [newFlashcard, setNewFlashcard] = useState({ Title: "", Content: "" });
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [flashcardToDelete, setFlashcardToDelete] = useState(null);
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const fetchFlashcards = async () => {
+    const fetchDeckAndFlashcards = async () => {
       try {
         const deckResponse = await axios.get(
           `http://localhost:9000/api/decks/${deckId}`,
           { withCredentials: true }
         );
-        console.log("Deck Response:", deckResponse.data);
         if (deckResponse.data.deck) {
+          console.log(deckResponse.data);
           setDeck(deckResponse.data.deck);
-        } else {
-          console.error("Deck not found.");
-          return;
+          setTag(deckResponse.data);
         }
 
-        const response = await axios.get(
+        const flashcardsResponse = await axios.get(
           `http://localhost:9000/api/cards/${deckId}`,
           { withCredentials: true }
         );
-        if (Array.isArray(response.data.cards)) {
-          setFlashcards(response.data.cards);
-        } else {
-          console.error("Expected an array but got:", response.data);
+        if (Array.isArray(flashcardsResponse.data.cards)) {
+          setFlashcards(flashcardsResponse.data.cards);
         }
       } catch (error) {
-        console.error("Error fetching flashcards:", error);
+        console.error("Error fetching deck or flashcards:", error);
       }
     };
 
     if (deckId) {
-      fetchFlashcards();
+      fetchDeckAndFlashcards();
     }
   }, [deckId]);
 
@@ -51,24 +52,20 @@ const CreateFlashcardPage = () => {
 
   const addFlashcardToBackend = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:9000/api/cards/${deckId}`,
         newFlashcard,
         { withCredentials: true }
       );
-
       setNewFlashcard({ Title: "", Content: "" });
-      setShowAddForm(false); // Hide the form after adding
+      setShowAddForm(false);
 
-      // Refetch flashcards
       const updatedFlashcards = await axios.get(
         `http://localhost:9000/api/cards/${deckId}`,
         { withCredentials: true }
       );
       if (Array.isArray(updatedFlashcards.data.cards)) {
         setFlashcards(updatedFlashcards.data.cards);
-      } else {
-        console.error("Expected an array but got:", updatedFlashcards.data);
       }
     } catch (error) {
       console.error("Error adding flashcard:", error);
@@ -76,16 +73,42 @@ const CreateFlashcardPage = () => {
   };
 
   const cancelAddFlashcard = () => {
-    setShowAddForm(false); // Close the form without saving
-    setNewFlashcard({ Title: "", Content: "" }); // Clear the input fields
+    setShowAddForm(false);
+    setNewFlashcard({ Title: "", Content: "" });
   };
 
-  // Determine the previous URL to navigate back
   const handleBack = () => {
-    const previousURL = "/userflashcards"; // Default to "/explorepage" if no previous state
-    navigate(previousURL);
+    navigate("/userflashcards");
   };
 
+  const handleDeleteClick = (flashcardId) => {
+    setFlashcardToDelete(flashcardId);
+    setShowDeletePopup(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    try {
+      await axios.delete(`http://localhost:9000/api/cards/${deckId}/${flashcardToDelete}`, {
+        withCredentials: true,
+      });
+
+      // Remove deleted flashcard from the state
+      setFlashcards((prev) =>
+        prev.filter((flashcard) => flashcard._id !== flashcardToDelete)
+      );
+
+      // Close popup and reset state
+      setShowDeletePopup(false);
+      setFlashcardToDelete(null);
+    } catch (error) {
+      console.error("Error deleting flashcard:", error);
+    }
+  };
+
+  const cancelDeletePopup = () => {
+    setShowDeletePopup(false);
+    setFlashcardToDelete(null);
+  };
 
   return (
     <div>
@@ -99,66 +122,117 @@ const CreateFlashcardPage = () => {
         ← Back
       </button>
 
-      <h2 className="mt-5 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-700 mb-5 text-center relative">
-        Flashcards for Deck: {deck ? deck.deck_name : ""}
-        <span className="block mt-2 h-1 w-1/6 mx-auto bg-gradient-to-r from-green-500 to-green-700 rounded-full"></span>
-      </h2>
+      {/* Deck Information Section */}
+      {deck && (
+        <div className="my-8 p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-3xl font-semibold text-center text-green-600 mb-4">
+            Deck: {deck.deck_name}
+          </h2>
+          {deck.deck_image && deck.deck_image.url ? (
+            <img
+              src={deck.deck_image.url}
+              alt={deck.deck_name}
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          ) : (
+            <div className="w-full h-48 bg-gray-300 flex items-center justify-center rounded-md mb-4">
+              <span className="text-gray-600">No image available</span>
+            </div>
+          )}
+          <p className="text-lg font-medium mb-2">Description: {deck.description}</p>
+          <p className="text-lg font-medium mb-2">Status: {deck.deck_status}</p>
+          <p className="text-lg font-medium mb-2">Created by: {deck.created_by}</p>
+          <div className="flex flex-wrap mt-4">
+            {tagss.tags && tagss.tags.length > 0 ? (
+              tagss.tags.map((tag) => (
+                <span
+                  key={tag._id}
+                  className="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mr-2 mb-2"
+                >
+                  {tag.name}
+                </span>
+              ))
+            ) : (
+              <span className="text-gray-500">No tags available</span>
+            )}
+          </div>
+        </div>
+      )}
 
+      {/* Flashcards Display */}
+      <h3 className="text-2xl text-center text-green-700 font-bold mt-8 mb-4">
+        Flashcards for Deck: {deck ? deck.deck_name : "Loading..."}
+      </h3>
       {flashcards.length === 0 ? (
         <div className="flex justify-center items-center h-48 border-2 border-dashed border-green-500 rounded-lg text-green-500 text-xl font-semibold">
           No flashcards available. Start by adding a new flashcard!
         </div>
       ) : (
-        <div className="flex overflow-x-auto space-x-4 p-4">
+        <div className="flex flex-wrap justify-center gap-6 p-4">
           {flashcards.map((flashcard) => (
             <div
               key={flashcard._id}
-              className="min-w-[250px] bg-green-200 p-4 rounded-lg shadow flex-shrink-0"
+              className="w-full max-w-xs bg-green-200 p-6 rounded-lg shadow-lg relative transform transition-transform duration-300 hover:scale-105"
             >
-              <h3 className="text-lg font-bold">{flashcard.Title}</h3>
-              <p className="text-sm">{flashcard.Content}</p>
+              <div className="absolute top-2 right-2 flex space-x-2">
+                <button
+                  onClick={() => handleDeleteClick(flashcard._id)}
+                  className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                >
+                  <FaTrashAlt />
+                </button>
+                <button
+                  onClick={() => navigate(`/updateflashcard/${deckId}/${flashcard._id},` )}
+                  className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600"
+                >
+                  <FaEdit />
+                </button>
+              </div>
+              <h3 className="text-xl font-bold text-green-800">{flashcard.Title}</h3>
+              <p className="text-sm text-gray-700">{flashcard.Content}</p>
+              <div className="mt-4 text-xs text-gray-500">
+                <p>Created: {new Date(flashcard.created_at).toLocaleString()}</p>
+                <p>Updated: {new Date(flashcard.updated_at).toLocaleString()}</p>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      <div className="flex flex-col items-center mt-5">
+      {/* Add Flashcard Button and Form */}
+      <div className="flex justify-center mt-5">
         {!showAddForm ? (
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded-full shadow hover:bg-green-600 transition-colors"
+            className="bg-green-500 text-white px-6 py-3 rounded-full shadow hover:bg-green-600 transition-colors"
           >
             Add Flashcard
           </button>
         ) : (
-          <div className="bg-gray-50 p-4 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-gray-50 p-6 rounded-lg shadow-lg w-full max-w-md">
             <input
               type="text"
               placeholder="Flashcard Title"
               value={newFlashcard.Title}
-              onChange={(e) =>
-                handleNewFlashcardChange("Title", e.target.value)
-              }
+              onChange={(e) => handleNewFlashcardChange("Title", e.target.value)}
               className="border border-gray-300 rounded-lg w-full p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
             <textarea
               placeholder="Flashcard Content"
               value={newFlashcard.Content}
-              onChange={(e) =>
-                handleNewFlashcardChange("Content", e.target.value)
-              }
+              onChange={(e) => handleNewFlashcardChange("Content", e.target.value)}
               className="border border-gray-300 rounded-lg w-full p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-green-300"
-            ></textarea>
+            />
             <div className="flex justify-between">
               <button
                 onClick={addFlashcardToBackend}
-                className="bg-green-500 text-white px-4 py-2 rounded-full shadow hover:bg-green-600 transition-colors"
+                className="bg-green-500 text-white px-6 py-3 rounded-full shadow hover:bg-green-600"
               >
-                Save Flashcard
+                Save
               </button>
               <button
                 onClick={cancelAddFlashcard}
-                className="bg-red-500 text-white px-4 py-2 rounded-full shadow hover:bg-red-600 transition-colors"
+                className="bg-gray-500 text-white px-6 py-3 rounded-full shadow hover:bg-gray-600"
               >
                 Cancel
               </button>
@@ -166,6 +240,29 @@ const CreateFlashcardPage = () => {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Popup */}
+      {showDeletePopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full">
+            <p className="text-lg font-semibold mb-4">Are you sure you want to delete this flashcard?</p>
+            <div className="flex justify-between">
+              <button
+                onClick={handleDeleteConfirmation}
+                className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={cancelDeletePopup}
+                className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

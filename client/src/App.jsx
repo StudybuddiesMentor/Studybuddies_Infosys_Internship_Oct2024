@@ -28,6 +28,7 @@ import Testimonials from './components/Testimonials.jsx';
 import CreateFlashcardPage from './components/Flashcards.jsx';
 import Userflashcards from './components/Userflashcards.jsx';
 import EditDeckPage from './components/EditDeckPage.jsx';
+import UpdateFlashcardPage from './components/UpdateFlashcard.jsx';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
         <Route path="/userflashcards" element={<Userflashcards />} /> 
         <Route path="/userflashcards/:id" element={<Userflashcards />} /> 
         <Route path="/edit-deck/:deckId" element={<EditDeckPage/>}/>
+        <Route path="/updateflashcard/:deckId/:flashcardId" element={<UpdateFlashcardPage/>}/>
       </Routes>
     </Router>
   );
