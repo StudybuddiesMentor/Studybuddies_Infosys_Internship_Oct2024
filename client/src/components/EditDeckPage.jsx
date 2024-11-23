@@ -192,8 +192,16 @@ const EditDeckPage = () => {
     setError(null);
 
     try {
+      // Ensure tags are sent as lowercase strings
+    const processedTags = Array.isArray(deckData.tags)
+    ? deckData.tags.map((tag) =>
+        typeof tag.name === "string" ? tag.name.toLowerCase() : ""
+      ).filter(tag => tag) // Remove any invalid tags (empty or non-string)
+    : [];
+
+      
       // Update deck details (text fields) and tags
-      await axios.put(
+            await axios.put(
         `http://localhost:9000/api/decks/${deckId}`,
         {
           deck_name: deckData.title,
