@@ -170,14 +170,28 @@ const EditDeckPage = () => {
 
   // Handle tag deletion (Backend call to remove a tag)
   const handleDeleteTag = async (tagId) => {
+    // Find the tag name using the tag ID
+    const tag = deckData.tags.find((t) => t._id === tagId);
+    if (!tag) {
+      setError("Tag not found.");
+      return;
+    }
+
+    const tagName = tag.name; // Extract the tag name
+
     try {
-      await axios.delete(`http://localhost:9000/api/tags/${deckId}`, {
-        data: { tagId },
-        withCredentials: true,
-      });
+      const response = await axios.delete(
+        `http://localhost:9000/api/decktags/${deckId}`,
+        {
+          data: { tags: tagName }, // Send multiple tags for deletion
+          withCredentials: true,
+        }
+      );
+
+      // Update the frontend state
       setDeckData((prev) => ({
         ...prev,
-        tags: prev.tags.filter((tag) => tag._id !== tagId),
+        tags: prev.tags.filter((t) => t._id !== tagId),
       }));
     } catch (err) {
       console.error(err);
@@ -193,15 +207,16 @@ const EditDeckPage = () => {
 
     try {
       // Ensure tags are sent as lowercase strings
-    const processedTags = Array.isArray(deckData.tags)
-    ? deckData.tags.map((tag) =>
-        typeof tag.name === "string" ? tag.name.toLowerCase() : ""
-      ).filter(tag => tag) // Remove any invalid tags (empty or non-string)
-    : [];
+      const processedTags = Array.isArray(deckData.tags)
+        ? deckData.tags
+            .map((tag) =>
+              typeof tag.name === "string" ? tag.name.toLowerCase() : ""
+            )
+            .filter((tag) => tag) // Remove any invalid tags (empty or non-string)
+        : [];
 
-      
       // Update deck details (text fields) and tags
-            await axios.put(
+      await axios.put(
         `http://localhost:9000/api/decks/${deckId}`,
         {
           deck_name: deckData.title,
