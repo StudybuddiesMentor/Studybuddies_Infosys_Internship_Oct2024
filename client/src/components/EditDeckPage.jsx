@@ -406,7 +406,7 @@ const EditDeckPage = () => {
                 </button>
                 <button
                   onClick={() =>
-                    navigate(`/updateflashcard/${deckId}/${flashcard._id},`)
+                    navigate(`/updateflashcard/${deckId}/${flashcard._id}`)
                   }
                   className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600"
                 >

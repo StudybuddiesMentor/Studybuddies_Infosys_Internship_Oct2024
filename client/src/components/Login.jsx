@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import "./Login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,14 @@ function Login() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
+  // Check if user is already authenticated
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/main-page"); // Redirect if token exists
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -32,6 +40,10 @@ function Login() {
         { withCredentials: true }
       );
       console.log(response.data);
+
+        // Store token in localStorage
+        const { token } = response.data;
+        localStorage.setItem("token", token);  
 
       setSuccess("Login successful! Redirecting...");
       setError("");

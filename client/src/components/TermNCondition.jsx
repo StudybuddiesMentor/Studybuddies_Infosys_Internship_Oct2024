@@ -1,13 +1,29 @@
 import { IoTerminalOutline } from "react-icons/io5";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from './Header';
 import Homefooter from './Homefooter';
+import Nav from "./Nav";
+import HomeFooter from "./Homefooter";
 
 const TermsOfService = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Check if the token cookie is present
+        // const token = getCookie('token');
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            setIsLoggedIn(true); // If token exists, user is logged in
+        } else {
+            setIsLoggedIn(false); // If no token, user is not logged in
+        }
+    }, []);
+
   return (
     <>
       {/* Header */}
-      <Header />
+      {isLoggedIn ? <Nav /> : <Header />}
 
       {/* Main Container */}
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-100 to-green-200 p-6">
@@ -81,7 +97,26 @@ const TermsOfService = () => {
       </div>
 
       {/* Footer */}
-      <Homefooter />
+      {isLoggedIn ?  (
+                <footer className="bg-gray-800 text-white py-6 mt-10">
+                    <div className="container mx-auto text-center">
+                    <p>&copy; 2024 Study Buddy. All Rights Reserved.</p>
+                    <div className="mt-3 space-x-5">
+                        {["Privacy Policy", "Terms of Service", "Contact Us"].map((item) => (
+                        <a
+                            key={item}
+                            href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                            className="hover:text-gray-400"
+                        >
+                            {item}
+                        </a>
+                        ))}
+                    </div>
+                    </div>
+                </footer>
+            ) : (
+            <HomeFooter />
+            )}
     </>
   );
 };

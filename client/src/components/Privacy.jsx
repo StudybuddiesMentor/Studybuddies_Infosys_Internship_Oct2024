@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from './Header';
 import "./Privacy.css";
+import Nav from "./Nav";
+// import getCookie from "./check_auth";
+import HomeFooter from "./Homefooter";
 
 const Privacy = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Check if the token cookie is present
+        // const token = getCookie('token');
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            setIsLoggedIn(true); // If token exists, user is logged in
+        } else {
+            setIsLoggedIn(false); // If no token, user is not logged in
+        }
+    }, []);
+
     return (
         <>
-            <Header />
+            {isLoggedIn ? <Nav /> : <Header />}
             <div className="privacy-policy max-w-screen-lg">
                 <h1><strong>Study Buddies Privacy Policy</strong></h1>
                 <p>Last Updated: Nov 6, 2024</p><br></br>
@@ -113,6 +130,27 @@ const Privacy = () => {
                     </p><br></br>
                 </div>
             </div>
+            {/* Footer */}
+            {isLoggedIn ?  (
+                <footer className="bg-gray-800 text-white py-6 mt-10">
+                    <div className="container mx-auto text-center">
+                    <p>&copy; 2024 Study Buddy. All Rights Reserved.</p>
+                    <div className="mt-3 space-x-5">
+                        {["Privacy Policy", "Terms of Service", "Contact Us"].map((item) => (
+                        <a
+                            key={item}
+                            href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                            className="hover:text-gray-400"
+                        >
+                            {item}
+                        </a>
+                        ))}
+                    </div>
+                    </div>
+                </footer>
+            ) : (
+            <HomeFooter />
+            )}
         </>
     );
 };

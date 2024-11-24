@@ -29,6 +29,7 @@ import CreateFlashcardPage from './components/Flashcards.jsx';
 import Userflashcards from './components/Userflashcards.jsx';
 import EditDeckPage from './components/EditDeckPage.jsx';
 import UpdateFlashcardPage from './components/UpdateFlashcard.jsx';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -40,21 +41,22 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
-        <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
+        <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Logout" element={<Home />} />
+        <Route path="/terms-of-service" element={<TermsNCondition />} />
+        <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/help" element={<Help />} />
+      
+        <Route element={<ProtectedRoute />}>
+        <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
         <Route path="/explore/:id" element={<ExplorePage />} />
         <Route path="/Deck" element={<Deck />} />
-        <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/UserPage" element={<UserPage />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/Logout" element={<Home />} />
         <Route path="/Decks" element={<Deck />} />
         <Route path="/AdminPage" element={<Adminpage/>} />
-        <Route path="/privacy-policy" element={<Privacy />} />
-        <Route path="/terms-of-service" element={<TermsNCondition />} />
         <Route path="/UserMonitoringPage" element={<UserMonitoringPage />} />
-        <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/view-deck/:id" element={<ViewDeckPage/>} />
         <Route path="/explore-admin" element={<ExplorePageadmin />} /> 
         <Route path="/CreateFlashcard/:id" element={<CreateFlashcardPage />} /> 
@@ -62,6 +64,7 @@ function App() {
         <Route path="/userflashcards/:id" element={<Userflashcards />} /> 
         <Route path="/edit-deck/:deckId" element={<EditDeckPage/>}/>
         <Route path="/updateflashcard/:deckId/:flashcardId" element={<UpdateFlashcardPage/>}/>
+        </Route>
       </Routes>
     </Router>
   );

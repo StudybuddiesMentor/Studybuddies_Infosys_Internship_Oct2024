@@ -13,7 +13,8 @@ const LogoutButton = () => {
             const data = await response.json();
             if (response.ok) {
                 alert(data.message); // Display success message
-                window.location.href = "/login"; // Redirect to login page
+                localStorage.clear();
+                window.location.href = "/"; // Redirect to login page
             } else {
                 alert(data.message || "Logout failed!");
             }

@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
+import Nav from './Nav';
+import HomeFooter from './Homefooter';
 
 // ContactForm component to handle form submission and file attachments
 const ContactForm = () => {
     // State to track form submission and file attachment status
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [files, setFiles] = useState(null)
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Check if the token cookie is present
+        // const token = getCookie('token');
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            setIsLoggedIn(true); // If token exists, user is logged in
+        } else {
+            setIsLoggedIn(false); // If no token, user is not logged in
+        }
+    }, []);
+
     // Function to handle form submission
     const onSubmit = async (event) => {
         event.preventDefault()
@@ -35,7 +51,7 @@ const ContactForm = () => {
     return (
         <>
             {/* Include the Header component */}
-            <Header />
+            {isLoggedIn ? <Nav /> : <Header />}
             <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem', border: '2px' }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: '600', marginBottom: '1.5rem' }}>Submit a request</h1>
                 {/* Form element with submit handler */}
@@ -145,6 +161,28 @@ const ContactForm = () => {
                     </button>
                 </form>
             </div>
+
+            {/* Footer */}
+            {isLoggedIn ?  (
+                <footer className="bg-gray-800 text-white py-6 mt-10">
+                    <div className="container mx-auto text-center">
+                    <p>&copy; 2024 Study Buddy. All Rights Reserved.</p>
+                    <div className="mt-3 space-x-5">
+                        {["Privacy Policy", "Terms of Service", "Contact Us"].map((item) => (
+                        <a
+                            key={item}
+                            href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                            className="hover:text-gray-400"
+                        >
+                            {item}
+                        </a>
+                        ))}
+                    </div>
+                    </div>
+                </footer>
+            ) : (
+            <HomeFooter />
+            )}
         </>
     )
 }

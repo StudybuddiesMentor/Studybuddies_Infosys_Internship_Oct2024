@@ -61,7 +61,7 @@ const UpdateFlashcardPage = () => {
         updatedFlashcard,  // Send the updated flashcard data
         { withCredentials: true }
       );
-      navigate(`/createflashcard/${deckId}`);  // Navigate back to the create flashcard page for the deck
+      navigate(`/edit-deck/${deckId}`);  // Navigate back to the create flashcard page for the deck
     } catch (error) {
       console.error("Error updating flashcard:", error);
     }
@@ -69,7 +69,7 @@ const UpdateFlashcardPage = () => {
 
   // Cancel and navigate back to the deck page
   const handleCancel = () => {
-    navigate(`/Createflashcard/${deckId}`);
+    navigate(`/edit-deck/${deckId}`);
   };
 
   // Display a loading spinner while data is being fetched
