@@ -2,25 +2,7 @@ import Tag from "../db/Tag.js";
 import DeckTag from "../db/DeckTag.js";
 import checkTag from "./TagValidate.js";
 
-/**
- * Validate tags and return valid ones along with errors.
- * @param {Array} tags - Array of tags to validate
- * @returns {Object} - Object containing valid tags and errors
- */
-export const checkTagValidity = async (tags) => {
-  const errors = [];
-  const validTags = [];
 
-  for (const tag of tags) {
-    if (!tag || typeof tag !== "string" || tag.length < 2) {
-      errors.push(`Invalid tag: ${tag}`);
-    } else {
-      validTags.push(tag.toLowerCase());
-    }
-  }
-
-  return { errors, validTags };
-};
 
 /**
  * Handle tags for a new deck.
@@ -31,34 +13,54 @@ export const checkTagValidity = async (tags) => {
  */
 const handleTags = async (deckId, existingTags, newTags) => {
   const deckTags = [];
+  const error = [];
 
   // Associate existing tags
   if (existingTags.length > 0) {
     const existingTagPromises = existingTags.map(async (tag) => {
       const existingTag = await Tag.findOne({ name: tag });
+      const decktag = await DeckTag.findOne({$and:[{deck_id:deckId},{tag_id:existingTag._id}]})
+      if(!decktag){
       return DeckTag.create({ deck_id: deckId, tag_id: existingTag._id });
+      }
+      return null;
     });
     const existingDeckTags = await Promise.all(existingTagPromises);
-    deckTags.push(...existingDeckTags);
+    deckTags.push(...existingDeckTags.filter(tag => tag !== null));
   }
 
   // Validate and add new tags
   if (newTags.length > 0) {
-    const { errors, validTags } = await checkTagValidity(newTags);
-    if (errors.length > 0) {
-      throw new Error(errors.join(", "));
-    }
+   
+      const { errors, validtags } = await checkTag(newTags);
+      
+      
+      if (errors.length > 0) {
+        error.push(...errors);
+      }
 
-    const newTagPromises = validTags.map(async (tag) => {
-      const createdTag = new Tag({ name: tag });
-      await createdTag.save();
-      return DeckTag.create({ deck_id: deckId, tag_id: createdTag._id });
-    });
-    const newDeckTags = await Promise.all(newTagPromises);
-    deckTags.push(...newDeckTags);
+      const newTagPromises = validtags.map(async (tag) => {
+        let existingvalidtag = await Tag.findOne({ name: tag });
+        
+        if (!existingvalidtag) {
+          existingvalidtag = new Tag({ name: tag });
+          await existingvalidtag.save(); 
+        }
+
+        const existingDeckTag = await DeckTag.findOne({ deck_id: deckId, tag_id: existingvalidtag._id });
+        if (!existingDeckTag) {
+          return DeckTag.create({ deck_id: deckId, tag_id: existingvalidtag._id });
+        }
+        return null;
+      });
+  
+      
+      const newDeckTags = await Promise.all(newTagPromises);
+     
+      deckTags.push(...newDeckTags.filter(tag => tag !== null));
   }
 
-  return deckTags;
+  return {deckTags,error};
 };
 
 export default handleTags;

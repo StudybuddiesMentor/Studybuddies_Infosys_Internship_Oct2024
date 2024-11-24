@@ -50,7 +50,10 @@ export const createDeck = async (req, res) => {
     await newDeck.save();
 
     // Handle tag associations
-    const deckTags = await handleTags(newDeck._id, existingTags, newTags);
+    const {error,deckTags} = await handleTags(newDeck._id, existingTags, newTags);
+    if (error && error.length > 0){
+      return res.status(400).json(error);
+    }
 
     // Format tags for response
     const formattedTags = await Promise.all(
@@ -87,9 +90,10 @@ export const getDecks = async (req, res) => {
 
     const userDecks = await Promise.all(
       decks.map(async (deck) => {
+        const cards = await Card.find({deck_id:deck._id});
         const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
         const tags = deckTags.map((deckTag) => deckTag.tag_id);
-        return { deck, tags };
+        return { deck, tags ,cards};
       })
     );
 
@@ -158,7 +162,10 @@ export const updateDeck = async (req, res) => {
       
     }
 
-    const deckTags = await handleTags(deck._id, existingTags, newTags);
+    const {error,deckTags} = await handleTags(deck._id, existingTags, newTags);
+    if (error && error.length > 0){
+      return res.status(400).json(error);
+    }
 
     // Format tags for response
     const updatedTags = await Promise.all(
@@ -207,13 +214,22 @@ try{
   if(decks.length == 0){
    return res.status(404).json({message:"Currently there are no such decks"})
   }
-  const publicDecks = await Promise.all(
+  const filterpublicDecks = await Promise.all(
     decks.map(async (deck) => {
+      const cardscount = await Card.countDocuments({deck_id:deck._id})
+      if(cardscount > 0){
       const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
       const tags = deckTags.map((deckTag) => deckTag.tag_id);
       return { deck, tags };
+      }
+      return null;
     })
+
   );
+  const publicDecks = filterpublicDecks.filter(deck => deck !== null);
+ if(publicDecks.length === 0){
+  return res.status(404).json({message:"There are no decks currently to Explore."})
+ }
   return res.status(200).json({message:"Public Decks",publicDecks})
 
 }catch(error){
@@ -354,3 +370,38 @@ export const RevokeDelete = async(req,res)=>{
 return res.status(500).json({ message: "Internal Server error",error:error.message });
 }
 };
+
+export const adminExploreDecks = async(req,res)=>{
+  try{
+    const user = await User.findById(req.user.id);
+    if(!user){
+      return res.status(404).json({message:"user not found"})
+    }
+    const decks = await Deck.find({$or:[{deck_status:"Public"},{deck_status:"Deleted"}]});
+    
+  
+    if(decks.length == 0){
+     return res.status(404).json({message:"Currently there are no such decks"})
+    }
+    const filterpublicDecks = await Promise.all(
+      decks.map(async (deck) => {
+        const cardscount = await Card.countDocuments({deck_id:deck._id})
+        if(cardscount > 0){
+        const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
+        const tags = deckTags.map((deckTag) => deckTag.tag_id);
+        return { deck, tags };
+        }
+        return null;
+      })
+    );
+    
+    const publicDecks = filterpublicDecks.filter(deck => deck !== null);
+   if(publicDecks.length === 0){
+    return res.status(404).json({message:"There are no decks currently to Explore."})
+   }
+    return res.status(200).json({message:"Public Decks", publicDecks})
+  
+  }catch(error){
+   return res.status(500).json({message:"Internal Serval Error", error:error.message});
+  }
+}

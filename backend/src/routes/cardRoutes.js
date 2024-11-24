@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCard, updateCard, deleteCard,getCards } from '../controllers/cardController.js';
+import { createCard, updateCard, deleteCard,getCards,cardsCount } from '../controllers/cardController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
@@ -33,5 +33,14 @@ router.put('/:deckId/:cardId', userAuthMiddleware, updateCard);
  * @access Private (User Auth)
  */
 router.delete('/:deckId/:cardId', userAuthMiddleware, deleteCard);
+
+
+/**
+ * @route GET /api/cards/:deckId/
+ * @desc GET COUNT OF FLASH CARDS IN DECK
+ * @access Private (User Auth)
+ */
+
+router.get('/cardscount/:deckId',userAuthMiddleware,cardsCount);
 
 export default router;

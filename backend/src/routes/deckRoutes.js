@@ -1,6 +1,6 @@
 import express from 'express';
 import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,softdeleteDeck,HardDelete,RevokeDelete,
-  RemoveAllDecks,countDecks,deckImage,deckImageUpdate } from '../controllers/deckController.js';
+  RemoveAllDecks,countDecks,deckImage,deckImageUpdate,adminExploreDecks } from '../controllers/deckController.js';
 import { userAuthMiddleware, adminAuthMiddleware } from '../middlewares/auth.js';
 import Deck from '../models/Deck.js';
 import { deckImageUpload,checkMinFileSize } from '../middlewares/ImageValidate.js';
@@ -29,6 +29,14 @@ router.get('/exploredeck',userAuthMiddleware,getPublicDecks);
  */
 
 router.get("/alldecks",userAuthMiddleware,countDecks)
+
+/**
+ * @route GET /api/decks/adminexplore
+ * @desc get both the deleted and public decks for admin 
+ * @access  Private (admin Auth)
+ */
+router.get('/adminexplore',adminAuthMiddleware,adminExploreDecks);
+
 
 /**
  * @route GET /api/decks/:id

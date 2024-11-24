@@ -30,9 +30,13 @@ export const createCard = async (req, res) => {
 
 // Update a card
 export const updateCard = async (req, res) => {
+  const { Title, Content } = req.body;
+  const {deckId,cardId} = req.params;
   try {
-    const { Title, Content } = req.body;
-    const {deckId,cardId} = req.params;
+    const deck = await findById(deckId);
+    if(!deck){
+      return res.status(404).json({message:"deck not found."});
+    }
 
     const card = await Card.findById(cardId);
     if (!card) {
@@ -52,9 +56,13 @@ export const updateCard = async (req, res) => {
 
 // Delete a card
 export const deleteCard = async (req, res) => {
-  const{cardId} = req.params;
+  const{cardId,deckId} = req.params;
  
   try {
+    const deck = await findById(deckId);
+    if(!deck){
+      return res.status(404).json({message:"deck not found."});
+    }
     const card = await Card.findById(cardId);
     if (!card) {
       return res.status(404).json({ message: "Card not found." });
@@ -72,6 +80,10 @@ export const deleteCard = async (req, res) => {
 export const getCards = async(req,res)=>{
   const {deckId} = req.params;
   try{
+    const deck = await findById(deckId);
+    if(!deck){
+      return res.status(404).json({message:"deck not found."});
+    }
     const cards = await Card.find({$and:[{deck_id:deckId},{deleted:{$ne:true}}]});
     if(cards.length === 0){
       return res.status(200).json({ message: "No flashcards found.",cards:[]});
@@ -83,4 +95,21 @@ export const getCards = async(req,res)=>{
     res.status(500).json({message:"Internal Server error",error:error.message});
   }
 
+}
+
+export const cardsCount = async(req,res)=>{
+  const {deckId} = req.params;
+  try{
+    const deck = await Deck.findById(deckId);
+    if(!deck){
+      return res.status(404).json({message:"deck not found"})
+    }
+    const cardscount = await Card.countDocuments({deck_id:deckId});
+
+    return res.status(200).json({message:"deck flashcard's count is:",cardscount})
+
+  }
+  catch(error){
+     return res.status(500).json({message:"Internal Server Error",error:error.message})
+  }
 }
