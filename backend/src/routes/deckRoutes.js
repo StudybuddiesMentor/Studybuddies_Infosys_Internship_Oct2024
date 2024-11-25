@@ -1,11 +1,13 @@
 import express from 'express';
 import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,softdeleteDeck,HardDelete,RevokeDelete,
-  RemoveAllDecks,countDecks,deckImage,deckImageUpdate,adminExploreDecks } from '../controllers/deckController.js';
+  RemoveAllDecks,countDecks,deckImage,deckImageUpdate,adminExploreDecks} from '../controllers/deckController.js';
 import { userAuthMiddleware, adminAuthMiddleware } from '../middlewares/auth.js';
-import Deck from '../models/Deck.js';
+import isdeckOwner from '../middlewares/authoriz.js';
 import { deckImageUpload,checkMinFileSize } from '../middlewares/ImageValidate.js';
 
 const router = express.Router();
+
+
 
 /**
  * @route GET /api/decks
@@ -43,7 +45,7 @@ router.get('/adminexplore',adminAuthMiddleware,adminExploreDecks);
  * @desc Get a single deck by its ID
  * @access Private (User Auth)
  */
-router.get('/:id',userAuthMiddleware, getDeckById);
+router.get('/:deckId', userAuthMiddleware, isdeckOwner,getDeckById);
 
 /**
  * @route POST /api/decks
@@ -57,14 +59,14 @@ router.post('/', userAuthMiddleware, createDeck);
  * @desc Update a deck by its ID
  * @access Private (User Auth)
  */
-router.put('/:id', userAuthMiddleware, updateDeck);
+router.put('/:deckId', userAuthMiddleware,isdeckOwner, updateDeck);
 
 /**
  * @route DELETE /api/decks/:id
  * @desc Delete a deck by its ID
  * @access Private (Admin Auth)
  */
-router.delete('/:id', userAuthMiddleware, deleteDeck);
+router.delete('/:deckId', userAuthMiddleware, isdeckOwner,deleteDeck);
 /**
  * @route DELETE /api/decks/removealldecks
  * @desc Delete all the user decks 
@@ -88,26 +90,27 @@ router.post('/deckimage',userAuthMiddleware,deckImageUpload.single('deck_image')
  */
 
 
-router.put('/deckimage/:id',userAuthMiddleware,deckImageUpload.single('deck_image'),checkMinFileSize,deckImageUpdate);;
+router.put('/deckimage/:deckId',userAuthMiddleware,isdeckOwner,deckImageUpload.single('deck_image'),checkMinFileSize,deckImageUpdate);;
 
 /**
  * @route DELETE /api/decks/deletedeck/:id
  * @desc soft delete deck by admin 
  * @access  Private (admin Auth)
  */
-router.delete('/deletedeck/:id',adminAuthMiddleware,softdeleteDeck)
+router.delete('/deletedeck/:deckId',adminAuthMiddleware,softdeleteDeck)
 /**
  * @route DELETE /api/decks/admindelete/:id
  * @desc hard delete deck by admin 
  * @access  Private (admin Auth)
  */
-router.delete('/admindelete/:id',adminAuthMiddleware,HardDelete);
+router.delete('/admindelete/:deckId',adminAuthMiddleware,HardDelete);
 /**
  * @route DELETE /api/decks/revokedeck/:id
  * @desc delete deck by admin 
  * @access  Private (admin Auth)
  */
-router.put('/revokedeck/:id',adminAuthMiddleware,RevokeDelete);
+router.put('/revokedeck/:deckId',adminAuthMiddleware,RevokeDelete);
+
 
 
 

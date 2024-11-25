@@ -118,7 +118,7 @@ export const getDeckById = async (req, res) => {
     }
 
     // Find the deck
-    const deck = await Deck.findById(req.params.id);
+    const deck = await Deck.findById(req.params.deckId);
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }
@@ -145,7 +145,7 @@ export const updateDeck = async (req, res) => {
     const existingTags = [];
     const newTags = [];
 
-    const deck = await Deck.findById(req.params.id);
+    const deck = await Deck.findById(req.params.deckId);
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }
@@ -188,7 +188,7 @@ export const updateDeck = async (req, res) => {
 // Delete a deck
 export const deleteDeck = async (req, res) => {
   try {
-    const deck = await Deck.findById(req.params.id);
+    const deck = await Deck.findById(req.params.deckId);
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }
@@ -292,7 +292,7 @@ export const deckImageUpdate = async(req,res)=>{
  }
  try {
    
-    const deck = await Deck.findById(req.params.id)
+    const deck = await Deck.findById(req.params.deckId)
     if (!deck) {
      return res.status(404).json({ message: 'Deck not found.' });
    }
@@ -321,7 +321,7 @@ export const deckImageUpdate = async(req,res)=>{
 export const softdeleteDeck = async (req, res) => {
   try {
     
-    const deck = await Deck.findById(req.params.id).populate('created_by','username email');
+    const deck = await Deck.findById(req.params.deckId).populate('created_by','username email');
     if (!deck) {
       return res.status(404).json({ message: "Deck not found" });
     }
@@ -345,7 +345,7 @@ export const softdeleteDeck = async (req, res) => {
 //Deck deletion from database by admin
 export const HardDelete = async(req,res)=>{
 try{
-  const deck = await Deck.findByIdAndDelete(req.params.id);
+  const deck = await Deck.findByIdAndDelete(req.params.deckId);
   if (!deck) {
     return res.status(404).json({ message: "Deck not found" });
   }
@@ -358,7 +358,7 @@ try{
 //The deleted decks are revoked by admin to normal state
 export const RevokeDelete = async(req,res)=>{
   try{
-    const deck = await Deck.findByIdAndDelete(req.params.id);
+    const deck = await Deck.findByIdAndDelete(req.params.deckId);
   if (!deck) {
     return res.status(404).json({ message: "Deck not found" });
   }
@@ -371,6 +371,7 @@ return res.status(500).json({ message: "Internal Server error",error:error.messa
 }
 };
 
+//admin can explore both the deleted and public decks 
 export const adminExploreDecks = async(req,res)=>{
   try{
     const user = await User.findById(req.user.id);
@@ -405,3 +406,5 @@ export const adminExploreDecks = async(req,res)=>{
    return res.status(500).json({message:"Internal Serval Error", error:error.message});
   }
 }
+
+

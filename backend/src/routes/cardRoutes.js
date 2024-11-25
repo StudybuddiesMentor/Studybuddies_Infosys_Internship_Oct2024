@@ -1,6 +1,7 @@
 import express from 'express';
 import { createCard, updateCard, deleteCard,getCards,cardsCount } from '../controllers/cardController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
+import isdeckOwner from '../middlewares/authoriz.js';
 
 const router = express.Router();
 
@@ -11,28 +12,28 @@ const router = express.Router();
  * @access Private (User Auth)
  */
 
-router.get('/:deckId',userAuthMiddleware,getCards);
+router.get('/:deckId',userAuthMiddleware,isdeckOwner,getCards);
 
 /**
  * @route POST /api/cards/:deckId
  * @desc Create a new card within a specific deck
  * @access Private (User Auth)
  */
-router.post('/:deckId', userAuthMiddleware, createCard);
+router.post('/:deckId', userAuthMiddleware,isdeckOwner, createCard);
 
 /**
  * @route PUT /api/cards/:deckId/:cardId
  * @desc Update a card in a specific deck
  * @access Private (User Auth)
  */
-router.put('/:deckId/:cardId', userAuthMiddleware, updateCard);
+router.put('/:deckId/:cardId', userAuthMiddleware,isdeckOwner, updateCard);
 
 /**
  * @route DELETE /api/cards/:deckId/:cardId
  * @desc Delete a card in a specific deck
  * @access Private (User Auth)
  */
-router.delete('/:deckId/:cardId', userAuthMiddleware, deleteCard);
+router.delete('/:deckId/:cardId', userAuthMiddleware, isdeckOwner,deleteCard);
 
 
 /**
