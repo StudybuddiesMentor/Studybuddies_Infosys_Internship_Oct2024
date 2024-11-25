@@ -2,6 +2,9 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import User from "../db/User.js";
+import Deck from "../db/Deck.js";
+import Card from "../db/Card.js";
+import DeckTag from "../db/DeckTag.js";
 import dotenv from "dotenv";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
 import { hashPassword,sendmailOtp,passwordResetEmail } from "../utils/UserMail.js";
@@ -378,6 +381,79 @@ try{
 catch(error){
     return res.status(500).json({message:"Internal Server Error", error:error.message})
 }
+}
 
-
- }
+//User add deck to favaorites
+export const addFavorites = async(req,res)=>{
+    try{
+      const user = await User.findById(req.user.id);
+      if(!user){
+        return res.status(404).json({message:"user not found"})
+      }
+      const deck = await Deck.findById(req.params.deckId);
+      if(!deck){
+        return res.status(404).json({message:"Deck not found"});
+      }
+      if(!user.favorites.includes(deck._id)){
+       user.favorites.push(deck._id);
+       await user.save();
+       return res.status(200).json({message:"Deck added to favorites"})
+      }else {
+        return res.status(400).json({ message: "Deck is already in favorites" });
+      }
+  
+    }catch(error){
+     return res.status(500).json({message:"Internal Server Error", error:error.message})
+    }
+  }
+  
+  //user remove deck from favorties
+  export const removeFavorites = async(req,res)=>{
+    try{
+      const user = await User.findById(req.user.id);
+      if(!user){
+        return res.status(404).json({message:"User not found"});
+      }
+      const deck = await Deck.findById(req.params.deckId);
+      if(!deck){
+        return res.status(404).json({message:"Deck not found"});
+      }
+      if(!user.favorites.includes(deck._id)){
+        return res.status(404).json({message:"Deck is not in favorites"})
+      }
+      user.favorites = user.favorites.filter((deckId)=>{
+       return deckId.toString() !== deck._id.toString();
+      } );
+      await user.save();
+      return res.status(200).json({ message: 'Deck removed from favorites' });
+    }catch(error){
+      return res.status(500).json({message:"Internal Server Error", error:error.message})
+     }
+  }
+  
+  //To get all the favorites of user
+  export const getFavorites = async(req,res)=>{
+  try{
+    
+    const user = await User.findById(req.user.id).populate('favorites');
+      if(!user){
+        return res.status(404).json({message:"User not found"});
+      }
+      const favoriteDecks = await Promise.all(
+        user.favorites.map(async (deck) => {
+          const cards = await Card.find({deck_id:deck._id});
+          const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
+          const tags = deckTags.map((deckTag) => deckTag.tag_id);
+          return { deck, tags ,cards};
+        })
+      );
+      return res.status(200).json({ message: "Here are your decks.", favoriteDecks });
+    } catch (error) {
+       return res.status(500).json({ message: "Internal server error.",error:error.message });
+    }
+  };
+  
+  
+  
+  
+  

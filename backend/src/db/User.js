@@ -51,6 +51,12 @@ const userSchema = new mongoose.Schema({
  otpExpires: {
     type: Date, 
 },
+favorites: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Deck', 
+  },
+],
  createdAt: {
   type: Date,
   default: Date.now,
@@ -59,6 +65,7 @@ const userSchema = new mongoose.Schema({
   type: Date,
   default: Date.now, 
 },
+
   
 });
 

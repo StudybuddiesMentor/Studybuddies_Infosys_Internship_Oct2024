@@ -3,7 +3,7 @@ import {
    
   getUserProfile, 
   updateUserProfile,loginUser,registerUser,logoutUser,updateUserPic,
-  verifyotp,forgotPassword,passwordReset,sendOtp,switchRole
+  verifyotp,forgotPassword,passwordReset,sendOtp,switchRole,addFavorites,removeFavorites,getFavorites
    
 } from '../controllers/userController.js';
 import { userAuthMiddleware } from '../middlewares/auth.js';
@@ -94,6 +94,25 @@ router.post('/logout',logoutUser);
  */
  
 router.put('/switchrole',userAuthMiddleware,switchRole);
+
+/**
+ * @route POST /api/decks/addfav/:id
+ * @desc adding deck to user favorites
+ * @access  Private (admin Auth)
+ */
+router.post('/addfav/:deckId',userAuthMiddleware,addFavorites);
+/**
+ * @route DELETE /api/decks/removefav/:id
+ * @desc Remove deck from user favorites
+ * @access  Private (admin Auth)
+ */
+router.delete('/removefav/:deckId',userAuthMiddleware,removeFavorites);
+/**
+ * @route  GET/api/decks/fav/:id
+ * @desc get decks of user favorites
+ * @access  Private (admin Auth)
+ */
+router.get('/fav',userAuthMiddleware, getFavorites);
 
 
 
