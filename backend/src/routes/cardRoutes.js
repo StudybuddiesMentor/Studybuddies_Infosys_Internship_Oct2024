@@ -12,7 +12,7 @@ const router = express.Router();
  * @access Private (User Auth)
  */
 
-router.get('/:deckId',userAuthMiddleware,isdeckOwner,getCards);
+router.get('/:deckId',userAuthMiddleware,getCards);
 
 /**
  * @route POST /api/cards/:deckId

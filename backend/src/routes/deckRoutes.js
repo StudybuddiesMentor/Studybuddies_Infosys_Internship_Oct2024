@@ -46,7 +46,7 @@ router.get('/adminexplore',adminAuthMiddleware,adminExploreDecks);
  * @desc Get a single deck by its ID
  * @access Private (User Auth)
  */
-router.get('/:deckId', userAuthMiddleware, isdeckOwner,getDeckById);
+router.get('/:deckId', userAuthMiddleware,getDeckById);
 
 /**
  * @route POST /api/decks
