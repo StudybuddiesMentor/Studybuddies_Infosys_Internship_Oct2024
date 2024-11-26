@@ -2,7 +2,7 @@
 const MAX_SIZE = 6 * 1024 * 1024; // 6MB
 const MIN_SIZE = 40000; // Minimum file size in bytes (~76.5KB)
 import multer from "multer";
-import { storage, deckstorage } from "../cloudConfig.js";
+import { storage, deckstorage } from "../utils/cloudConfig.js";
 import cloudinary from "cloudinary";
 
 const cloudinaryV2 = cloudinary.v2;
