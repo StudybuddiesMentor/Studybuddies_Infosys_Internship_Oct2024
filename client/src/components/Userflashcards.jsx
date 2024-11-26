@@ -6,14 +6,27 @@ import { useParams } from "react-router-dom";
 
 // Component to display and manage user-created decks with filter options
 const UserFlashcards = () => {
+  const defaultImageUrl =
+    "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
+
   const [decks, setDecks] = useState([]);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // For success messages
+  const [errorMessage, setErrorMessage] = useState(""); // For error messages
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all"); // Default filter: Show all decks
+  const [searchloading, setsearchloading] = useState(false);
   const { id } = useParams();
   // Fetch user-created decks
   useEffect(() => {
     const fetchUserDecks = async () => {
+      setError(""); // Clear previous errors
+
+      // Start search loading if there's an ID or if a filter other than "all" is applied
+      if (id || filter !== "all" || filter == "all") {
+        setsearchloading(true);
+      }
+
       try {
         const response = await axios.get("http://localhost:9000/api/decks", {
           withCredentials: true,
@@ -27,31 +40,26 @@ const UserFlashcards = () => {
             (a, b) => new Date(b.deck.created_at) - new Date(a.deck.created_at)
           );
 
-          // Filter decks based on filter condition
+          // Filter decks based on both tag and filter condition
           const filteredDecks = sortedDecks.filter((deckObj) => {
             const tags = deckObj.tags || [];
+            const hasTag = id
+              ? tags.some((tag) => tag.name.toLowerCase() === id.toLowerCase())
+              : true;
 
-            // Debugging: Log the tags and searched tag
-            console.log("Deck tags:", tags);
-            console.log("Searching for:", id);
-
-            if (id) {
-              // Filter based on the 'name' property of each tag
-              return tags.some(tag => tag.name.toLowerCase() === id.toLowerCase());
-            }
+            if (!hasTag) return false; // If the tag doesn't match, exclude this deck
             
             if (filter === "has_flashcards") {
               // Assuming you want to filter based on tags instead of flashcards
-              return deckObj.tags && deckObj.tags.length > 0;
+              return deckObj.cards && deckObj.cards.length > 0;
             }
 
             if (filter === "no_flashcards") {
-              return !(deckObj.tags && deckObj.tags.length > 0);
+              return !(deckObj.cards && deckObj.cards.length > 0);
             }
 
             return true; // Show all decks when no filter is applied
           });
-
           setDecks(filteredDecks);
         } else {
           setError("Unexpected response format");
@@ -65,6 +73,9 @@ const UserFlashcards = () => {
         console.error("Error fetching decks:", err);
       } finally {
         setLoading(false);
+        
+          setsearchloading(false); // End search-specific loading
+       
       }
     };
 
@@ -92,10 +103,32 @@ if (error) {
   );
 }
 
+
+// Callback to remove a deck from state
+const handleDeckDeletion = (deletedDeckId) => {
+  setDecks((prevDecks) =>
+    prevDecks.filter((deckObj) => deckObj.deck._id !== deletedDeckId)
+  );
+};
+
+const handleSuccessMessage = (message) => {
+  setSuccessMessage(message);
+  setErrorMessage(""); // Clear error message
+};
+
+const handleErrorMessage = (message) => {
+  setErrorMessage(message);
+  setSuccessMessage(""); // Clear success message
+};
+
   return (
     <div>
       <Nav/>
       <div className="p-4 overflow-y-auto max-h-screen flex flex-col items-center">
+
+      {successMessage && <div className="text-green-600 mb-4">{successMessage}</div>}
+      {errorMessage && <div className="text-red-600 mb-4">{errorMessage}</div>}
+        
         <h1 className="text-2xl font-bold mb-4">Your Decks</h1>
 
         {/* Filter options */}
@@ -116,22 +149,34 @@ if (error) {
         </div>
 
         {/* Display user-created decks */}
+        {/* Show search-specific loading if fetching based on tag */}
+        {searchloading ? (
+                  <div className="flex items-center justify-center h-48">
+                    <p className="text-lg font-semibold text-gray-600 animate-pulse">
+                      Searching decks...
+                    </p>
+                  </div>
+        ):(
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {decks.map((deckObj) => (
            <DeckUser
            key={deckObj.deck._id}
            title={deckObj.deck.deck_name}
            description={deckObj.deck.description}
-           imageUrl={deckObj.deck.deck_image?.url || deckObj.deck.defaultImageUrl}
+           imageUrl={deckObj.deck.deck_image?.url || defaultImageUrl}
            deckId={deckObj.deck._id}
            tags={deckObj.tags} // Pass tags
            status={deckObj.deck.deck_status} // Pass status
            createdAt={deckObj.deck.created_at} // Pass creation date
+           onDeleteDeck={handleDeckDeletion}
+           onSuccess={handleSuccessMessage} // Pass success callback
+           onError={handleErrorMessage} // Pass error callback
          />
           ))}
         </div>
-
-        {decks.length === 0 && (
+        )}
+        
+        {!searchloading && decks.length === 0 && (
           <p className="text-gray-500 mt-4">
             {filter === "has_flashcards"
               ? "You have no decks with flashcards."
