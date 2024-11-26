@@ -8,13 +8,14 @@ const Nav = () => {
   const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [availableTags, setAvailableTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const categoriesRef = useRef(null);
   const userRef = useRef(null);
-  const menuRef = useRef(null);  // Reference for the mobile menu
+  const menuRef = useRef(null); // Reference for the mobile menu
+  const searchRef = useRef(null); // Reference for the search box
   const navigate = useNavigate();
-  const searchRef = useRef(null); // Define searchRef here
 
   // Fetch tags from backend
   useEffect(() => {
@@ -28,48 +29,89 @@ const Nav = () => {
     tag.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Close categories dropdown when clicking outside
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (
-      categoriesRef.current &&
-      !categoriesRef.current.contains(event.target) &&
-      userRef.current &&
-      !userRef.current.contains(event.target) &&
-      menuRef.current &&
-      !menuRef.current.contains(event.target) &&
-      searchRef.current &&
-      !searchRef.current.contains(event.target)
-    ) {
-      setCategoriesDropdownOpen(false);
-      setUserDropdownOpen(false);
-      setMenuOpen(false); // Close mobile menu
+  // Close categories dropdown and other elements when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !categoriesRef.current?.contains(event.target) &&
+        !userRef.current?.contains(event.target) &&
+        !menuRef.current?.contains(event.target) &&
+        !searchRef.current?.contains(event.target)
+      ) {
+        setCategoriesDropdownOpen(false);
+        setUserDropdownOpen(false);
+        setMenuOpen(false);
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Handle search query
+  const handleSearch = () => {
+    if (searchQuery) {
+      if (location.pathname.startsWith("/userflashcards")) {
+        navigate(`/userflashcards/${searchQuery}`);
+      } else {
+        navigate(`/explore/${searchQuery}`);
+      }
+      setShowDropdown(false); // Close dropdown on search
     }
   };
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
 
-// Handle search query
-const handleSearch = () => {
-  if (searchQuery) {
-    if (location.pathname.startsWith("/userflashcards")) {
-      navigate(`/userflashcards/${searchQuery}`);
+
+  // Handle search query and dropdown visibility
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (value.trim() !== "") {
+      setShowDropdown(true);
     } else {
-      navigate(`/explore/${searchQuery}`);
+      setShowDropdown(false);
     }
-  }
-};
+    setSelectedIndex(-1); // Reset the selected index
+  };
 
-// Handle "Enter" key for search
-const handleKeyDown = (event) => {
-  if (event.key === "Enter") {
-    handleSearch();
-  }
-};
-
+  // Handle key navigation in dropdown
+  const handleKeyDown = (event) => {
+    if (showDropdown && filteredTags.length > 0) {
+      if (event.key === "ArrowDown") {
+        setSelectedIndex((prev) => (prev + 1) % filteredTags.length);
+        event.preventDefault(); // Prevent scrolling
+      } else if (event.key === "ArrowUp") {
+        setSelectedIndex((prev) =>
+          prev === 0 ? filteredTags.length - 1 : prev - 1
+        );
+        event.preventDefault(); // Prevent scrolling
+      } else if (event.key === "Enter") {
+        if (selectedIndex >= 0) {
+          setSearchQuery(filteredTags[selectedIndex].name); // Set selected tag name
+          setShowDropdown(false); // Close the dropdown
+          setSelectedIndex(-1); // Reset index
+        } else {
+          handleSearch(); // Trigger search if no dropdown item is selected
+        }
+        event.preventDefault(); // Prevent form submission
+      }
+    } else if (event.key === "Enter") {
+      handleSearch(); // Trigger search for direct input
+      event.preventDefault();
+    }
+  };
+  
+  const handleCategoryClick = (category) => {
+    // Conditionally navigate based on current path
+    if (location.pathname.startsWith("/userflashcards")) {
+      setCategoriesDropdownOpen(false);
+      navigate(`/userflashcards/${category.toLowerCase()}`);
+    } else {
+      setCategoriesDropdownOpen(false);
+      navigate(`/explore/${category.toLowerCase()}`);
+    }
+  };
 
   return (
     <nav className={`bg-white shadow-lg py-4 z-50 ${menuOpen ? "relative" : "sticky top-0"}`}>
@@ -85,16 +127,13 @@ const handleKeyDown = (event) => {
 
         {/* Search Bar and Create Button */}
         <div className="flex-1 flex justify-center items-center relative space-x-4 md:space-x-30">
-          <div className="relative w-full max-w-md sm:max-w-xs md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+          <div className="relative w-full max-w-md" ref={searchRef}>
             <input
               type="text"
               placeholder="Search flashcards..."
               value={searchQuery}
               onKeyDown={handleKeyDown} // Trigger search on Enter key
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setShowDropdown(true);
-              }}
+              onChange={handleInputChange} // Handle search query change
               className="border rounded-full px-4 pr-12 py-2 w-full shadow-md focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-300 transition-all duration-300"
             />
             <button
@@ -109,24 +148,34 @@ const handleKeyDown = (event) => {
             </button>
 
             {/* Tag Suggestions Dropdown */}
-            {showDropdown && filteredTags.length > 0 && (
+            
+            {showDropdown && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg w-full z-10 max-h-40 overflow-y-auto">
-                {filteredTags.map((tag, index) => (
-                  <div
-                    key={index}
-                    className="px-4 py-2 text-gray-700 hover:bg-green-100 cursor-pointer"
-                    onClick={() => {
-                      setSearchQuery(tag.name);
-                      setShowDropdown(false);
-                    }}
-                  >
-                    {tag.name}
+                {filteredTags.length > 0 ? (
+                  filteredTags.map((tag, index) => (
+                    <div
+                      key={index}
+                      className={`px-4 py-2 cursor-pointer ${
+                        selectedIndex === index ? "bg-green-100 text-gray-800" : "text-gray-700"
+                      } hover:bg-green-100`}
+                      onClick={() => {
+                        setSearchQuery(tag.name);
+                        setShowDropdown(false);
+                        setSelectedIndex(-1); // Reset index on click
+                      }}
+                    >
+                      {tag.name}
+                    </div>
+                  ))
+                ) : (
+                  <div className="px-4 py-2 text-gray-500 text-center">
+                    Not Found
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>
-
+          
           {/* Create Deck Button */}
           <button
             className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-transform duration-200 active:scale-95"
@@ -156,13 +205,13 @@ const handleKeyDown = (event) => {
             {categoriesDropdownOpen && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg z-50">
                 {["Math", "Science", "Languages", "History"].map((category) => (
-                  <Link
-                    to={`/explore/${category.toLowerCase()}`}
-                    key={category}
-                    className="block px-4 py-2 text-gray-700 hover:bg-green-100"
-                  >
-                    {category}
-                  </Link>
+                  <button
+                  key={category}
+                  onClick={() => handleCategoryClick(category)}
+                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                >
+                  {category}
+                </button>
                 ))}
               </div>
             )}
@@ -261,13 +310,13 @@ const handleKeyDown = (event) => {
             {categoriesDropdownOpen && (
               <div className="mt-2 bg-white border rounded-lg shadow-lg z-30">
                 {["Math", "Science", "Languages", "History"].map((category) => (
-                  <Link
-                    to={`/category/${category.toLowerCase()}`}
-                    key={category}
-                    className="block px-4 py-2 text-gray-700 hover:bg-green-100"
-                  >
-                    {category}
-                  </Link>
+                  <button
+                  key={category}
+                  onClick={() => handleCategoryClick(category)}
+                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                >
+                  {category}
+                </button>
                 ))}
               </div>
             )}
