@@ -1,17 +1,47 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
-const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt }) => {
+const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt, upvotes, downvotes, setMessage  }) => {
   const defaultImageUrl =
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
   const navigate = useNavigate();
   const location = useLocation();
 
+  // States to handle votes
+  const [upvoteCount, setUpvoteCount] = useState(upvotes);
+  const [downvoteCount, setDownvoteCount] = useState(downvotes);
+  const [loading, setLoading] = useState(false);
   const handleOpenDeck = () => {
-    // Navigate to the appropriate page based on the current location
     if (location.pathname === "/userflashcards") {
       navigate(`/CreateFlashcard/${deckId}`);
     } else {
       navigate(`/view-deck/${deckId}`);
+    }
+  };
+
+  const handleVote = async (action) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `http://localhost:9000/api/decks/${deckId}/vote`,
+        { action },
+        { withCredentials: true }
+      );
+      if (response.data.message.includes("Upvoted")) {
+        setUpvoteCount(response.data.upvotes);
+        setDownvoteCount(response.data.downvotes);
+        // setMessage("Successfully upvoted the deck!"); // Set success message
+      } else if (response.data.message.includes("Downvoted")) {
+        setUpvoteCount(response.data.upvotes);
+        setDownvoteCount(response.data.downvotes);
+        // setMessage("Successfully downvoted the deck!"); // Set success message
+      }
+    } catch (error) {
+      console.error("Error in voting:", error);
+      setMessage(error.response.data.message); // Set error message from the server
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,7 +90,19 @@ const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt })
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
+          <span
+            onClick={() => handleVote("upvote")}
+            className={`text-sm bg-green-100 text-green-500 px-3 py-1 rounded cursor-pointer`}
+          >
+            👍 {upvoteCount}
+          </span>
+          <span
+            onClick={() => handleVote("downvote")}
+            className={`text-sm bg-red-100 text-red-500 px-3 py-1 rounded cursor-pointer`}
+          >
+            👎 {downvoteCount}
+          </span>
           <button
             onClick={handleOpenDeck}
             className="text-sm bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition duration-200"
