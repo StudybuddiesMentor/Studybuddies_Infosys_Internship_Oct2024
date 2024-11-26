@@ -33,7 +33,7 @@ export const updateCard = async (req, res) => {
   const { Title, Content } = req.body;
   const {deckId,cardId} = req.params;
   try {
-    const deck = await findById(deckId);
+    const deck = await Deck.findById(deckId);
     if(!deck){
       return res.status(404).json({message:"deck not found."});
     }
@@ -59,7 +59,7 @@ export const deleteCard = async (req, res) => {
   const{cardId,deckId} = req.params;
  
   try {
-    const deck = await findById(deckId);
+    const deck = await Deck.findById(deckId);
     if(!deck){
       return res.status(404).json({message:"deck not found."});
     }
@@ -80,7 +80,7 @@ export const deleteCard = async (req, res) => {
 export const getCards = async(req,res)=>{
   const {deckId} = req.params;
   try{
-    const deck = await findById(deckId);
+    const deck = await Deck.findById(deckId);
     if(!deck){
       return res.status(404).json({message:"deck not found."});
     }
