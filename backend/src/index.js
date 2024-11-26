@@ -3,11 +3,10 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import multer from "multer";
 
 // configuration from environment variables
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config( { path: "./.env"} );
 
 // Import routes
 import userRoutes from "./routes/userRoutes.js";
@@ -16,9 +15,16 @@ import cardRoutes from "./routes/cardRoutes.js";
 import voteRoutes from "./routes/voteRoutes.js";
 import tagRoutes from "./routes/tagRoutes.js";
 import decktagRoutes from "./routes/decktagRoutes.js"
+import errorHandler from "./middlewares/errorMiddleware.js";
+
 // Fetch the PORT and MONGODB_URI from .env
-const PORT = process.env.PORT || 9000;
-const MONGODB_URI = 'mongodb+srv://aryan:aryan123@studybuddy.2bajq.mongodb.net/studybuddy';
+const PORT = process.env.PORT;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+// checking for environment variables
+if (!MONGODB_URI || !PORT) {
+  throw new Error("Environment variables are not defined in the .env file. Copy contents of .env.sample to a new file called .env in your 'backend' folder.");
+}
 
 const app = express();
 
@@ -26,7 +32,7 @@ const app = express();
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5174"], // Allow both localhost URLs
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Allow cookies or other credentials
   })
 );
@@ -41,6 +47,10 @@ app.use("/api/cards", cardRoutes); // Route for card-related operations
 app.use("/api/votes", voteRoutes); // Route for voting-related operations
 app.use("/api/tags", tagRoutes); // Route for tag-related operations
 app.use("/api/decktags",decktagRoutes)//Route for deck-tag related operations
+
+// error handling middleware
+app.use(errorHandler);
+
 // Unified function to connect to MongoDB and start the server
 const startServer = async () => {
   try {
@@ -74,33 +84,5 @@ const startServer = async () => {
   }
 };
 
-app.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({
-        message: 'Error: File too large. Maximum file size is 5 MB.',
-        errorCode: err.code
-      });
-    }
-    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-      return res.status(400).json({
-        message: 'Error: Unexpected file type or field name.',
-        errorCode: err.code
-      });
-    }
-  }
-  if (err.message && err.message.includes('Invalid file type')) {
-    return res.status(err.status || 400).json({ message: err.message });
-  }
-
-  if (err.message && err.message.includes('File size is too small')) {
-    return res.status(err.status || 400).json({ message: err.message });
-  }
-  return res.status(err.status || 500).json({
-    message: "Something went wrong!",
-    error: err.message || err
-  });
-});
-
-// Start the application
+//Start the application
 startServer();
