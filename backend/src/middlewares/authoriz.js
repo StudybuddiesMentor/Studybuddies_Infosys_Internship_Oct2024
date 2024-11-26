@@ -1,7 +1,7 @@
 import Deck from "../db/Deck.js";
 
 
-const isdeckOwner = async(req,res)=>{
+const isdeckOwner = async(req,res,next)=>{
     try{
         const{deckId} = req.params
 
