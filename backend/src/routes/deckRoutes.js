@@ -1,6 +1,7 @@
 import express from 'express';
 import { createDeck, getDecks, getDeckById, updateDeck, deleteDeck,getPublicDecks,softdeleteDeck,HardDelete,RevokeDelete,
-  RemoveAllDecks,countDecks,deckImage,deckImageUpdate,adminExploreDecks} from '../controllers/deckController.js';
+  RemoveAllDecks,countDecks,deckImage,deckImageUpdate,adminExploreDecks,
+  toggleVote} from '../controllers/deckController.js';
 import { userAuthMiddleware, adminAuthMiddleware } from '../middlewares/auth.js';
 import isdeckOwner from '../middlewares/authoriz.js';
 import { deckImageUpload,checkMinFileSize } from '../middlewares/ImageValidate.js';
@@ -112,6 +113,12 @@ router.delete('/admindelete/:deckId',adminAuthMiddleware,HardDelete);
 router.put('/revokedeck/:deckId',adminAuthMiddleware,RevokeDelete);
 
 
+/**
+ * @route POST /api/decks/:deckId/vote
+ * @desc Toggle upvote or downvote for a deck
+ * @access Private (User Auth)
+ */
+router.post('/:deckId/vote', userAuthMiddleware, toggleVote);
 
 
 

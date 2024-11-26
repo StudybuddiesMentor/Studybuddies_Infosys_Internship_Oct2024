@@ -5,6 +5,14 @@ const deckSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  upvotes: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User" 
+  }], // List of users who upvoted
+  downvotes: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User" 
+  }], // List of users who downvoted
   deck_image:{
     url : String,
     filename : String

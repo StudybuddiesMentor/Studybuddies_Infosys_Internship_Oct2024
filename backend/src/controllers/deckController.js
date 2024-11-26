@@ -81,6 +81,7 @@ export const createDeck = async (req, res) => {
  */
 export const getDecks = async (req, res) => {
   try {
+    // Fetch all decks created by the user and not marked as "Deleted"
     const decks = await Deck.find({
       $and: [
         { created_by: req.user.id },
@@ -88,21 +89,31 @@ export const getDecks = async (req, res) => {
       ],
     });
 
+    // Process each deck
     const userDecks = await Promise.all(
       decks.map(async (deck) => {
-        const cards = await Card.find({deck_id:deck._id});
+        // Fetch all cards related to the deck
+        const cards = await Card.find({ deck_id: deck._id });
+
+        // Fetch all tags related to the deck
         const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
         const tags = deckTags.map((deckTag) => deckTag.tag_id);
-        return { deck, tags ,cards};
+
+        // Determine if the user has upvoted or downvoted the deck
+        const hasUpvoted = deck.upvotes.includes(req.user.id);
+        const hasDownvoted = deck.downvotes.includes(req.user.id);
+
+        return { deck, tags, cards, hasUpvoted, hasDownvoted };
       })
     );
 
     return res.status(200).json({ message: "Here are your decks.", userDecks });
   } catch (error) {
     console.error("Error fetching decks:", error);
-    return res.status(500).json({ message: "Internal server error.",error:error.message });
+    return res.status(500).json({ message: "Internal server error.", error: error.message });
   }
 };
+
 
 /**
  * Get a specific deck by ID.
@@ -123,14 +134,26 @@ export const getDeckById = async (req, res) => {
       return res.status(404).json({ message: "Deck not found." });
     }
 
+    // Fetch tags and flashcards related to the deck
     const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
     const tags = deckTags.map((deckTag) => deckTag.tag_id);
-    const flashcards = await Card.find({deck_id :deck._id})
+    const flashcards = await Card.find({ deck_id: deck._id });
 
-    return res.status(200).json({ message: "Deck found.", deck, tags,flashcards });
+    // Determine if the user has upvoted or downvoted the deck
+    const hasUpvoted = deck.upvotes.includes(req.user.id);
+    const hasDownvoted = deck.downvotes.includes(req.user.id);
+
+    return res.status(200).json({
+      message: "Deck found.",
+      deck,
+      tags,
+      flashcards,
+      hasUpvoted,
+      hasDownvoted,
+    });
   } catch (error) {
     console.error("Error fetching deck by ID:", error);
-    return res.status(500).json({ message: "Internal server error.",error:error.message });
+    return res.status(500).json({ message: "Internal server error.", error: error.message });
   }
 };
 
@@ -406,5 +429,95 @@ export const adminExploreDecks = async(req,res)=>{
    return res.status(500).json({message:"Internal Serval Error", error:error.message});
   }
 }
+
+/**
+ * Toggle upvote or downvote for a deck.
+ * @route POST /api/decks/:deckId/vote
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+export const toggleVote = async (req, res) => {
+  const { action } = req.body; // `action` should be either "upvote" or "downvote"
+  const userId = req.user.id; // Assume `req.user` contains authenticated user info
+
+  try {
+    // Validate user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    // Ensure the user has the "user" role
+    if (user.role !== "user") {
+      return res.status(403).json({
+        message: "Only users with role 'user' can vote on decks.",
+      });
+    }
+
+    // Find the deck by ID
+    const deck = await Deck.findById(req.params.deckId);
+    if (!deck) {
+      return res.status(404).json({
+        message: "Deck not found.",
+      });
+    }
+
+    // Ensure the deck is public
+    if (deck.deck_status !== "Public") {
+      return res.status(403).json({
+        message: "Only public decks can be voted on.",
+      });
+    }
+
+    // Ensure the user is not the owner of the deck
+    if (deck.created_by.toString() === userId) {
+      return res.status(403).json({
+        message: "You cannot vote on your own deck.",
+      });
+    }
+
+    // Handle upvote logic
+    if (action === "upvote") {
+      if (deck.upvotes.includes(userId)) {
+        // Remove upvote if already upvoted
+        deck.upvotes = deck.upvotes.filter((id) => id.toString() !== userId);
+      } else {
+        // Add upvote and remove downvote if it exists
+        deck.upvotes.push(userId);
+        deck.downvotes = deck.downvotes.filter((id) => id.toString() !== userId);
+      }
+    }
+
+    // Handle downvote logic
+    if (action === "downvote") {
+      if (deck.downvotes.includes(userId)) {
+        // Remove downvote if already downvoted
+        deck.downvotes = deck.downvotes.filter((id) => id.toString() !== userId);
+      } else {
+        // Add downvote and remove upvote if it exists
+        deck.downvotes.push(userId);
+        deck.upvotes = deck.upvotes.filter((id) => id.toString() !== userId);
+      }
+    }
+
+    // Save the updated deck
+    await deck.save();
+
+    return res.status(200).json({
+      message: `${action === "upvote" ? "Upvoted" : "Downvoted"} successfully.`,
+      upvotes: deck.upvotes.length,
+      downvotes: deck.downvotes.length,
+    });
+  } catch (error) {
+    console.error("Error toggling vote:", error);
+    return res.status(500).json({
+      message: "Internal server error.",
+      error: error.message,
+    });
+  }
+};
+
 
 
