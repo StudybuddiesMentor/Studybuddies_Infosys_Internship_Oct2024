@@ -13,6 +13,7 @@ const Deck = ({
   upvotes,
   downvotes,
   setMessage,
+  refreshDecks,
 }) => {
   const defaultImageUrl =
     'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
@@ -62,6 +63,7 @@ const Deck = ({
       );
       setMessage(response.data.message);
       setPopupMessage(`Deck ${title} has been restored.`);
+      refreshDecks();
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error occurred while restoring the deck');
       setPopupMessage('Error in restoring deck.');
@@ -86,6 +88,7 @@ const Deck = ({
       );
       setMessage(response.data.message);
       setPopupMessage(`Deck ${title} has been soft deleted.`);
+      refreshDecks();
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error occurred while deleting the deck');
       setPopupMessage('Error in soft delete.');
@@ -107,6 +110,7 @@ const Deck = ({
       );
       setMessage(response.data.message);
       setPopupMessage(`Deck ${title} has been permanently deleted.`);
+      refreshDecks();
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error occurred while deleting the deck');
       setPopupMessage('Error in hard delete.');
@@ -116,7 +120,7 @@ const Deck = ({
 
   const handleOpenDeck = () => {
     if (location.pathname === '/explore-admin') {
-      navigate(`/view-deck/${deckId}, { state: { from: location.pathname } }`);
+      navigate(`/view-deck/${deckId}`, { state: { from: location.pathname } });
     }
   };
 
