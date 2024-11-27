@@ -16,6 +16,7 @@ const UserFlashcards = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all"); // Default filter: Show all decks
   const [searchloading, setsearchloading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const { id } = useParams();
   // Fetch user-created decks
   useEffect(() => {
@@ -80,8 +81,22 @@ const UserFlashcards = () => {
     };
 
     fetchUserDecks();
-  }, [filter,id]); // Re-run the effect if the filter changes
+  }, [filter,id, refresh]); // Re-run the effect if the filter changes
   // Re-run the effect if the filter changes
+
+  // Hide the message after 3 seconds
+  useEffect(() => {
+    if (successMessage || errorMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage(""); // Hide message after 3 seconds
+        setErrorMessage("");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage, errorMessage]);
+
+  // Function to toggle refresh
+  const refreshDecks = () => setRefresh((prev) => !prev);
 
  // Show a loading message while the decks are being fetched
  if (loading) {
@@ -126,8 +141,16 @@ const handleErrorMessage = (message) => {
       <Nav/>
       <div className="p-4 overflow-y-auto max-h-screen flex flex-col items-center">
 
-      {successMessage && <div className="text-green-600 mb-4">{successMessage}</div>}
-      {errorMessage && <div className="text-red-600 mb-4">{errorMessage}</div>}
+        {/* Display message at the top of the screen */}
+        {(successMessage || errorMessage) && (
+          <div
+            className={`fixed top-20 left-0 right-0 text-center p-3 z-50 ${
+              successMessage ? "bg-green-500 text-green-100" : "bg-red-500 text-red-100"
+            }`}
+          >
+            {successMessage || errorMessage}
+          </div>
+        )}
         
         <h1 className="text-2xl font-bold mb-4">Your Decks</h1>
 
@@ -171,6 +194,7 @@ const handleErrorMessage = (message) => {
            onDeleteDeck={handleDeckDeletion}
            onSuccess={handleSuccessMessage} // Pass success callback
            onError={handleErrorMessage} // Pass error callback
+           refreshDecks={refreshDecks}
          />
           ))}
         </div>
