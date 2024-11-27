@@ -166,6 +166,8 @@ const MainPage = () => {
                         : deck.defaultImageUrl
                     }
                     deckId={deck.deck._id}
+                    upvotes={deck.deck.upvotes?.length || 0}
+                    downvotes={deck.deck.downvotes?.length || 0}
                   />
 
                   <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
@@ -229,6 +231,8 @@ const MainPage = () => {
                     description={deck.deck.description}
                     imageUrl={deck.deck.deck_image?.url || deck.defaultImageUrl}
                     deckId={deck.deck._id}
+                    upvotes={deck.deck.upvotes?.length || 0}
+                    downvotes={deck.deck.downvotes?.length || 0}
                   />
 
                   {/* Favorite Icon */}
