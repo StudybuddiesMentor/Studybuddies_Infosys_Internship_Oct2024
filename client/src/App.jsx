@@ -30,6 +30,7 @@ import Userflashcards from './components/Userflashcards.jsx';
 import EditDeckPage from './components/EditDeckPage.jsx';
 import UpdateFlashcardPage from './components/UpdateFlashcard.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
+import About from './components/About.jsx';
 
 function App() {
   return (
@@ -47,7 +48,7 @@ function App() {
         <Route path="/terms-of-service" element={<TermsNCondition />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/help" element={<Help />} />
-      
+        <Route path="/about" element={<About />} />
         <Route element={<ProtectedRoute />}>
         <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
