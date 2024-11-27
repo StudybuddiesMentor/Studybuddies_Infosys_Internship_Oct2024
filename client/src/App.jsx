@@ -48,7 +48,7 @@ function App() {
         <Route path="/terms-of-service" element={<TermsNCondition />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/help" element={<Help />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About/>}/>
         <Route element={<ProtectedRoute />}>
         <Route path="/main-page" element={<MainPage />} /> {/* Updated to lowercase for consistency */}
         <Route path="/explore" element={<ExplorePage />} /> {/* Changed path to /explore */}
@@ -65,6 +65,7 @@ function App() {
         <Route path="/userflashcards/:id" element={<Userflashcards />} /> 
         <Route path="/edit-deck/:deckId" element={<EditDeckPage/>}/>
         <Route path="/updateflashcard/:deckId/:flashcardId" element={<UpdateFlashcardPage/>}/>
+        <Route path="/explore-admin/:id" element={<ExplorePageadmin/>}/>
         </Route>
       </Routes>
     </Router>

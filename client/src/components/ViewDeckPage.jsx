@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Flashcard from './Flashcard';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Nav from './Nav';
 
 const ViewDeckPage = () => {
   const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
-
+  const location = useLocation();
   const navigate = useNavigate();
   const { id: deckId } = useParams();
 
@@ -55,6 +55,14 @@ const ViewDeckPage = () => {
     fetchDeckAndFlashcards();
   }, [deckId]);
 
+  const handleBack = () => {
+    // Redirect based on the previous route
+    if (location.state?.from === '/explore-admin') {
+      navigate('/explore-admin');
+    } else {
+      navigate('/explore');
+    }
+  };
 // Show a loading message while the decks are being fetched
 if (loading) {
   return (
@@ -79,7 +87,7 @@ if (error) {
     <div className="p-6">
       <Nav />
       <button
-        onClick={() => navigate('/explore')}
+        onClick= {handleBack}
         className="mb-6 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700"
       >
         ← Back

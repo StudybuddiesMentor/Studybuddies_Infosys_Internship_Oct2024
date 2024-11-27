@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const Deck = ({ title, description, imageUrl, deckId, tags, status, createdAt, upvotes, downvotes, setMessage  }) => {
+const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt, upvotes, downvotes, setMessage  }) => {
   const defaultImageUrl =
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
   const navigate = useNavigate();

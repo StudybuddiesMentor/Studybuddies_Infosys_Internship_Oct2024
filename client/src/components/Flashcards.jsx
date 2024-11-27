@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
-import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 const CreateFlashcardPage = () => {
   const { id: deckId } = useParams();
@@ -13,7 +13,10 @@ const CreateFlashcardPage = () => {
   const [newFlashcard, setNewFlashcard] = useState({ Title: "", Content: "" });
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [flashcardToDelete, setFlashcardToDelete] = useState(null);
-
+  const [upvotes, setUpvotes] = useState(0);
+  const [downvotes, setDownvotes] = useState(0);
+  const [hasUpvoted, setHasUpvoted] = useState(false);
+  const [hasDownvoted, setHasDownvoted] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +30,10 @@ const CreateFlashcardPage = () => {
           setDeck(deckResponse.data.deck);
           setTag(deckResponse.data);
         }
-
+        setUpvotes(deck.upvotes.length);
+        setDownvotes(deck.downvotes.length);
+        setHasUpvoted(hasUpvoted);
+        setHasDownvoted(hasDownvoted);
         const flashcardsResponse = await axios.get(
           `http://localhost:9000/api/cards/${deckId}`,
           { withCredentials: true }
@@ -87,9 +93,12 @@ const CreateFlashcardPage = () => {
 
   const handleDeleteConfirmation = async () => {
     try {
-      await axios.delete(`http://localhost:9000/api/cards/${deckId}/${flashcardToDelete}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `http://localhost:9000/api/cards/${deckId}/${flashcardToDelete}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       // Remove deleted flashcard from the state
       setFlashcards((prev) =>
@@ -138,9 +147,13 @@ const CreateFlashcardPage = () => {
               <span className="text-gray-600">No image available</span>
             </div>
           )}
-          <p className="text-lg font-medium mb-2">Description: {deck.description}</p>
+          <p className="text-lg font-medium mb-2">
+            Description: {deck.description}
+          </p>
           <p className="text-lg font-medium mb-2">Status: {deck.deck_status}</p>
-          <p className="text-lg font-medium mb-2">Created by: {deck.created_by}</p>
+          <p className="text-lg font-medium mb-2">
+            Created by: {deck.created_by}
+          </p>
           <div className="flex flex-wrap mt-4">
             {tagss.tags && tagss.tags.length > 0 ? (
               tagss.tags.map((tag) => (
@@ -157,7 +170,22 @@ const CreateFlashcardPage = () => {
           </div>
         </div>
       )}
-
+      <div className="flex space-x-4">
+        <button
+          className={`px-6 py-2 rounded-lg text-white ${
+            hasUpvoted ? "bg-green-500" : "bg-gray-400"
+          }`}
+        >
+          👍 {upvotes}
+        </button>
+        <button
+          className={`px-6 py-2 rounded-lg text-white ${
+            hasDownvoted ? "bg-red-500" : "bg-gray-400"
+          }`}
+        >
+          👎 {downvotes}
+        </button>
+      </div>
       {/* Flashcards Display */}
       <h3 className="text-2xl text-center text-green-700 font-bold mt-8 mb-4">
         Flashcards for Deck: {deck ? deck.deck_name : "Loading..."}
@@ -187,11 +215,17 @@ const CreateFlashcardPage = () => {
                   <FaEdit />
                 </button>
               </div> */}
-              <h3 className="text-xl font-bold text-green-800">{flashcard.Title}</h3>
+              <h3 className="text-xl font-bold text-green-800">
+                {flashcard.Title}
+              </h3>
               <p className="text-sm text-gray-700">{flashcard.Content}</p>
               <div className="mt-4 text-xs text-gray-500">
-                <p>Created: {new Date(flashcard.created_at).toLocaleString()}</p>
-                <p>Updated: {new Date(flashcard.updated_at).toLocaleString()}</p>
+                <p>
+                  Created: {new Date(flashcard.created_at).toLocaleString()}
+                </p>
+                <p>
+                  Updated: {new Date(flashcard.updated_at).toLocaleString()}
+                </p>
               </div>
             </div>
           ))}
@@ -213,13 +247,17 @@ const CreateFlashcardPage = () => {
               type="text"
               placeholder="Flashcard Title"
               value={newFlashcard.Title}
-              onChange={(e) => handleNewFlashcardChange("Title", e.target.value)}
+              onChange={(e) =>
+                handleNewFlashcardChange("Title", e.target.value)
+              }
               className="border border-gray-300 rounded-lg w-full p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
             <textarea
               placeholder="Flashcard Content"
               value={newFlashcard.Content}
-              onChange={(e) => handleNewFlashcardChange("Content", e.target.value)}
+              onChange={(e) =>
+                handleNewFlashcardChange("Content", e.target.value)
+              }
               className="border border-gray-300 rounded-lg w-full p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
             <div className="flex justify-between">
@@ -244,7 +282,9 @@ const CreateFlashcardPage = () => {
       {showDeletePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full">
-            <p className="text-lg font-semibold mb-4">Are you sure you want to delete this flashcard?</p>
+            <p className="text-lg font-semibold mb-4">
+              Are you sure you want to delete this flashcard?
+            </p>
             <div className="flex justify-between">
               <button
                 onClick={handleDeleteConfirmation}

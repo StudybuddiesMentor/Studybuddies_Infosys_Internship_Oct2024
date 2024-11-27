@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import LogoutButton from "./LogoutButton"; 
+import LogoutButton from "./LogoutButton";
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -55,13 +55,14 @@ const Nav = () => {
     if (searchQuery) {
       if (location.pathname.startsWith("/userflashcards")) {
         navigate(`/userflashcards/${searchQuery}`);
+      } else if (location.pathname.startsWith("/explore-admin")) {
+        navigate(`/explore-admin/${searchQuery}`);
       } else {
         navigate(`/explore/${searchQuery}`);
       }
       setShowDropdown(false); // Close dropdown on search
     }
   };
-
 
   // Handle search query and dropdown visibility
   const handleInputChange = (e) => {
@@ -101,20 +102,29 @@ const Nav = () => {
       event.preventDefault();
     }
   };
-  
+
   const handleCategoryClick = (category) => {
     // Conditionally navigate based on current path
     if (location.pathname.startsWith("/userflashcards")) {
       setCategoriesDropdownOpen(false);
       navigate(`/userflashcards/${category.toLowerCase()}`);
-    } else {
+    }
+    else if (location.pathname.startsWith("/explore-admin")) {
+      setCategoriesDropdownOpen(false);
+      navigate(`/explore-admin/${category.toLowerCase()}`);
+    } 
+    else {
       setCategoriesDropdownOpen(false);
       navigate(`/explore/${category.toLowerCase()}`);
     }
   };
 
   return (
-    <nav className={`bg-white shadow-lg py-4 z-50 ${menuOpen ? "relative" : "sticky top-0"}`}>
+    <nav
+      className={`bg-white shadow-lg py-4 z-50 ${
+        menuOpen ? "relative" : "sticky top-0"
+      }`}
+    >
       <div className="container mx-auto flex justify-between items-center px-6">
         {/* Logo */}
         <Link to="/main-page">
@@ -148,7 +158,7 @@ const Nav = () => {
             </button>
 
             {/* Tag Suggestions Dropdown */}
-            
+
             {showDropdown && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg w-full z-10 max-h-40 overflow-y-auto">
                 {filteredTags.length > 0 ? (
@@ -156,7 +166,9 @@ const Nav = () => {
                     <div
                       key={index}
                       className={`px-4 py-2 cursor-pointer ${
-                        selectedIndex === index ? "bg-green-100 text-gray-800" : "text-gray-700"
+                        selectedIndex === index
+                          ? "bg-green-100 text-gray-800"
+                          : "text-gray-700"
                       } hover:bg-green-100`}
                       onClick={() => {
                         setSearchQuery(tag.name);
@@ -175,7 +187,7 @@ const Nav = () => {
               </div>
             )}
           </div>
-          
+
           {/* Create Deck Button */}
           <button
             className="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-600 transition-transform duration-200 active:scale-95"
@@ -183,12 +195,14 @@ const Nav = () => {
           >
             Create
           </button>
-
         </div>
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-20 items-center">
-          <Link to="/explore" className="text-gray-700 hover:text-green-500 transition active:scale-95">
+          <Link
+            to="/explore"
+            className="text-gray-700 hover:text-green-500 transition active:scale-95"
+          >
             Explore
           </Link>
 
@@ -201,17 +215,16 @@ const Nav = () => {
               Categories
             </button>
 
-           
             {categoriesDropdownOpen && (
               <div className="absolute mt-2 bg-white border rounded-lg shadow-lg z-50">
                 {["Math", "Science", "Languages", "History"].map((category) => (
                   <button
-                  key={category}
-                  onClick={() => handleCategoryClick(category)}
-                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
-                >
-                  {category}
-                </button>
+                    key={category}
+                    onClick={() => handleCategoryClick(category)}
+                    className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                  >
+                    {category}
+                  </button>
                 ))}
               </div>
             )}
@@ -232,13 +245,22 @@ const Nav = () => {
 
             {userDropdownOpen && (
               <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg w-48 z-100">
-                <Link to="/userpage" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
+                <Link
+                  to="/userpage"
+                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                >
                   View Profile
                 </Link>
-                <Link to="/help" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
+                <Link
+                  to="/help"
+                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                >
                   Help
                 </Link>
-                <Link to="/terms-of-service" className="block px-4 py-2 text-gray-700 hover:bg-green-100">
+                <Link
+                  to="/terms-of-service"
+                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                >
                   Terms and Conditions
                 </Link>
                 <LogoutButton />
@@ -248,7 +270,10 @@ const Nav = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden ml-4 focus:outline-none">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden ml-4 focus:outline-none"
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/56/56763.png"
             alt="Menu Icon"
@@ -259,7 +284,10 @@ const Nav = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden absolute top-16 right-0 w-full bg-white p-4 shadow-md z-50" ref={menuRef}>
+        <div
+          className="md:hidden absolute top-16 right-0 w-full bg-white p-4 shadow-md z-50"
+          ref={menuRef}
+        >
           <div className="space-y-4">
             <Link
               to="/userpage"
@@ -311,12 +339,12 @@ const Nav = () => {
               <div className="mt-2 bg-white border rounded-lg shadow-lg z-30">
                 {["Math", "Science", "Languages", "History"].map((category) => (
                   <button
-                  key={category}
-                  onClick={() => handleCategoryClick(category)}
-                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
-                >
-                  {category}
-                </button>
+                    key={category}
+                    onClick={() => handleCategoryClick(category)}
+                    className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                  >
+                    {category}
+                  </button>
                 ))}
               </div>
             )}
