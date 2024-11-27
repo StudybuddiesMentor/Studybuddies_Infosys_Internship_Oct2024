@@ -14,6 +14,7 @@ const ExplorePageadmin = () => {
   const [filter, setFilter] = useState("all");
   const [searchloading, setsearchloading] = useState(false);
   const [message, setMessage] = useState("");
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchPublicDecks = async () => {
@@ -71,8 +72,11 @@ const ExplorePageadmin = () => {
     };
 
     fetchPublicDecks();
-  }, [filter, id]);
+  }, [filter, id, refresh]);
 
+  // Function to toggle refresh
+    const refreshDecks = () => setRefresh((prev) => !prev);
+  
   // Hide the message after 3 seconds
   useEffect(() => {
     if (message) {
@@ -113,7 +117,7 @@ const ExplorePageadmin = () => {
             </div>
           )}
 
-          {`id ? Decks tagged "${id}" : "Explore Decks Admin"`}
+          {id ? `Decks tagged "${id}"` : "Explore Decks Admin"}
         </h1>
 
         <div className="mb-4">
@@ -153,6 +157,7 @@ const ExplorePageadmin = () => {
                 upvotes={deck.deck.upvotes?.length || 0}
                 downvotes={deck.deck.downvotes?.length || 0}
                 setMessage={setMessage}
+                refreshDecks={refreshDecks}
               />
             ))}
           </div>
@@ -160,9 +165,9 @@ const ExplorePageadmin = () => {
 
         {!searchloading && decks.length === 0 && (
           <p className="text-gray-500 mt-6 text-center">
-            {`id
-              ? No decks found with the tag "${id}".
-              : "No decks available at the moment. Please check back later."`}
+            {id
+              ? `No decks found with the tag "${id}".`
+              : "No decks available at the moment. Please check back later."}
           </p>
         )}
       </div>
