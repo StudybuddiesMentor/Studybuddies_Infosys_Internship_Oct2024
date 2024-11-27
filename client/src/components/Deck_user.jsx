@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const DeckUser = ({ title, description, imageUrl, deckId, tags, status, createdAt, onDeleteDeck, onSuccess, onError }) => {
+const DeckUser = ({ title, description, imageUrl, deckId, tags, status, createdAt, onDeleteDeck, onSuccess, onError, refreshDecks, }) => {
   const [showPopup, setShowPopup] = useState(false);
   
   const defaultImageUrl =
@@ -31,6 +31,7 @@ const DeckUser = ({ title, description, imageUrl, deckId, tags, status, createdA
         if (onDeleteDeck) onDeleteDeck(deckId); // Notify parent component about the deletion
         if (onSuccess) onSuccess(`Deck ${title} deleted successfully!`);
         setShowPopup(false);
+        refreshDecks();
       } catch (error) {
         console.error("Error deleting deck:", error);
         if (onError) onError(`Failed to delete the deck ${title}. Please try again.`);
