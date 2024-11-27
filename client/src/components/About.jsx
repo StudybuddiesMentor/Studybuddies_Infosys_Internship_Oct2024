@@ -232,7 +232,7 @@ const About = () => {
             {/* Call to Action */}
             <div className="mt-10 text-center">
               <a
-                href="/contact"
+                href="/contact-us"
                 className="inline-block bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold text-lg px-8 py-3 rounded-full shadow-md transform hover:scale-105 transition duration-300"
               >
                 Contact Us Now
