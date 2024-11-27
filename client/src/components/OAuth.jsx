@@ -2,10 +2,13 @@ import React from 'react'
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { app } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 
 
 export default function OAuth() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleGoogleClick = async () => {
         try {
@@ -31,7 +34,7 @@ export default function OAuth() {
           } catch (error) {
             console.log('could not sign in with google', error);
           }
-    }
+    } 
 
   return (
     <button onClick={handleGoogleClick} className='btn-submit2'>Continue with google</button>
