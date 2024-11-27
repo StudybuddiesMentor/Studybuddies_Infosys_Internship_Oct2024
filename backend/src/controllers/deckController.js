@@ -241,9 +241,10 @@ try{
     decks.map(async (deck) => {
       const cardscount = await Card.countDocuments({deck_id:deck._id})
       if(cardscount > 0){
-      const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
-      const tags = deckTags.map((deckTag) => deckTag.tag_id);
-      return { deck, tags };
+        const cards = await Card.find({ deck_id: deck._id });
+       const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
+       const tags = deckTags.map((deckTag) => deckTag.tag_id);
+      return { deck, tags,cards };
       }
       return null;
     })
@@ -381,13 +382,17 @@ try{
 //The deleted decks are revoked by admin to normal state
 export const RevokeDelete = async(req,res)=>{
   try{
-    const deck = await Deck.findByIdAndDelete(req.params.deckId);
+    const deck = await Deck.findById(req.params.deckId);
   if (!deck) {
     return res.status(404).json({ message: "Deck not found" });
   }
-  await deck.updateOne({deck_status:"Public"});
-
-  return res.status(200).json({ message: "Deck deleted successfully" });
+  if(deck.deck_status === "Deleted"){
+    await deck.updateOne({deck_status:"Public"});
+  
+    return res.status(200).json({ message: "Deck revoked successfully" });
+    }else{
+      return res.status(400).json({message:"Deck is not in deleted state"})
+    }
 } catch (error) {
 
 return res.status(500).json({ message: "Internal Server error",error:error.message });
@@ -411,9 +416,10 @@ export const adminExploreDecks = async(req,res)=>{
       decks.map(async (deck) => {
         const cardscount = await Card.countDocuments({deck_id:deck._id})
         if(cardscount > 0){
+          const cards = await Card.find({ deck_id: deck._id });
         const deckTags = await DeckTag.find({ deck_id: deck._id }).populate("tag_id");
         const tags = deckTags.map((deckTag) => deckTag.tag_id);
-        return { deck, tags };
+        return { deck, tags, cards };
         }
         return null;
       })
