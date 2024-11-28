@@ -148,8 +148,32 @@ const EditDeckPage = () => {
   // Handle image file selection and preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+  
+    // Check for file size (between 500KB and 1MB)
+    if (file.size < 500 * 1024 || file.size > 1024 * 1024) {
+      setError("The image should be between 500KB and 1MB.");
+      setImage(null);
+      setImagePreview("");
+      return;
+    }
+  
+    // Check for valid file type (JPEG, JPG, or PNG)
+    if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      setError("The image should be in JPEG, JPG, or PNG format.");
+      setImage(null);
+      setImagePreview("");
+      return;
+    }
+  
+    // If valid, set the image and preview
     setImage(file);
-    setImagePreview(URL.createObjectURL(file)); // Set preview URL for the selected file
+    setImagePreview(URL.createObjectURL(file));
+    setError(null); // Clear any previous errors
+  };
+
+  const removeImage = () => {
+    setImagePreview("");
+    setImage(null); // Remove the preview
   };
 
   // Handle tag addition
@@ -362,12 +386,26 @@ const EditDeckPage = () => {
               onChange={handleImageChange}
               className="mt-1 block w-full"
             />
+            {!imagePreview && (
+            <>
+              <p className="text-red-600 mt-2">* The image should be between 500KB and 1MB.</p>
+              <p className="text-red-600">* The image should be in JPEG, JPG, or PNG format.</p>
+            </>
+            )}
             {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Deck Preview"
-                className="mt-4 w-full h-48 object-cover rounded-lg shadow"
-              />
+              <div className="relative mt-4">
+                <img
+                  src={imagePreview}
+                  alt="Deck Preview"
+                  className="mt-4 w-full h-48 object-cover rounded-lg shadow"
+                />
+                <button
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full shadow hover:bg-red-600 transition duration-200"
+                >
+                  Remove
+                </button>
+              </div>
             )}
           </div>
 

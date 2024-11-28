@@ -55,10 +55,15 @@ function Login() {
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || "Invalid email or password");
-      setSuccess("");
+      handlemessage();
+      setSuccess("");      
     }
   };
-
+  const handlemessage = () => {
+    setTimeout(() => {
+      setError("");
+  },2000);
+};
   const handleRegister = () => {
     navigate("/register");
   };

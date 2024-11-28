@@ -45,11 +45,13 @@ const ExplorePage = () => {
             if (!hasTag) return false;
 
             if (filter === "with_upvotes") {
-              return deckObj.deck.upvotes && deckObj.deck.upvotes.length > 0;
+              return deckObj.deck.upvotes && deckObj.deck.upvotes.length > 0 &&
+              (!deckObj.deck.downvotes || deckObj.deck.downvotes.length === 0);
             }
 
             if (filter === "with_downvotes") {
-              return deckObj.deck.downvotes && deckObj.deck.downvotes.length > 0;
+              return deckObj.deck.downvotes && deckObj.deck.downvotes.length > 0 &&
+              (!deckObj.deck.upvotes || deckObj.deck.upvotes.length === 0);
             }
 
             return true;

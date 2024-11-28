@@ -9,44 +9,116 @@ const Deck = () => {
   const [deckTitle, setDeckTitle] = useState("");
   const [deckid, setdeckid] = useState("");
   const [deckDescription, setDeckDescription] = useState("");
-  const [tags, setTags] = useState([]);;
+  const [tags, setTags] = useState([]);
   // const [lastCreatedTime, setLastCreatedTime] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [deckImage, setDeckImage] = useState("");
   const [deckImageName, setDeckImageName] = useState("");
   const [image, setImage] = useState(null);
-  const [error, setError] = useState("");
-
+  const [loadingbutton, setLoadingbutton] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ visible: false, message: "", type: "" });
-  const navigate = useNavigate();    
+  const navigate = useNavigate();
+
+  const validateImage = (file) => {
+    const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+    const maxSize = 1 * 1024 * 1024; // 1MB in bytes
+    const minSize = 500 * 1024; // 500KB in bytes
+
+    if (!validFormats.includes(file.type)) {
+      setAlert({
+        visible: true,
+        message: "The image format should be JPEG, PNG, or JPG.",
+        type: "error",
+      });
+      // Auto-hide the alert after 3 seconds
+      setTimeout(() => {
+        setAlert({ visible: false, message: "", type: "" });
+      }, 3000);
+      return false;
+    }
+
+    if (file.size < minSize || file.size > maxSize) {
+      setAlert({
+        visible: true,
+        message: "The photo size should be between 500KB and 1MB.",
+        type: "error",
+      });
+      // Auto-hide the alert after 3 seconds
+      setTimeout(() => {
+        setAlert({ visible: false, message: "", type: "" });
+      }, 3000);
+      return false;
+    }
+
+    return true;
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
 
-    try {
+    if (file && validateImage(file)) {
+      setLoading(true);
       const formData = new FormData();
       formData.append("deck_image", file);
 
-      const response = await axios.post(
-        "http://localhost:9000/api/decks/deckimage",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/api/decks/deckimage",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          }
+        );
 
-      const { imageUrl, fileName } = response.data;
-      setDeckImage(imageUrl);
-      setDeckImageName(fileName);
-      setImage(imageUrl);
-    } catch (err) {
-      setError("Error uploading image: ", err.message);
+        const { imageUrl, fileName } = response.data;
+
+        // Update the state with the uploaded image details
+        setDeckImage(imageUrl);
+        setDeckImageName(fileName);
+        setImage(URL.createObjectURL(file)); // Use local URL for live preview
+      } catch (err) {
+        console.error("Error uploading image:", err.message);
+        e.target.value = ""; // Clear the input on error
+      } finally {
+        setLoading(false); // End loading
+      }
+    } else {
+      e.target.value = ""; // Clear the input if the image is invalid
+      setDeckImage("");
+      setImage(null); // Clear the preview if the image is removed
     }
+
+    // Auto-hide the alert after 3 seconds
+    setTimeout(() => {
+      setAlert({ visible: false, message: "", type: "" });
+    }, 3000);
+  };
+
+  const removeImage = () => {
+    setDeckImage("");
+    setImage(null); // Remove the preview
   };
 
   const saveDeck = async () => {
+     // Validate required fields
+    if (!deckTitle.trim() || !deckDescription.trim()) {
+      setAlert({
+        visible: true,
+        message: "Please fill in all required fields.",
+        type: "error",
+      });
+      // Auto-hide the alert after 3 seconds
+      setTimeout(() => {
+        setAlert({ visible: false, message: "", type: "" });
+      }, 3000);
+      return;
+    }
+
+    setLoadingbutton(true);
     try {
       const newDeck = {
         deck_name: deckTitle,
@@ -64,10 +136,10 @@ const Deck = () => {
         { withCredentials: true }
       );
       if (response.data.newDeck) {
-        const { _id  } = response.data.newDeck;
-        setdeckid(_id ); // Get deckId from response
+        const { _id } = response.data.newDeck;
+        setdeckid(_id); // Get deckId from response
       } else {
-        console.error('Deck creation failed:', response.data.message);
+        console.error("Deck creation failed:", response.data.message);
       }
 
       // Show success alert if the request was successful
@@ -114,6 +186,8 @@ const Deck = () => {
       setTimeout(() => {
         setAlert({ visible: false, message: "", type: "" });
       }, 3000);
+    } finally {
+      setLoadingbutton(false);
     }
   };
 
@@ -157,14 +231,36 @@ const Deck = () => {
             className="border border-gray-300 rounded-lg p-2 w-full shadow focus:outline-none active:scale-95"
             onChange={handleImageUpload}
           />
-
-          {deckImage && (
-            <img
-              src={image}
-              alt="Deck Preview"
-              className="mt-4 w-full h-48 object-cover rounded-lg shadow"
-            />
+          {!deckImage && (
+            <>
+              <p className="text-red-600 mt-2">
+                * The image should be between 500KB and 1MB.
+              </p>
+              <p className="text-red-600">
+                * The image should be in JPEG, JPG, or PNG format.
+              </p>
+            </>
           )}
+
+          {loading ? (
+            <div className="relative mt-4 flex justify-center">
+              <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : deckImage ? (
+            <div className="relative mt-4">
+              <img
+                src={image}
+                alt="Deck Preview"
+                className="w-full h-48 object-cover rounded-lg shadow"
+              />
+              <button
+                onClick={removeImage}
+                className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full shadow hover:bg-red-600 transition duration-200"
+              >
+                Remove
+              </button>
+            </div>
+          ) : null}
         </div>
 
         {/* Making deck public/ private */}
@@ -231,13 +327,40 @@ const Deck = () => {
         </div>
 
         <div className="mt-8 justify-center">
-          <button
+        <button
             onClick={saveDeck}
-            className="bg-cyan-500 text-white px-4 py-2 rounded-full flex items-center justify-center space-x-2 shadow hover:bg-cyan-800 transition-colors w-[40%] mx-auto "
+            disabled={loadingbutton} // Disable button when loading
+            className={`${
+              loading ? "bg-gray-500 cursor-not-allowed" : "bg-cyan-500"
+            } text-white px-4 py-2 rounded-full flex items-center justify-center space-x-2 shadow hover:bg-cyan-800 transition-colors w-[40%] mx-auto`}
           >
-            <span className="active:scale-95 focus:outline-none transition-transform duration-200">
-              Save Deck
-            </span>
+            {loading ? (
+              <span className="flex items-center space-x-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                <span>Saving...</span>
+              </span>
+            ) : (
+              <span>Save Deck</span>
+            )}
           </button>
 
           {/* Render the Alert component if alert is visible */}
