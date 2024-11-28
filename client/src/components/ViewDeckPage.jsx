@@ -3,6 +3,8 @@ import axios from 'axios';
 import Flashcard from './Flashcard';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Nav from './Nav';
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
 
 const ViewDeckPage = () => {
   const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
@@ -113,14 +115,14 @@ if (error) {
                 hasUpvoted ? 'bg-green-500' : 'bg-gray-400'
               }`}
             >
-              👍 {upvotes}
+              <AiFillLike className='text-blue-500 text-xl' /> {upvotes}
             </button>
             <button
               className={`px-6 py-2 rounded-lg text-white ${
                 hasDownvoted ? 'bg-red-500' : 'bg-gray-400'
               }`}
             >
-              👎 {downvotes}
+              <AiFillDislike className='text-red-500 text-xl' /> {downvotes}
             </button>
           </div>
           <div className="flex flex-wrap gap-2">

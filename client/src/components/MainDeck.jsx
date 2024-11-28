@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
 
 const MainDeck = ({ title, imageUrl, deckId, upvotes, downvotes }) => {
 
@@ -28,12 +30,12 @@ const MainDeck = ({ title, imageUrl, deckId, upvotes, downvotes }) => {
           <span
             className={`text-lg bg-green-100 text-green-500 px-3 py-1 rounded cursor-pointer`}
           >
-            👍 {upvotes}
+            <AiFillLike className='text-blue-500 text-xl' /> {upvotes}
           </span>
           <span
             className={`text-lg bg-red-100 text-red-500 px-3 py-1 rounded cursor-pointer`}
           >
-            👎 {downvotes}
+            <AiFillDislike className='text-red-500 text-xl' /> {downvotes}
           </span>
           <button
           className="bg-gradient-to-r from-white to-green-300  px-9 py-2 rounded-full shadow-md hover:bg-gradient-to-r hover:from-white hover:to-green-200 transition-colors duration-300 "

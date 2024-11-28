@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
 
 const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt, upvotes, downvotes, setMessage  }) => {
   const defaultImageUrl =
@@ -95,13 +97,13 @@ const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt
             onClick={() => handleVote("upvote")}
             className={`text-sm bg-green-100 text-green-500 px-3 py-1 rounded cursor-pointer`}
           >
-            👍 {upvoteCount}
+            <AiFillLike className='text-blue-500 text-xl' /> {upvoteCount}
           </span>
           <span
             onClick={() => handleVote("downvote")}
             className={`text-sm bg-red-100 text-red-500 px-3 py-1 rounded cursor-pointer`}
           >
-            👎 {downvoteCount}
+            <AiFillDislike className='text-red-500 text-xl' /> {downvoteCount}
           </span>
           <button
             onClick={handleOpenDeck}

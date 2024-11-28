@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
 
 const CreateFlashcardPage = () => {
   const { id: deckId } = useParams();
@@ -168,14 +170,14 @@ const CreateFlashcardPage = () => {
                 hasUpvoted ? 'bg-green-500' : 'bg-gray-400'
               }`}
             >
-              👍 {upvotes}
+              <AiFillLike className='text-blue-500 text-xl' /> {upvotes}
             </button>
             <button
               className={`px-6 py-2 rounded-lg text-white ${
                 hasDownvoted ? 'bg-red-500' : 'bg-gray-400'
               }`}
             >
-              👎 {downvotes}
+              <AiFillDislike className='text-red-500 text-xl' /> {downvotes}
             </button>
           </div>
         </div>
