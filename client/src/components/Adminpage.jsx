@@ -367,7 +367,7 @@ const Adminpagebody = () => {
         <div className="container mx-auto text-center bg-gray-800">
           <p>&copy; 2024 Study Buddy. All Rights Reserved.</p>
           <div className="mt-2 space-x-4">
-            {["Privacy Policy", "Terms of Service", "Contact Us"].map(
+            {["Privacy Policy", "Terms-of-Service", "Contact Us"].map(
               (item) => (
                 <a
                   key={item}
