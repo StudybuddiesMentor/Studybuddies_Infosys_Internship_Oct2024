@@ -168,6 +168,8 @@ const MainPage = () => {
                         : deck.defaultImageUrl
                     }
                     deckId={deck.deck._id}
+                    upvotes={deck.deck.upvotes?.length || 0}
+                    downvotes={deck.deck.downvotes?.length || 0}
                   />
 
                   <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
@@ -175,14 +177,14 @@ const MainPage = () => {
                       src={
                         favorites.find(
                           (favorite) =>
-                            favorite.id === `recent-${deck.deck._id}`
+                            favorite.id === `${deck.deck._id}`
                         )
                           ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
                           : "https://cdn-icons-png.freepik.com/512/57/57602.png"
                       }
                       alt="Favorite"
                       className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                      onClick={() => toggleFavorite(`recent-${deck.deck._id}`)}
+                      onClick={() => toggleFavorite(`${deck.deck._id}`)}
                     />
                   </div>
                 </div>
@@ -231,6 +233,8 @@ const MainPage = () => {
                     description={deck.deck.description}
                     imageUrl={deck.deck.deck_image?.url || deck.defaultImageUrl}
                     deckId={deck.deck._id}
+                    upvotes={deck.deck.upvotes?.length || 0}
+                    downvotes={deck.deck.downvotes?.length || 0}
                   />
 
                   {/* Favorite Icon */}
@@ -288,6 +292,8 @@ const MainPage = () => {
                     description={decks[index].deck.description}
                     imageUrl={decks[index].deck.deck_image?.url || decks[index].defaultImageUrl}
                     deckId={decks[index].deck._id}
+                    upvotes={decks[index].deck.upvotes?.length || 0}
+                    downvotes={decks[index].deck.downvotes?.length || 0}
                   />
                 )
               })}
