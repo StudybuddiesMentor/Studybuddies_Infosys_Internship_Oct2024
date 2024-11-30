@@ -133,8 +133,8 @@ const ExplorePageadmin = () => {
             className="border p-2 rounded-md"
           >
             <option value="all">All Decks</option>
-            <option value="with_upvotes">Decks with Upvotes</option>
-            <option value="with_downvotes">Decks with Downvotes</option>
+            <option value="with_upvotes">Decks with Only Upvotes</option>
+            <option value="with_downvotes">Decks with Only Downvotes</option>
           </select>
         </div>
 
