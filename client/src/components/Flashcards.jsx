@@ -29,12 +29,15 @@ const CreateFlashcardPage = () => {
           { withCredentials: true }
         );
         if (deckResponse.data.deck) {
-          setDeck(deckResponse.data.deck);
+          const fetchedDeck = deckResponse.data.deck;
+          setDeck(fetchedDeck);
           setTag(deckResponse.data);
-          setUpvotes(deck.upvotes.length);
-          setDownvotes(deck.downvotes.length);
-          setHasUpvoted(hasUpvoted);
-          setHasDownvoted(hasDownvoted);
+  
+          // Use the fetched deck data directly here
+          setUpvotes(fetchedDeck.upvotes?.length || 0);
+          setDownvotes(fetchedDeck.downvotes?.length || 0);
+          setHasUpvoted(fetchedDeck.hasUpvoted || false);
+          setHasDownvoted(fetchedDeck.hasDownvoted || false);
         }
 
         const flashcardsResponse = await axios.get(
