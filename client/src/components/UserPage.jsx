@@ -13,7 +13,7 @@ import {
   FaInstagram,
   FaLinkedin,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Userpagebody = () => {
@@ -322,11 +322,13 @@ const Userpagebody = () => {
     <div className="bg-gradient-to-b from-green-50 to-green-200 min-h-screen">
       <nav className="flex justify-between items-center p-4 bg-white px-8 text-white relative z-10 m-0">
         <div className="navbar-logo">
-          <img
-            src={logo1}
-            alt="Logo"
-            className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
-          />
+          <Link to="/main-page">
+            <img
+              src={logo1}
+              alt="Logo"
+              className="rounded-full h-10 cursor-pointer transition-transform duration-300 hover:scale-110"
+            />
+          </Link>
         </div>
         <div className="hidden md:flex items-center gap-6 bg-white py-4 px-8  transition-transform duration-300">
           <a
