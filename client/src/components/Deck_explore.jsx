@@ -58,7 +58,7 @@ const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          fill={$`{isFavorite ? "white" : "none"}`}
+          fill={`${isFavorite ? "white" : "none"}`}
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
