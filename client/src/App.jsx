@@ -31,6 +31,7 @@ import EditDeckPage from './components/EditDeckPage.jsx';
 import UpdateFlashcardPage from './components/UpdateFlashcard.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import About from './components/About.jsx';
+import UserFavourite from './components/userFavourite.jsx';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
         <Route path="/edit-deck/:deckId" element={<EditDeckPage/>}/>
         <Route path="/updateflashcard/:deckId/:flashcardId" element={<UpdateFlashcardPage/>}/>
         <Route path="/explore-admin/:id" element={<ExplorePageadmin/>}/>
+        <Route path="/userFavourites" element={<UserFavourite/>}/>
         </Route>
       </Routes>
     </Router>

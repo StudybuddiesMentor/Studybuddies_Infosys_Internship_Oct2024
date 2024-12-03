@@ -6,7 +6,7 @@ import Nav from "./Nav";
 
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(new Set());
   const flashcards = [
     {
       id: 1,
@@ -44,20 +44,36 @@ const MainPage = () => {
     return () => clearInterval(intervalId); // Clear interval on component unmount
   }, [flashcards.length]);
 
-  // Toggle favorite icon for a specific card
-  const toggleFavorite = (id) => {
-    console.log("printing id in toggle favroit ", id, favorites);
-    setFavorites((prevFavorites) => {
-      const newFavorites = [...prevFavorites];
-      const index = newFavorites.findIndex((favorite) => favorite.id === id);
-      if (index !== -1) {
-        newFavorites.splice(index, 1); // Remove the favorite from the list
+  // Toggle favorite status and sync with backend
+  const toggleFavorite = async (id) => {
+    try {
+      const isFavorited = favorites.has(id);
+
+      if (isFavorited) {
+        // Remove from favorites
+        await axios.delete(`http://localhost:9000/api/users/removefav/${id}`, {
+          withCredentials: true,
+        });
+        setFavorites((prev) => {
+          const newFavorites = new Set(prev);
+          newFavorites.delete(id); // Remove deck from the favorites set
+          return newFavorites;
+        });
       } else {
-        newFavorites.push({ id, isFavorite: true });
+        // Add to favorites
+        const response = await axios.post(
+          `http://localhost:9000/api/users/addfav/${id}`,
+          {},
+          { withCredentials: true }
+        );
+        console.log("addfav:",response.data);
+        setFavorites((prev) => new Set(prev).add(id)); // Add deck to favorites set
       }
-      return newFavorites;
-    });
+    } catch (err) {
+      console.error("Failed to toggle favorite", err);
+    }
   };
+  
   const [decks, setDecks] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -65,6 +81,9 @@ const MainPage = () => {
     // Async function to retrieve deck data from the server
     const fetchPublicDecks = async () => {
       try {
+
+        setLoading(true);
+
         // Perform GET request to fetch deck data from the backend
         const response = await axios.get(
           "http://localhost:9000/api/decks/exploredeck",
@@ -83,6 +102,16 @@ const MainPage = () => {
           setError("Unexpected response format");
         }
         console.log('structure of decks ', decks);
+
+        // Fetch favorites
+        const favoritesResponse = await axios.get(
+          "http://localhost:9000/api/users/fav",
+          { withCredentials: true }
+        );
+        console.log('structure of favorites ', favoritesResponse.data);
+        const favDecks = favoritesResponse.data.favoriteDecks || [];
+        setFavorites(new Set(favDecks.map((fav) => fav.deck._id))); // Track favorites by IDs
+
       } catch (err) {
         // Error handling: show server error message if available or network error if not
         if (err.response) {
@@ -175,16 +204,13 @@ const MainPage = () => {
                   <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
                     <img
                       src={
-                        favorites.find(
-                          (favorite) =>
-                            favorite.id === `${deck.deck._id}`
-                        )
+                        favorites.has(deck.deck._id)
                           ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
                           : "https://cdn-icons-png.freepik.com/512/57/57602.png"
                       }
                       alt="Favorite"
                       className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                      onClick={() => toggleFavorite(`${deck.deck._id}`)}
+                      onClick={`() => toggleFavorite(${deck.deck._id})`}
                     />
                   </div>
                 </div>
@@ -222,7 +248,7 @@ const MainPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {decks.slice(-3).map((deck) => (
                 <div
-                  key={`recent-${deck._id}`}
+                  key={`recent-${deck.deck._id}`}
                   className="bg-white shadow-lg p-6 rounded-lg relative h-80 group 
                      transform hover:scale-105 transition-all duration-500 ease-in-out"
                 >
@@ -241,16 +267,13 @@ const MainPage = () => {
                   <div className="absolute bottom-2 right-2 group-hover:scale-110 transition-transform duration-300">
                     <img
                       src={
-                        favorites.some(
-                          (favorite) =>
-                            favorite.id === `${deck.deck._id}`
-                        )
+                        favorites.has(deck.deck._id)
                           ? "https://em-content.zobj.net/source/apple/81/black-heart_1f5a4.png"
                           : "https://cdn-icons-png.freepik.com/512/57/57602.png"
                       }
                       alt="Favorite"
                       className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                      onClick={() => toggleFavorite(`${deck.deck._id}`)}
+                      onClick={`() => toggleFavorite(${deck.deck._id})`}
                     />
                   </div>
                 </div>
@@ -259,47 +282,7 @@ const MainPage = () => {
           </section>
         )}
 
-        {/* My Favorite Section */}
-        <div className="flex justify-between items-center mt-12">
-          <h3 className="text-2xl font-semibold text-gray-800">
-            My Favroites
-          </h3>
-        </div>
-
-        {loading ? (
-          // Loading indicator
-          <div className="flex items-center justify-center h-48">
-            <p className="text-lg font-semibold text-gray-600 animate-pulse">
-              Loading decks...
-            </p>
-          </div>
-        ) : (
-          // Explore Flashcards Section
-          <section className="mt-12 relative">
-            {/* Header */}
-
-            {/* Flashcards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
-              {favorites.map((favorite) => {
-
-                const index = decks.findIndex(deck => deck.deck._id == favorite.id);
-
-                return (
-                  <MainDeck
-                    key={decks[index].deck._id}
-                    title={decks[index].deck.deck_name}
-                    description={decks[index].deck.description}
-                    imageUrl={decks[index].deck.deck_image?.url || decks[index].defaultImageUrl}
-                    deckId={decks[index].deck._id}
-                    upvotes={decks[index].deck.upvotes?.length || 0}
-                    downvotes={decks[index].deck.downvotes?.length || 0}
-                  />
-                )
-              })}
-            </div>
-          </section>
-        )}
+        
       </main>
 
       {/* Footer */}

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
 
-const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt, upvotes, downvotes, setMessage  }) => {
+const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt, upvotes, downvotes, setMessage,, isFavorite, toggleFavorite }) => {
   const defaultImageUrl =
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
   const navigate = useNavigate();
@@ -49,6 +49,29 @@ const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-transform transform hover:scale-105 duration-200 flex flex-col justify-between border-2 border-gray-200 w-64">
+      {/* Favorite Button */}
+      <button
+        onClick={() => toggleFavorite(deckId)}
+        className={`absolute top-2 right-2 p-2 rounded-full ${
+          isFavorite ? "bg-red-500 text-white" : "bg-gray-200 text-gray-800"
+        } hover:bg-red-600 transition-colors ease-in-out duration-300`}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill={$`{isFavorite ? "white" : "none"}`}
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-5 h-5"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M11.998 21.348l-1.344-1.153C5.64 16.64 2.25 13.71 2.25 9.96c0-3.173 2.422-5.71 5.4-5.71 1.743 0 3.335.793 4.348 2.03C13.015 5.043 14.607 4.25 16.35 4.25c2.978 0 5.4 2.537 5.4 5.71 0 3.75-3.39 6.68-8.404 10.236l-1.348 1.152z"
+          />
+        </svg>
+        </button>
+
       {/* Deck Image */}
       <img
         src={imageUrl || defaultImageUrl}

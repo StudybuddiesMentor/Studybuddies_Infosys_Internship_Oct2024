@@ -9,78 +9,116 @@ const ExplorePage = () => {
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
   const { id } = useParams();
   const [decks, setDecks] = useState([]);
+  const [favoriteDeckIds, setFavoriteDeckIds] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [searchloading, setsearchloading] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Fetch all decks and favorites
   useEffect(() => {
-    const fetchPublicDecks = async () => {
+    const fetchDecksAndFavorites = async () => {
       setError("");
-      if (id || filter !== "all") {
-        setsearchloading(true);
-      }
+      if (id || filter !== "all") setsearchloading(true);
 
       try {
-        const response = await axios.get(
+        // Fetch public decks
+        const deckResponse = await axios.get(
           "http://localhost:9000/api/decks/exploredeck",
           { withCredentials: true }
         );
-        console.log(response.data);
 
-        if (response.data.publicDecks && Array.isArray(response.data.publicDecks)) {
-          const allDecks = response.data.publicDecks;
+        const favoriteResponse = await axios.get(
+          "http://localhost:9000/api/users/fav",
+          { withCredentials: true }
+        );
 
-          const sortedDecks = allDecks.sort(
-            (a, b) => new Date(b.deck.created_at) - new Date(a.deck.created_at)
-          );
+        const allDecks = deckResponse.data.publicDecks || [];
+        const sortedDecks = allDecks.sort(
+          (a, b) => new Date(b.deck.created_at) - new Date(a.deck.created_at)
+        );
 
-          const filteredDecks = sortedDecks.filter((deckObj) => {
-            const tags = deckObj.tags || [];
-            const hasTag = id
-              ? tags.some((tag) => tag.name.toLowerCase() === id.toLowerCase())
-              : true;
+        const filteredDecks = sortedDecks.filter((deckObj) => {
+          const tags = deckObj.tags || [];
+          const hasTag = id
+            ? tags.some((tag) => tag.name.toLowerCase() === id.toLowerCase())
+            : true;
 
-            if (!hasTag) return false;
+          if (!hasTag) return false;
 
-            if (filter === "with_upvotes") {
-              return deckObj.deck.upvotes && deckObj.deck.upvotes.length > 0 &&
-              (!deckObj.deck.downvotes || deckObj.deck.downvotes.length === 0);
-            }
+          if (filter === "with_upvotes") {
+            return (
+              deckObj.deck.upvotes?.length > 0 &&
+              (!deckObj.deck.downvotes || deckObj.deck.downvotes.length === 0)
+            );
+          }
 
-            if (filter === "with_downvotes") {
-              return deckObj.deck.downvotes && deckObj.deck.downvotes.length > 0 &&
-              (!deckObj.deck.upvotes || deckObj.deck.upvotes.length === 0);
-            }
+          if (filter === "with_downvotes") {
+            return (
+              deckObj.deck.downvotes?.length > 0 &&
+              (!deckObj.deck.upvotes || deckObj.deck.upvotes.length === 0)
+            );
+          }
 
-            return true;
-          });
+          return true;
+        });
 
-          setDecks(filteredDecks);
-        } else {
-          setError("Unexpected response format");
-        }
+        setDecks(filteredDecks);
+
+        // Set favorite deck IDs
+        const favoriteDecks = favoriteResponse.data.favoriteDecks || [];
+        setFavoriteDeckIds(favoriteDecks.map((fav) => fav.deck._id));
       } catch (err) {
-        const errorMessage =
-          err.response?.data?.message || "Failed to fetch decks. Please try again.";
-        setError(errorMessage);
-        console.error("Error fetching decks:", err);
+        setError(
+          err.response?.data?.message || "Failed to fetch decks. Please try again."
+        );
       } finally {
         setLoading(false);
         setsearchloading(false);
       }
     };
 
-    fetchPublicDecks();
+    fetchDecksAndFavorites();
   }, [filter, id]);
+
+  // Toggle favorite
+  const toggleFavorite = async (deckId) => {
+    try {
+      const isFavorite = favoriteDeckIds.includes(deckId);
+
+      if (isFavorite) {
+        await axios.delete(`http://localhost:9000/api/users/removefav/${deckId}`, {
+          withCredentials: true,
+        });
+        setFavoriteDeckIds((prev) => prev.filter((id) => id !== deckId));
+      } else {
+        await axios.post(
+          `http://localhost:9000/api/users/addfav/${deckId}`,
+          {},
+          { withCredentials: true }
+        );
+        setFavoriteDeckIds((prev) => [...prev, deckId]);
+      }
+
+      // Update deck in place without re-fetching all decks
+      setDecks((prevDecks) =>
+        prevDecks.map((deckObj) => {
+          if (deckObj.deck._id === deckId) {
+            return { ...deckObj }; // This triggers a re-render
+          }
+          return deckObj;
+        })
+      );
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   // Hide the message after 3 seconds
   useEffect(() => {
     if (message) {
-      const timer = setTimeout(() => {
-        setMessage(""); // Hide message after 3 seconds
-      }, 2000);
+      const timer = setTimeout(() => setMessage(""), 2000);
       return () => clearTimeout(timer);
     }
   }, [message]);
@@ -107,15 +145,7 @@ const ExplorePage = () => {
 
       <div className="p-4 max-h-screen flex flex-col items-center">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
-
-          {/* Display message at the top of the screen */}
-          {message && (
-            <div className="fixed top-20 left-0 right-0 bg-red-500 text-red-100 text-center p-3 z-50">
-              {message}
-            </div>
-          )}
-
-          {id ? `Decks tagged "${id}"` : "Explore Decks"}
+          {`id ? Decks tagged "${id}" : "Explore Decks"`}
         </h1>
 
         <div className="mb-4">
@@ -154,6 +184,8 @@ const ExplorePage = () => {
                 createdAt={deck.deck.created_at}
                 upvotes={deck.deck.upvotes?.length || 0}
                 downvotes={deck.deck.downvotes?.length || 0}
+                isFavorite={favoriteDeckIds.includes(deck.deck._id)}
+                toggleFavorite={toggleFavorite}
                 setMessage={setMessage}
               />
             ))}
@@ -162,9 +194,9 @@ const ExplorePage = () => {
 
         {!searchloading && decks.length === 0 && (
           <p className="text-gray-500 mt-6 text-center">
-            {id
-              ? `No decks found with the tag "${id}".`
-              : "No decks available at the moment. Please check back later."}
+            {`id
+              ? No decks found with the tag "${id}".
+              : "No decks available at the moment. Please check back later."`}
           </p>
         )}
       </div>

@@ -20,7 +20,6 @@ const Userpagebody = () => {
   const navigate = useNavigate();
   const defaultImageUrl =
     "https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg";
-
   const [userInfo, setUserInfo] = useState({
     fullName: "",
     professionalTitle: "",
@@ -42,6 +41,7 @@ const Userpagebody = () => {
   const [editedPersonalInfo, setEditedPersonalInfo] = useState(userInfo);
   const [logo, setLogo] = useState(logoDefault);
   const [logoFile, setLogoFile] = useState(null);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     fetchUserInfo();
@@ -316,6 +316,26 @@ const Userpagebody = () => {
   // const nextDeckPage = () => {
   //   if (deckPage < totalDeckPages) setDeckPage(deckPage + 1);
   // };
+  const fetchFavorites = async () => {
+    try {
+      // Fetch user's favorite decks (adjust the API endpoint as needed)
+      const response = await axios.get("http://localhost:9000/api/users/fav",
+        { withCredentials: true }); // Change to your actual API
+      const data =  response.data.favoriteDecks || [];
+      console.log("favi:", data);
+      setFavorites(data); // Set favorite decks data
+    } catch (error) {
+      console.error("Error fetching favorite decks:", error);
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  // useEffect to fetch data when the component mounts
+  useEffect(() => {
+    setLoading(true);
+    fetchFavorites(); // Fetch favorite decks
+  }, []);
 
   return (
     // <div className=' bg-gray-100'>
@@ -572,7 +592,91 @@ const Userpagebody = () => {
                   )}
                 </div>
               )}
+              {/* My Favorite Section */}
+              <div className="flex justify-between items-center mt-12">
+                <h3 className="text-2xl font-semibold text-gray-800">
+                  My Favourites
+                </h3>
+                {/* Show More Button */}
+                <button
+                  onClick={() => navigate("/userFavourites")}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md mb-3 disabled:opacity-50 hover:bg-blue-600 transition-colors ease-in-out duration-300 flex items-center space-x-2"
+                >
+                  <span>Show More</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.25 3.75l7.5 7.5-7.5 7.5M3.75 12h15"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {loading ? (
+                // Loading indicator
+                <div className="flex items-center justify-center h-48">
+                  <p className="text-lg font-semibold text-gray-600 animate-pulse">
+                    Loading decks...
+                  </p>
+                </div>
+              ) : (
+                // Explore Flashcards Section
+                <section className="mt-12 relative">
+                  {/* Header */}
+
+                  {/* Flashcards Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {favorites.length > 0 ? (
+                      favorites.slice(-3).map((favorite) => {
+
+                        const imageUrl = favorite.deck.deck_image?.url || defaultImageUrl;
+                
+                        return (
+                          <div
+                            key={favorite.deck._id}
+                            onClick={() =>
+                              navigate(/view-deck/${favorite.deck._id})
+                            }
+                            className="bg-gray-200 rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-300 ease-in-out duration-300"
+                          >
+                            <img
+                              src={imageUrl}
+                              alt={favorite.deck.deck_name}
+                              className="w-full h-32 object-cover"
+                            />
+                            <div className="p-4">
+                              <h3 className="font-semibold">
+                                {favorite.deck.deck_name}
+                              </h3>
+                              
+                            </div>
+                            <div className="flex justify-between w-full">
+                              <span className="text-sm text-gray-400">
+                                {favorite.deck.upvotes?.length || 0} Upvotes
+                              </span>
+                              <span className="text-sm text-gray-400">
+                                {favorite.deck.downvotes?.length || 0} Downvotes
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p className="text-gray-500 mt-4">No favorites found.</p>
+                    )}
+                  </div>
+                </section>
+              )}
             </div>
+
             {/* <div className="flex justify-between mt-4">
               <button
                 onClick={previousDeckPage}
