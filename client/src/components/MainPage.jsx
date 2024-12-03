@@ -210,7 +210,7 @@ const MainPage = () => {
                       }
                       alt="Favorite"
                       className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                      onClick={`() => toggleFavorite(${deck.deck._id})`}
+                      onClick={() => toggleFavorite(`${deck.deck._id}`)}
                     />
                   </div>
                 </div>
@@ -273,7 +273,7 @@ const MainPage = () => {
                       }
                       alt="Favorite"
                       className="h-8 cursor-pointer hover:scale-110 transition-transform"
-                      onClick={`() => toggleFavorite(${deck.deck._id})`}
+                      onClick={() => toggleFavorite(`${deck.deck._id}`)}
                     />
                   </div>
                 </div>
