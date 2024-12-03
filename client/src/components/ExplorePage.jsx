@@ -145,7 +145,7 @@ const ExplorePage = () => {
 
       <div className="p-4 max-h-screen flex flex-col items-center">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
-          {`id ? Decks tagged "${id}" : "Explore Decks"`}
+          {id ? `Decks tagged "${id}"` : "Explore Decks"}
         </h1>
 
         <div className="mb-4">
@@ -194,9 +194,9 @@ const ExplorePage = () => {
 
         {!searchloading && decks.length === 0 && (
           <p className="text-gray-500 mt-6 text-center">
-            {`id
-              ? No decks found with the tag "${id}".
-              : "No decks available at the moment. Please check back later."`}
+            {id
+              ? `No decks found with the tag "${id}".`
+              : "No decks available at the moment. Please check back later."}
           </p>
         )}
       </div>
