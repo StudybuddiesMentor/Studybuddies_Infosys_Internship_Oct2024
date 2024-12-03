@@ -5,9 +5,11 @@
 @tailwind utilities;
 
 body {
-  background-image: url('https://i.pinimg.com/736x/e5/85/84/e58584ee0b5c3b44a4817b88da2c7d0a.jpg'); /* Background image */
-  background-size: cover; /* Cover the entire body */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-color: #caa3d6; /* Fallback color */
+    background-size: cover; /* Cover the entire page */
+    background-position: center center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-color: #e6fff1ce; /* Fallback color */
+    min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+    margin: 0; /* Remove default margin to make the background span the whole page */
+
 }
