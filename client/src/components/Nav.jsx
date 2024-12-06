@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LogoutButton from "./LogoutButton";
+import { jwtDecode } from "jwt-decode";
+
+import Cookie from "js-cookie"; 
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,11 +14,25 @@ const Nav = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [availableTags, setAvailableTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  
   const categoriesRef = useRef(null);
   const userRef = useRef(null);
   const menuRef = useRef(null); // Reference for the mobile menu
   const searchRef = useRef(null); // Reference for the search box
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = Cookie.get("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserRole(decoded.role); // Set the decoded role (e.g., "admin" or "user")
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
 
   // Fetch tags from backend
   useEffect(() => {
@@ -119,6 +136,8 @@ const Nav = () => {
     }
   };
 
+ 
+
   return (
     <nav
       className={`bg-white shadow-lg py-4 z-50 ${
@@ -199,12 +218,13 @@ const Nav = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-20 items-center">
-          <Link
-            to="/explore"
-            className="text-gray-700 hover:text-green-500 transition active:scale-95"
-          >
-            Explore
-          </Link>
+        <Link
+          to={userRole === "admin" ? "/explore-admin" : "/explore"}
+          //onClick={handleExploreClick} // On click, navigate based on user role
+          className="text-gray-700 hover:text-green-500 transition active:scale-95"
+        >
+          {userRole === "admin" ? "Admin Explore" : "Explore"}
+        </Link>
 
           {/* Categories Dropdown */}
           <div className="relative mr-15" ref={categoriesRef}>

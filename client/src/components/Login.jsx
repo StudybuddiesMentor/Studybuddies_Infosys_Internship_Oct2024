@@ -13,13 +13,7 @@ function Login() {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  // Check if user is already authenticated
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/main-page"); // Redirect if token exists
-    }
-  }, [navigate]);
+ 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,9 +35,7 @@ function Login() {
       );
       console.log(response.data);
 
-        // Store token in localStorage
-        const { token } = response.data;
-        localStorage.setItem("token", token);  
+      
 
       setSuccess("Login successful! Redirecting...");
       setError("");
