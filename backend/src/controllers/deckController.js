@@ -373,6 +373,14 @@ try{
   if (!deck) {
     return res.status(404).json({ message: "Deck not found" });
   }
+  if (deck.deck_image && deck.deck_image.url) {
+  const publicId = extractPublicIdFromUrl(deck.deck_image.url);
+try {
+    await cloudinary.v2.uploader.destroy(publicId);
+  } catch (cloudinaryError) {
+    console.error("Cloudinary deletion failed", cloudinaryError.message);
+  }
+}            
   return res.status(200).json({ message: "Deck deleted successfully." });
 } catch (error) {
   return res.status(500).json({ message: "Internal Server error", error:error.message });
