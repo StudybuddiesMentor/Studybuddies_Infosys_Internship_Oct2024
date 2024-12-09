@@ -101,9 +101,9 @@ const Otpchecker = () => {
       <form className="otp-form" onSubmit={handleSubmit}>
         <span className="mainHeading">Email Verification</span>
         <p className="otpSubheading">
-          We will send a verification code to your email address
+          We have sent a verification code to your email address
         </p>
-        <button
+{/*         <button
           type="button"
           className="otp-btn"
           style={{ backgroundColor: isOtpSent ? "blue" : "green" }}
@@ -115,7 +115,7 @@ const Otpchecker = () => {
             : isOtpSent
             ? "OTP Sent"
             : "Send OTP"}
-        </button>
+        </button> */}
         <div className="form-card-input-wrapper">
           <input
             className={`form-card-input ${error ? "input-error" : "input-success"}`}
