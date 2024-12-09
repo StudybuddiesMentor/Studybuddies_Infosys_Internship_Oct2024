@@ -48,7 +48,7 @@ function Register() {
 
       setSuccess("Registered successfully!");
       setError("");
-      navigate("/mail-verification");
+      navigate("/Otpchecker");
 
       // Reset form fields
       setName("");
