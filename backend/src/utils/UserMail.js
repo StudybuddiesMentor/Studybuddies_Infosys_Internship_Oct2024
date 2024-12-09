@@ -29,15 +29,6 @@ function sendmailOtp(email){
 
 }
 
-function passwordResetEmail(email){
-    const mailOptions = {
-        from: 'process.env.GMAIL_ID;',
-        to: email,
-        subject: 'StudyBuddies - reset password',
-       html: 
-       "<h3>Reset Your Password</h3><p>Click the link below to reset your password:</p><a href='http://localhost:5173/reset-password/${user._id}/${token}'>Reset Password</a><p>Reset Link is valid for only 15:00 min.</p>"
-   };
-   return mailOptions;
-}
 
-export {hashPassword,sendmailOtp,passwordResetEmail};
+
+export {hashPassword,sendmailOtp};

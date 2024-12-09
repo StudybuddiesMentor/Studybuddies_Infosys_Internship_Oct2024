@@ -7,7 +7,7 @@ import Card from "../db/Card.js";
 import DeckTag from "../db/DeckTag.js";
 import dotenv from "dotenv";
 import { extractPublicIdFromUrl } from "../middlewares/ImageValidate.js";
-import { hashPassword,sendmailOtp,passwordResetEmail } from "../utils/UserMail.js";
+import { hashPassword,sendmailOtp } from "../utils/UserMail.js";
 import cloudinary from 'cloudinary'; 
 const cloudinaryV2 = cloudinary.v2;
 
@@ -87,7 +87,7 @@ export const registerUser =  async (req, res) => {
         }
 
  const newuser = await User.create({ username, email, password: hashedPassword, otp:verifyotp, otpExpires:otpExpireTime });
-       return res.status(201).json({ message: "Account created successfully" ,});
+       return res.status(201).json({ message: "Account created successfully! An OTP has been sent to your email."});
     
 
     } catch (err) {
@@ -196,7 +196,20 @@ export const forgotPassword = async (req, res) => {
             
         });
     
-        const mailOptions = passwordResetEmail(email);
+        const resetPasswordLink = `http://localhost:5173/reset-password/${user._id}/${token}`;
+        const emailContent = `
+            <h3>Reset Your Password</h3>
+            <p>Click the link below to reset your password:</p>
+            <a href="${resetPasswordLink}">Reset Password</a>
+            <p>Reset Link is valid for only 15:00 min.</p>
+        `;
+    
+        const mailOptions = {
+            from: process.env.GMAIL_ID,
+            to: email,
+            subject: 'Password Reset Request',
+            html: emailContent
+        };
        // Send the email
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -244,7 +257,7 @@ export const passwordReset = async (req, res) => {
            return res.status(200).json({ message: "Password successfully updated" });
         } 
         catch (error) {
-            return registerUser.status(500).json({ message :  "An error occurred" , error: error.message});
+            return res.status(500).json({ message :  "An error occurred" , error: error.message});
         }
     });
 };
