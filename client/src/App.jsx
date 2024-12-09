@@ -32,6 +32,7 @@ import UpdateFlashcardPage from './components/UpdateFlashcard.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import About from './components/About.jsx';
 import UserFavourite from './components/userFavourite.jsx';
+import Otpchecker from './components/Otpchecker.jsx';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/mail-verification" element={<MailVerification />} />
+        <Route path="/Otpchecker" element={<Otpchecker />} />
         <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/Logout" element={<Home />} />
