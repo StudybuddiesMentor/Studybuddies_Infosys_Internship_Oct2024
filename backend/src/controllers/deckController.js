@@ -129,7 +129,7 @@ export const getDeckById = async (req, res) => {
     }
 
     // Find the deck
-    const deck = await Deck.findById(req.params.deckId);
+    const deck = await Deck.findById(req.params.deckId).populate('created_by', 'username');
     if (!deck) {
       return res.status(404).json({ message: "Deck not found." });
     }

@@ -152,7 +152,7 @@ const CreateFlashcardPage = () => {
           )}
           <p className="text-lg font-medium mb-2">Description: {deck.description}</p>
           <p className="text-lg font-medium mb-2">Status: {deck.deck_status}</p>
-          <p className="text-lg font-medium mb-2">Created by: {deck.created_by}</p>
+          <p className="text-lg font-medium mb-2">Created by: {deck.created_by.username}</p>
           <div className="flex flex-wrap mt-4">
             {tagss.tags && tagss.tags.length > 0 ? (
               tagss.tags.map((tag) => (
