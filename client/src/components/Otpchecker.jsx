@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./MailVerification.css";
 import logo from "@/assets/logo1.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Otpchecker = () => {
@@ -14,7 +14,14 @@ const Otpchecker = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
   const navigate = useNavigate();
-
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (location.state?.email) {
+      setEmail(location.state.email);
+    }
+  }, [location.state]);
+  
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleOtpChange = (e) => {
