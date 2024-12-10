@@ -164,7 +164,10 @@ export const getDeckById = async (req, res) => {
 export const updateDeck = async (req, res) => {
   try {
     const { deck_name, description, deck_status,tags } = req.body;
-    const tagArray = Array.isArray(tags) ? tags : [tags];
+    let tagArray = [];
+    if (tags) {
+      tagArray = Array.isArray(tags) ? tags : [tags];
+    }
     const existingTags = [];
     const newTags = [];
 
