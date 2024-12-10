@@ -48,7 +48,7 @@ function Register() {
 
       setSuccess("Registered successfully!");
       setError("");
-      navigate("/Otpchecker");
+      navigate("/Otpchecker", { state: { email } });
 
       // Reset form fields
       setName("");
