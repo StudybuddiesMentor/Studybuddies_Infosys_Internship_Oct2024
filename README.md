@@ -15,8 +15,8 @@
 - **MngoDB Atlas** (cloud/cluster connectivity setup if not using local db setup)
 
 ---
-
-## 📁 Directory Structure
+### 📁 Directory Structure
+```
 └── studybuddiesmentor-studybuddies_infosys_internship_oct2024/
     ├── README.md
     ├── LICENSE
@@ -153,7 +153,7 @@
         └── workflows/
             └── auto-assign.yml
 
-
+```
 ---
 
 ### 🔹 Client Setup
