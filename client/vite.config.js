@@ -4,10 +4,15 @@ import pluginRewriteAll from 'vite-plugin-rewrite-all'
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react(),pluginRewriteAll()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+  plugins: [react()],
+  base: '/',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://studybuddies-infosys-internship-oct2024.onrender.com',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });
