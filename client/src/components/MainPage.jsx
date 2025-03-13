@@ -6,7 +6,7 @@ import Nav from "./Nav";
    
 const backendUrl = import.meta.env.VITE_API_URL;
 
-const MainPage = () => {
+function MainPage (){
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [favorites, setFavorites] = useState(new Set());
   const flashcards = [
@@ -88,7 +88,7 @@ const MainPage = () => {
 
         // Perform GET request to fetch deck data from the backend
         const response = await axios.get(
-          "${backendUrl}/api/decks/exploredeck",
+          `${backendUrl}/api/decks/exploredeck`,
           {
             withCredentials: true,
           }
