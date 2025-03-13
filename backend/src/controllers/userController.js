@@ -11,7 +11,7 @@ import { hashPassword,sendmailOtp } from "../utils/UserMail.js";
 import cloudinary from 'cloudinary'; 
 const cloudinaryV2 = cloudinary.v2;
 
-dotenv.config();
+ 
 
 
 const JWT_SECRET = "jwt_secret_key";
