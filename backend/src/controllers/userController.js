@@ -196,7 +196,7 @@ export const forgotPassword = async (req, res) => {
             
         });
     
-        const resetPasswordLink = `http://localhost:5173/reset-password/${user._id}/${token}`;
+        const resetPasswordLink = `https://studybuddies-infosys-internship-oct2024.vercel.app/reset-password/${user._id}/${token}`;
         const emailContent = `
             <h3>Reset Your Password</h3>
             <p>Click the link below to reset your password:</p>
