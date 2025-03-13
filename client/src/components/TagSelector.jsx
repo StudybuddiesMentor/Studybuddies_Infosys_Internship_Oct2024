@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const TagSelector = ({ tags, setTags }) => {
   const [availableTags, setAvailableTags] = useState([]); // Existing tags from backend
@@ -13,7 +16,7 @@ const TagSelector = ({ tags, setTags }) => {
   // Fetch tags from the backend
   useEffect(() => {
     axios
-      .get("http://localhost:9000/api/tags")
+      .get(`${backendUrl}/api/tags`)
       .then((response) => {
         setAvailableTags(response.data.tags || []);
       })
@@ -32,7 +35,7 @@ const TagSelector = ({ tags, setTags }) => {
     if (newTag) {
       // Add new tag to backend and update the state
       axios
-        .post("http://localhost:9000/api/tags", { name: newTag },{ withCredentials: true })
+        .post(`${backendUrl}/api/tags`, { name: newTag },{ withCredentials: true })
         .then((response) => {
           setTags([...tags, newTag]);
           setAvailableTags([...availableTags, response.data]);

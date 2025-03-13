@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt, upvotes, downvotes, setMessage, isFavorite, toggleFavorite }) => {
   const defaultImageUrl =
@@ -26,7 +29,7 @@ const Deck = ({ title, description, imageUrl, deckId, tags=[], status, createdAt
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:9000/api/decks/${deckId}/vote`,
+        `${backendUrl}/api/decks/${deckId}/vote`,
         { action },
         { withCredentials: true }
       );

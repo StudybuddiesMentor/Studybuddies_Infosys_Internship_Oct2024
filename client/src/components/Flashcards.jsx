@@ -5,6 +5,9 @@ import Nav from "./Nav";
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const CreateFlashcardPage = () => {
   const { id: deckId } = useParams();
@@ -25,7 +28,7 @@ const CreateFlashcardPage = () => {
     const fetchDeckAndFlashcards = async () => {
       try {
         const deckResponse = await axios.get(
-          `http://localhost:9000/api/decks/${deckId}`,
+          `${backendUrl}/api/decks/${deckId}`,
           { withCredentials: true }
         );
         if (deckResponse.data.deck) {
@@ -41,7 +44,7 @@ const CreateFlashcardPage = () => {
         }
 
         const flashcardsResponse = await axios.get(
-          `http://localhost:9000/api/cards/${deckId}`,
+          `${backendUrl}/api/cards/${deckId}`,
           { withCredentials: true }
         );
         if (Array.isArray(flashcardsResponse.data.cards)) {
@@ -64,7 +67,7 @@ const CreateFlashcardPage = () => {
   const addFlashcardToBackend = async () => {
     try {
       await axios.post(
-        `http://localhost:9000/api/cards/${deckId}`,
+        `${backendUrl}/api/cards/${deckId}`,
         newFlashcard,
         { withCredentials: true }
       );
@@ -72,7 +75,7 @@ const CreateFlashcardPage = () => {
       setShowAddForm(false);
 
       const updatedFlashcards = await axios.get(
-        `http://localhost:9000/api/cards/${deckId}`,
+        `${backendUrl}/api/cards/${deckId}`,
         { withCredentials: true }
       );
       if (Array.isArray(updatedFlashcards.data.cards)) {
@@ -99,7 +102,7 @@ const CreateFlashcardPage = () => {
 
   const handleDeleteConfirmation = async () => {
     try {
-      await axios.delete(`http://localhost:9000/api/cards/${deckId}/${flashcardToDelete}`, {
+      await axios.delete(`${backendUrl}/api/cards/${deckId}/${flashcardToDelete}`, {
         withCredentials: true,
       });
 

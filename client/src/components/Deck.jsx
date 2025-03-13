@@ -4,6 +4,9 @@ import axios from "axios";
 import TagSelector from "./TagSelector";
 import Alert from "./Alert";
 import Nav from "./Nav";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const Deck = () => {
   const [deckTitle, setDeckTitle] = useState("");
@@ -64,7 +67,7 @@ const Deck = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:9000/api/decks/deckimage",
+          `${backendUrl}/api/decks/deckimage`,
           formData,
           {
             headers: {
@@ -131,7 +134,7 @@ const Deck = () => {
 
       // Attempt to post the new deck to the API
       const response = await axios.post(
-        "http://localhost:9000/api/decks",
+        `${backendUrl}/api/decks`,
         newDeck,
         { withCredentials: true }
       );

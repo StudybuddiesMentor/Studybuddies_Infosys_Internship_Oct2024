@@ -6,6 +6,9 @@ import image from "@/assets/register.png";
 import logo from "@/assets/logo1.png";
 import OAuth from "./OAuth";
 import { GoogleLogin } from "@react-oauth/google";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 function Register() {
   const [name, setName] = useState("");
@@ -38,7 +41,7 @@ function Register() {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/users/register",
+        `${backendUrl}/api/users/register`,
         {
           username: name,
           email,

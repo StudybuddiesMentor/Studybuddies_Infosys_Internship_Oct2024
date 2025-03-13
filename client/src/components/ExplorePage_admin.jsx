@@ -3,6 +3,9 @@ import axios from "axios";
 import Deck from "./Deck_explore_admin";
 import { useParams } from "react-router-dom";
 import Nav from "./Nav";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const ExplorePageadmin = () => {
   const defaultImageUrl =
@@ -25,7 +28,7 @@ const ExplorePageadmin = () => {
 
       try {
         const response = await axios.get(
-          "http://localhost:9000/api/decks/adminexplore",
+          `${backendUrl}/api/decks/adminexplore`,
           { withCredentials: true }
         );
         console.log(response.data);

@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Nav from "./Nav";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const EditDeckPage = () => {
   const { deckId } = useParams();
@@ -29,7 +32,7 @@ const EditDeckPage = () => {
   const addFlashcardToBackend = async () => {
     try {
       await axios.post(
-        `http://localhost:9000/api/cards/${deckId}`,
+        `${backendUrl}/api/cards/${deckId}`,
         newFlashcard,
         { withCredentials: true }
       );
@@ -37,7 +40,7 @@ const EditDeckPage = () => {
       setShowAddForm(false);
 
       const updatedFlashcards = await axios.get(
-        `http://localhost:9000/api/cards/${deckId}`,
+        `${backendUrl}/api/cards/${deckId}`,
         { withCredentials: true }
       );
       console.log(updatedFlashcards);
@@ -68,7 +71,7 @@ const EditDeckPage = () => {
   const handleDeleteConfirmation = async () => {
     try {
       await axios.delete(
-        `http://localhost:9000/api/cards/${deckId}/${flashcardToDelete}`,
+        `${backendUrl}/api/cards/${deckId}/${flashcardToDelete}`,
         {
           withCredentials: true,
         }
@@ -97,7 +100,7 @@ const EditDeckPage = () => {
     const fetchDeck = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/decks/${deckId}`,
+          `${backendUrl}/api/decks/${deckId}`,
           { withCredentials: true }
         );
         const deck = response.data.deck;
@@ -113,7 +116,7 @@ const EditDeckPage = () => {
           setImagePreview(deck.deck_image.url);
         }
         const flashcardsResponse = await axios.get(
-          `http://localhost:9000/api/cards/${deckId}`,
+          `${backendUrl}/api/cards/${deckId}`,
           { withCredentials: true }
         );
         if (Array.isArray(flashcardsResponse.data.cards)) {
@@ -205,7 +208,7 @@ const EditDeckPage = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:9000/api/decktags/${deckId}`,
+        `${backendUrl}/api/decktags/${deckId}`,
         {
           data: { tags: tagName }, // Send multiple tags for deletion
           withCredentials: true,
@@ -241,7 +244,7 @@ const EditDeckPage = () => {
 
       // Update deck details (text fields) and tags
       await axios.put(
-        `http://localhost:9000/api/decks/${deckId}`,
+        `${backendUrl}/api/decks/${deckId}`,
         {
           deck_name: deckData.title,
           description: deckData.description,
@@ -256,7 +259,7 @@ const EditDeckPage = () => {
         formData.append("deck_image", image);
 
         const response = await axios.put(
-          `http://localhost:9000/api/decks/deckimage/${deckId}`,
+          `${backendUrl}/api/decks/deckimage/${deckId}`,
           formData,
           {
             withCredentials: true,

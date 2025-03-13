@@ -1,6 +1,9 @@
 import { useState } from 'react'; 
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
@@ -24,7 +27,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:9000/api/users/reset-password/${id}/${token}`, { password });
+            const response = await axios.post(`${backendUrl}/api/users/reset-password/${id}/${token}`, { password });
 
             console.log('Response:', response.data); 
             setSuccess('Password reset successful. Redirecting to login...');

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const LogoutButton = () => {
     const [showModal, setShowModal] = useState(false);
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:9000/api/users/logout", {
+            const response = await fetch(`${backendUrl}/api/users/logout`, {
                 method: "POST",
                 credentials: "include", // Include cookies
             });

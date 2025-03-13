@@ -1,6 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 function Modal({ message, onClose }) {
   return (
@@ -86,7 +89,7 @@ function ForgotPassword() {
     }
     setIsLoading(true);
     try {
-      await axios.post("http://localhost:9000/api/users/forgot-password", {
+      await axios.post(`${backendUrl}/api/users/forgot-password`, {
         email,
       });
       setShowModal(true);

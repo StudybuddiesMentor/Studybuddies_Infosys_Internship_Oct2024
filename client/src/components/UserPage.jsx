@@ -16,6 +16,9 @@ import {
 import { Link, useNavigate } from "react-router-dom" 
 import axios from "axios" 
 import Nav from "./Nav" 
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const Userpagebody = () => {
   const navigate = useNavigate() 
@@ -49,7 +52,7 @@ const Userpagebody = () => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/users/profile",
+        `${backendUrl}/api/users/profile`,
         { withCredentials: true }
       ) 
 
@@ -76,7 +79,7 @@ const Userpagebody = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:9000/api/users/profile-pic",
+        `${backendUrl}/api/users/profile-pic`,
         formData,
         {
           headers: {
@@ -102,7 +105,7 @@ const Userpagebody = () => {
   const handleSaveUserInfo = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:9000/api/users/profile",
+        `${backendUrl}/api/users/profile`,
         {
           fullName: editedPersonalInfo.fullName,
           professionalTitle: editedPersonalInfo.professionalTitle,
@@ -265,7 +268,7 @@ const Userpagebody = () => {
 
   const fetchUserDecks = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/decks", {
+      const response = await axios.get(`${backendUrl}/api/decks`, {
         withCredentials: true,
       }) 
 
@@ -316,7 +319,7 @@ const Userpagebody = () => {
   const fetchFavorites = async () => {
     try {
       // Fetch user's favorite decks (adjust the API endpoint as needed)
-      const response = await axios.get("http://localhost:9000/api/users/fav", {
+      const response = await axios.get(`${backendUrl}/api/users/fav`, {
         withCredentials: true,
       })  // Change to your actual API
       const data = response.data.favoriteDecks || [] 

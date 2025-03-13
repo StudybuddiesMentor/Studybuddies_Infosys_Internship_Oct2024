@@ -29,7 +29,7 @@ const UserFlashcards = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:9000/api/decks", {
+        const response = await axios.get(`${backendUrl}/api/decks`, {
           withCredentials: true,
         });
 

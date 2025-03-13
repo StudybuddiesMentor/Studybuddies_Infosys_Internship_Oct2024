@@ -6,6 +6,11 @@ import image from "@/assets/loginani.png";
 import logo from "@/assets/logo1.png";
 import OAuth from "./OAuth";
 import { GoogleLogin } from "@react-oauth/google";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
+
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +31,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/users/login",
+        `${backendUrl}/api/users/login`,
         {
           email,
           password,

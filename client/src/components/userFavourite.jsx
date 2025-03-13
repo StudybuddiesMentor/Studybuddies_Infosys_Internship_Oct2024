@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Deck from "./Deck_explore";
 import Nav from "./Nav";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const UserFavourite = () => {
     const defaultImageUrl =
@@ -13,7 +16,7 @@ const UserFavourite = () => {
   const fetchFavorites = async () => {
     try {
       // Fetch user's favorite decks (adjust the API endpoint as needed)
-      const response = await axios.get("http://localhost:9000/api/users/fav",
+      const response = await axios.get(`${backendUrl}/api/users/fav`,
         { withCredentials: true }); // Change to your actual API
       const data =  response.data.favoriteDecks || [];
       console.log("favo:", data);
@@ -38,7 +41,7 @@ const UserFavourite = () => {
   
       if (isFavorite) {
         // Remove from favorites
-        await axios.delete(`http://localhost:9000/api/users/removefav/${deckId}`, {
+        await axios.delete(`${backendUrl}/api/users/removefav/${deckId}`, {
           withCredentials: true,
         });
         // Update only the specific deck's favorite status
@@ -49,7 +52,7 @@ const UserFavourite = () => {
       } else {
         // Add to favorites
         await axios.post(
-          `http://localhost:9000/api/users/addfav/${deckId}`,
+          `${backendUrl}/api/users/addfav/${deckId}`,
           {},
           { withCredentials: true }
         );

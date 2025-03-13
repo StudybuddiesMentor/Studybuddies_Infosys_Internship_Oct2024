@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MainDeck from "./MainDeck";
 import Nav from "./Nav";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
@@ -51,7 +54,7 @@ const MainPage = () => {
 
       if (isFavorited) {
         // Remove from favorites
-        await axios.delete(`http://localhost:9000/api/users/removefav/${id}`, {
+        await axios.delete(`${backendUrl}/api/users/removefav/${id}`, {
           withCredentials: true,
         });
         setFavorites((prev) => {
@@ -62,7 +65,7 @@ const MainPage = () => {
       } else {
         // Add to favorites
         const response = await axios.post(
-          `http://localhost:9000/api/users/addfav/${id}`,
+          `${backendUrl}/api/users/addfav/${id}`,
           {},
           { withCredentials: true }
         );
@@ -86,7 +89,7 @@ const MainPage = () => {
 
         // Perform GET request to fetch deck data from the backend
         const response = await axios.get(
-          "http://localhost:9000/api/decks/exploredeck",
+          "${backendUrl}/api/decks/exploredeck",
           {
             withCredentials: true,
           }
@@ -105,7 +108,7 @@ const MainPage = () => {
 
         // Fetch favorites
         const favoritesResponse = await axios.get(
-          "http://localhost:9000/api/users/fav",
+          `${backendUrl}/api/users/fav`,
           { withCredentials: true }
         );
         console.log('structure of favorites ', favoritesResponse.data);

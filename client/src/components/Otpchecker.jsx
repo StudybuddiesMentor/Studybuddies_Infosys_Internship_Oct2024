@@ -3,6 +3,9 @@ import "./MailVerification.css";
 import logo from "@/assets/logo1.png";
 import { useLocation,useNavigate } from "react-router-dom";
 import axios from "axios";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const Otpchecker = () => {
   const [email, setEmail] = useState("");
@@ -54,7 +57,7 @@ const Otpchecker = () => {
     setIsSendingOtp(true);
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/users/send-otp",
+        `${backendUrl}/api/users/send-otp`,
         { email }
       );
       setSuccess(response.data.message);
@@ -75,7 +78,7 @@ const Otpchecker = () => {
     setIsVerifying(true);
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/users/verify-otp",
+        `${backendUrl}/api/users/verify-otp`,
         { email, otp }
       );
       setSuccess(response.data.message);

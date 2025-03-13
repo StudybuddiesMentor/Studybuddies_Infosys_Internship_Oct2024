@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import * as dotenv from 'dotenv';
+dotenv.config();
+const backendUrl = process.env.backendUrl;
 
 const DeckUser = ({ title, description, imageUrl, deckId, tags, status, createdAt, onDeleteDeck, onSuccess, onError, refreshDecks, }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -25,7 +28,7 @@ const DeckUser = ({ title, description, imageUrl, deckId, tags, status, createdA
 
   const handleDeleteDeck = async () => {
       try {
-        await axios.delete(`http://localhost:9000/api/decks/${deckId}`, {
+        await axios.delete(`${backendUrl}/api/decks/${deckId}`, {
           withCredentials: true, // Ensure cookies (auth token) are sent
         });
         if (onDeleteDeck) onDeleteDeck(deckId); // Notify parent component about the deletion
