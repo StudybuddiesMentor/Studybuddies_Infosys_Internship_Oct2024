@@ -11,7 +11,7 @@ import { hashPassword,sendmailOtp } from "../utils/UserMail.js";
 import cloudinary from 'cloudinary'; 
 const cloudinaryV2 = cloudinary.v2;
 
-dotenv.config();
+ 
 
 
 const JWT_SECRET = "jwt_secret_key";
@@ -196,7 +196,7 @@ export const forgotPassword = async (req, res) => {
             
         });
     
-        const resetPasswordLink = `http://localhost:5173/reset-password/${user._id}/${token}`;
+        const resetPasswordLink = `https://studybuddies-infosys-internship-oct2024.vercel.app/reset-password/${user._id}/${token}`;
         const emailContent = `
             <h3>Reset Your Password</h3>
             <p>Click the link below to reset your password:</p>

@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const UpdateFlashcardPage = () => {
   const { deckId, flashcardId } = useParams();  // Get deckId and flashcardId from the URL
@@ -18,7 +20,7 @@ const UpdateFlashcardPage = () => {
     const fetchFlashcards = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/cards/${deckId}`,
+          `${backendUrl}/api/cards/${deckId}`,
           { withCredentials: true }
         );
         setFlashcards(response.data.cards);  // Set the list of flashcards for the deck
@@ -57,7 +59,7 @@ const UpdateFlashcardPage = () => {
   const handleSave = async () => {
     try {
       await axios.put(
-        `http://localhost:9000/api/cards/${deckId}/${flashcardId}`,
+        `${backendUrl}/api/cards/${deckId}/${flashcardId}`,
         updatedFlashcard,  // Send the updated flashcard data
         { withCredentials: true }
       );

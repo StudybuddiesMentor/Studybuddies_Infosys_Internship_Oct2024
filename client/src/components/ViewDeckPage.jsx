@@ -5,6 +5,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Nav from './Nav';
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const ViewDeckPage = () => {
   const defaultImageUrl = 'https://i.pinimg.com/736x/1f/61/74/1f6174a908f416f625bc02173ee7f00a.jpg';
@@ -28,7 +30,7 @@ const ViewDeckPage = () => {
     const fetchDeckAndFlashcards = async () => {
       try {
         const deckResponse = await axios.get(
-          `http://localhost:9000/api/decks/${deckId}`,
+          `${backendUrl}/api/decks/${deckId}`,
           { withCredentials: true }
         );
         console.log(deckResponse.data);
@@ -42,7 +44,7 @@ const ViewDeckPage = () => {
         setHasDownvoted(hasDownvoted);
 
         const flashcardsResponse = await axios.get(
-          `http://localhost:9000/api/cards/${deckId}`,
+          `${backendUrl}/api/cards/${deckId}`,
           { withCredentials: true }
         );
         setFlashcards(flashcardsResponse.data.cards || []);

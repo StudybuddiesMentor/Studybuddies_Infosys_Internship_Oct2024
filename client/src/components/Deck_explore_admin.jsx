@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const Deck = ({
   title,
@@ -59,7 +61,7 @@ const Deck = ({
   const handleConfirmRevoke = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/api/decks/revokedeck/${deckId}`,
+        `${backendUrl}/api/decks/revokedeck/${deckId}`,
         {},
         { withCredentials: true }
       );
@@ -85,7 +87,7 @@ const Deck = ({
   const handleConfirmSoftDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/api/decks/deletedeck/${deckId}`,
+        `${backendUrl}/api/decks/deletedeck/${deckId}`,
         { withCredentials: true }
       );
       setMessage(response.data.message);
@@ -107,7 +109,7 @@ const Deck = ({
   const handleConfirmHardDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/api/decks/admindelete/${deckId}`,
+        `${backendUrl}/api/decks/admindelete/${deckId}`,
         { withCredentials: true }
       );
       setMessage(response.data.message);
@@ -130,7 +132,7 @@ const Deck = ({
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:9000/api/decks/${deckId}/vote`,
+        `${backendUrl}/api/decks/${deckId}/vote`,
         { action },
         { withCredentials: true }
       );

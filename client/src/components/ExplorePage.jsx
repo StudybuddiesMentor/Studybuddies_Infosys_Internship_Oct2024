@@ -3,6 +3,8 @@ import axios from "axios";
 import Deck from "./Deck_explore";
 import { useParams } from "react-router-dom";
 import Nav from "./Nav";
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const ExplorePage = () => {
   const defaultImageUrl =
@@ -25,12 +27,12 @@ const ExplorePage = () => {
       try {
         // Fetch public decks
         const deckResponse = await axios.get(
-          "http://localhost:9000/api/decks/exploredeck",
+          `${backendUrl}/api/decks/exploredeck`,
           { withCredentials: true }
         );
 
         const favoriteResponse = await axios.get(
-          "http://localhost:9000/api/users/fav",
+          `${backendUrl}/api/users/fav`,
           { withCredentials: true }
         );
 
@@ -88,13 +90,13 @@ const ExplorePage = () => {
       const isFavorite = favoriteDeckIds.includes(deckId);
 
       if (isFavorite) {
-        await axios.delete(`http://localhost:9000/api/users/removefav/${deckId}`, {
+        await axios.delete(`${backendUrl}/api/users/removefav/${deckId}`, {
           withCredentials: true,
         });
         setFavoriteDeckIds((prev) => prev.filter((id) => id !== deckId));
       } else {
         await axios.post(
-          `http://localhost:9000/api/users/addfav/${deckId}`,
+          `${backendUrl}/api/users/addfav/${deckId}`,
           {},
           { withCredentials: true }
         );

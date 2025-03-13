@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LogoutButton from "./LogoutButton";
 import { jwtDecode } from "jwt-decode";
-
 import Cookie from "js-cookie"; 
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,7 +38,7 @@ const Nav = () => {
   // Fetch tags from backend
   useEffect(() => {
     axios
-      .get("http://localhost:9000/api/tags")
+      .get(`${backendUrl}/api/tags`)
       .then((response) => setAvailableTags(response.data.tags || []))
       .catch((error) => console.error("Error fetching tags:", error));
   }, []);

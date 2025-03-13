@@ -4,6 +4,8 @@ import axios from "axios";
 import TagSelector from "./TagSelector";
 import Alert from "./Alert";
 import Nav from "./Nav";
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const Deck = () => {
   const [deckTitle, setDeckTitle] = useState("");
@@ -64,7 +66,7 @@ const Deck = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:9000/api/decks/deckimage",
+          `${backendUrl}/api/decks/deckimage`,
           formData,
           {
             headers: {
@@ -131,7 +133,7 @@ const Deck = () => {
 
       // Attempt to post the new deck to the API
       const response = await axios.post(
-        "http://localhost:9000/api/decks",
+        `${backendUrl}/api/decks`,
         newDeck,
         { withCredentials: true }
       );

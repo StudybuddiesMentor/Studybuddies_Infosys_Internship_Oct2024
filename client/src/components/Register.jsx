@@ -6,6 +6,8 @@ import image from "@/assets/register.png";
 import logo from "@/assets/logo1.png";
 import OAuth from "./OAuth";
 import { GoogleLogin } from "@react-oauth/google";
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function Register() {
   const [name, setName] = useState("");
@@ -38,7 +40,7 @@ function Register() {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/users/register",
+        `${backendUrl}/api/users/register`,
         {
           username: name,
           email,

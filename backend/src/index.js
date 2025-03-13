@@ -31,7 +31,7 @@ const app = express();
 // CORS settings
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // Allow both localhost URLs
+    origin: ["https://studybuddies-infosys-internship-oct2024.vercel.app", "http://localhost:5174"], // Allow both localhost URLs
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Allow cookies or other credentials
   })
