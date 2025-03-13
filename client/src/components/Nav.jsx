@@ -4,9 +4,8 @@ import axios from "axios";
 import LogoutButton from "./LogoutButton";
 import { jwtDecode } from "jwt-decode";
 import Cookie from "js-cookie"; 
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);

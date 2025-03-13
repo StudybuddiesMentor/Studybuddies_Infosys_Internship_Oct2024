@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const TagSelector = ({ tags, setTags }) => {
   const [availableTags, setAvailableTags] = useState([]); // Existing tags from backend

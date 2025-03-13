@@ -2,9 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const UpdateFlashcardPage = () => {
   const { deckId, flashcardId } = useParams();  // Get deckId and flashcardId from the URL

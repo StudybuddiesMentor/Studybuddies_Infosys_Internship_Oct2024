@@ -6,9 +6,8 @@ import image from "@/assets/loginani.png";
 import logo from "@/assets/logo1.png";
 import OAuth from "./OAuth";
 import { GoogleLogin } from "@react-oauth/google";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 
 function Login() {

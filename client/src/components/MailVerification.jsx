@@ -3,9 +3,8 @@ import "./MailVerification.css";
 import logo from "@/assets/logo1.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const MailVerification = () => {
   const [email, setEmail] = useState("");

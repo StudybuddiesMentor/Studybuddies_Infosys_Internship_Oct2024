@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MainDeck from "./MainDeck";
 import Nav from "./Nav";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const MainPage = () => {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);

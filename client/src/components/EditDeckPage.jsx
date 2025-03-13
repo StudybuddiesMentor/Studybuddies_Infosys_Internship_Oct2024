@@ -3,9 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Nav from "./Nav";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const EditDeckPage = () => {
   const { deckId } = useParams();

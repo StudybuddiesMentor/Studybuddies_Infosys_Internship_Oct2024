@@ -1,9 +1,8 @@
 import { useState } from 'react'; 
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');

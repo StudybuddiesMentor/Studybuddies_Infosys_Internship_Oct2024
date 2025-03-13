@@ -4,9 +4,8 @@ import axios from "axios";
 import TagSelector from "./TagSelector";
 import Alert from "./Alert";
 import Nav from "./Nav";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const Deck = () => {
   const [deckTitle, setDeckTitle] = useState("");

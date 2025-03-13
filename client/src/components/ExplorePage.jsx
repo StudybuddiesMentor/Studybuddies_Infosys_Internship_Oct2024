@@ -3,9 +3,8 @@ import axios from "axios";
 import Deck from "./Deck_explore";
 import { useParams } from "react-router-dom";
 import Nav from "./Nav";
-import * as dotenv from 'dotenv';
-dotenv.config();
-const backendUrl = process.env.backendUrl;
+   
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const ExplorePage = () => {
   const defaultImageUrl =
